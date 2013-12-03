@@ -1,0 +1,30 @@
+					<?if($out['filters'] && !(int)$_REQUEST['showAll']){?>
+					<aside>
+						<div class="title">Фильтр товаров</div>
+						<form id="filter_form">
+							<div class="one_filter">
+							<?foreach($out['filters'] as $ov){?>
+							<input type="hidden" name="<?=$ov['name']?>" value="<?=$ov['value']?>" />
+							<?}?>
+							Пожалуйста, дождитесь загрузки фильтров
+							</div>
+						</form>
+					</aside>
+					<div id="catalog_content">
+					<?}?>
+						<div class="sort_views blue_block">
+							Сортировать по:
+							<a href="?sort=price<?if($out['filters_array']){?>&<?=$out['filters_array']?><?}?>" class="sort<?if($out['sort']['price'] == 'active'){?> active<?}?>">цене</a>
+							|
+							<a href="?sort=name<?if($out['filters_array']){?>&<?=$out['filters_array']?><?}?>" class="sort<?if($out['sort']['name'] == 'active'){?> active<?}?>">названию</a>
+							<div class="views">
+								Показывать:
+								<span class="grid<?if(!$_COOKIE['view']){?> active<?}?>">плиткой</span>
+								<span class="list<?if($_COOKIE['view']){?> active<?}?>">списком</span>
+							</div>
+						</div>
+						<?=$P->showItems($out['items'])?>
+						<?=$out['pages']?>
+					<?if($out['filters']){?>
+					</div>
+					<?}?>

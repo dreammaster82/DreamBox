@@ -1,0 +1,45 @@
+<form action='.' method='post' enctype='multipart/form-data'>
+    <table width="100%" border='0' cellpadding='1' cellspacing='0'>
+	<tr class=z height='24'>
+		<td class=z colspan='2' align='center'>перемещение категории</td>
+	</tr>
+	<tr class=y>
+		<td align='right' width='140' nowrap>что перемещаем:</td>
+		<td><b><?=$cur['name'];?></b></td>	
+	</tr>
+	<tr class=x>
+		<td align='right' width='140' nowrap>пункт назначения:</td>
+		<td><?=$category;?></td>	
+	</tr>
+	<tr class=y>
+		<td align='right' nowrap>пункт возврата:</td>
+		<td>
+			<input type='radio' name='return_to' value='1' checked />в себя
+			<br>
+			<input type='radio' name='return_to' value='2' />в старого родителя
+			<br>
+			<input type='radio' name='return_to' value='3' />в нового родителя 
+		</td>	
+	</tr>
+	<tr class=x>
+		<td align='right'>изменить</td>
+		<td>
+			<input type='submit' class='buttons' value=' >> ' />
+			<input type='hidden' name='action' value='catMove2' />
+			<input type='hidden' name='catId' value="<?=$this->id?>" />
+			<input type='hidden' name='what' value="<?=$cur['id']?>" />
+			<input type='hidden' name='v' value="<?=$this->type?>" />
+		</td>	
+	</tr>	
+	<tr class=y>
+		<td align='right'>отказаться</td>
+		<td>
+			<input type='button' class='buttons' value=' >> ' onclick="document.form_cancel.submit();" />
+		</td>	
+	</tr>
+    </table>
+</form>
+<form action='.' method='get' name="form_cancel">			
+    <input type='hidden' name='catId' value="<?=$this->id?>" />
+	<input type='hidden' name='v' value="<?=$this->type?>" />
+</form>

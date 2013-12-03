@@ -1,0 +1,23 @@
+<table width="100%" border="0" cellpadding="1" cellspacing="0">
+		<tr height="22">
+			<td align="center" width="100%" class="x"><b class=title><?=$it['name']?></b></td>
+		</tr>
+		<tr height="5"><td></td></tr>
+		<tr height="5"><td></td></tr>
+		<tr valign="middle">
+			<td align="center"><?=$img?></td>
+		</tr>
+		<tr height="5"><td></td></tr>
+		</table>
+
+		<center><?=$nav?></center>
+
+		<center>
+		<hr>
+		<input type="button" class="buttons" onclick="javascript:self.close();" value="Закрыть окно">
+		</center>
+		
+<script>
+function SelfReload() {	window.location.reload(); }
+function getReload() { w = setTimeout("SelfReload();", 5000); }
+</script>

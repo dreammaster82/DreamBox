@@ -1,0 +1,64 @@
+		<header>
+			<div class="right">
+				<div class="slider">
+					<ul>
+						<li style="text-align: left;"><img src="/images/14_years.png" title="14 лет на рынке!" alt="14 лет на рынке!" /></li>
+						<li><img src="/images/14_years.png" title="14 лет на рынке!" alt="14 лет на рынке!" /></li>
+					</ul>
+				</div>
+			</div>
+			<div class="right">
+				<div class="shops">
+					<div class="title">Розничные магазины:</div>
+					<ul style="margin-bottom: 15px;">
+						<li>г. Н. Новгород, ул. Культуры, д. 110б</li>
+						<li>г. Дзержинск, ул. Бутлерова, д. 40</li>
+					</ul>
+					<div class="title">Оптовые продажи:</div>
+					<ul>
+						<li>г. Н. Новгород, ул. Федосеенко, д. 54</li>
+						<li style="margin-bottom: 0">г. Дзержинск, ул. Бутлерова, д. 40</li>
+					</ul>
+				</div>
+			</div>
+			<div class="left">
+				<div class="top">
+					<?if($out['index']){?><span class="logo"><?}else{?><a href="/" class="logo"><?}?>
+							<img src="/images/logo.png" title="<?=$Core->globalConfig['title']?>" alt="<?=$Core->globalConfig['title']?>" />
+					<?if($out['index']){?></span><?}else{?></a><?}?>
+					<div class="phone">
+						<div>8 800 555-44-33</div>
+						<span id="get_call" class="button">Заказать звонок</span>
+					</div>
+				</div>
+				<nav>
+					<a href="/content/company.html">О&nbsp;магазине</a>
+					<a href="/news/">Новости</a>
+					<a href="/content/delivery/">Доставка и оплата</a>
+					<a href="/content/good_pages/">Полезные статьи</a>
+					<a href="/content/contacts/">Контакты</a>
+				</nav>
+			</div>
+		</header>
+		<section class="catalog_menu"<?=$out['catalog_margin']?>>
+			<?if($out['catalog_menu']){?>
+			<div class="wrapper">
+				<?=$out['catalog_menu']?>
+			</div>
+			<?}?>
+			<?if($out['slider']){?>
+			<div class="wrapper">
+				<div class="slider">
+					<ul id="slider">
+					<?foreach ($out['slider'] as $ov){?>
+						<li>
+							<img src="/files/slider<?=$ov['img_src']?>" alt="<?=$ov['alt']?>" />
+							<?if($ov['link']){?><a href="<?=$ov['link']?>">Подробнее</a><?}?>
+						</li>
+					<?}?>
+					</ul>
+				</div>
+			</div>
+			<div class="fon"></div>
+			<?}?>
+		</section>

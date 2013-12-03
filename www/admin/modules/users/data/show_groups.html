@@ -1,0 +1,61 @@
+				<?php if($out['parents']){
+					$i = 0;
+					foreach($out['parents'] as $ok => $ov){?>
+						<table style='width:100%' class="onecat">
+							<tr>
+								<td style="padding-left:<?=$i * 15?>px;"></td>				
+								<td><img src="/admin/images/open.gif" width="17" height="18" border="0" alt="" /></td>
+								<td width="90%">
+									<a href="?catId=<?=$ov['id']?>"><?=$ov['name'].($ov['note'] ? ' ('.$ov['note'].')' : '')?></a>
+								</td>
+								<td>
+								<?php if(!$_REQUEST['window']){
+									if($adm = $this->adminLinksParents($ov)){?>
+									<div class="admin_links">
+									<?php foreach($adm as $ov1){
+										if($ov1['type'] == 'link'){?>
+										<a href="<?=$ov1['link']?>"><?=$ov1['text']?></a>
+										<?php } else {?>
+										<input type="<?=$ov1['type']?>" name="<?=$ov1['name']?>" value="<?=$ov1['text']?>" onclick="<?=$ov1['onclick']?>" />
+										<?php }
+									}?>
+									</div>
+									<?php }
+								}?>
+								</td>
+							</tr>
+						</table>
+						<?php ++$i;
+					}
+				}
+				if($out['items']){
+					foreach($out['items'] as $ok => $ov){?>
+						<table style='width:100%' class="onecat">
+							<tr>
+								<td style="padding-left:<?=$i * 15?>px;"></td>				
+								<td><img src="/admin/images/closed.gif" width="17" height="18" border="0" alt="" /></td>
+								<td width="90%">
+									<a href="?catId=<?=$ov['id']?>"><?=$ov['name'].($ov['note'] ? ' ('.$ov['note'].')' : '')?></a>
+								</td>
+								<td>
+								<?php if(!$_REQUEST['window']){
+									if($adm = $this->adminLinksParents($ov)){?>
+									<div class="admin_links">
+									<?php foreach($adm as $ov1){
+										if($ov1['type'] == 'link'){?>
+										<a href="<?=$ov1['link']?>"><?=$ov1['text']?></a>
+										<?php } else {?>
+										<input type="<?=$ov1['type']?>" name="<?=$ov1['name']?>" value="<?=$ov1['text']?>" onclick="<?=$ov1['onclick']?>" />
+										<?php }
+									}?>
+									</div>
+									<?php }
+								}?>
+								</td>
+							</tr>
+						</table>
+						<?php }
+				}
+				if(!$out['parents'] && !$out['items']){?>
+				Группы отсутствуют
+				<?php }?>

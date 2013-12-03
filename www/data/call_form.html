@@ -1,0 +1,30 @@
+<div id="call_form">
+	<div class="box">
+		<div class="title">
+		<a href="#">Не дозвонились?</a>
+		</div>
+		<form method="POST" action="/service/send_form.php">
+			<div>
+				<label>Имя</label>
+				<input type="text" name="name" value="" required />
+			</div>
+			<div>
+				<label>Телефон</label>
+				<input type="tel" name="tel" value="" required />
+			</div>
+			<div>
+				<label>Код защиты</label>
+				<input type="text" name="secret" value="" required />
+			</div>
+			<div class="secret">
+				<img class="secr_img" src="<?=$secFile;?>" />
+				<a href="" class="rel_link">Не видно</a>
+				<input type="hidden" name="secret_crypted" value="<?=$string;?>" />
+			</div>
+			<div style="text-align: center;">
+				<button type="submit"><span>Отправить</span></button>
+			</div>
+			<div class="return"></div>
+		</form>
+	</div>
+</div>

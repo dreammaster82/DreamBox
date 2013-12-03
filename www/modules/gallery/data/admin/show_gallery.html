@@ -1,0 +1,19 @@
+<div class="header"><?=$this->config['header']?></div>
+<!--<div style="font-size:16px;font-weight:bold;text-align:center;color:#<?=$out['top_color']?>"><?=$out['top_header']?></div>-->
+<?php if(!(int)$_REQUEST['window']){?>
+<div class="admin_toplinks">
+	<!--<a href="./?<?=$this->type ? '' : 'v=1'?>">[<?=$out['top_name']?>]</a>-->
+	<a href="?action=editObjectItem<?=$out['add'] ? '&'.implode('&', $out['add']) : ''?>">[new]</a>
+</div>
+<?php }?>
+<?php if($out['parents']){?>
+<?=$this->showItems($out['parents'], true)?>
+<?php }
+if($out['items']){?>
+<?=$this->showItems($out['items'])?>
+<?php }
+if($out['class_items']){?>
+<?=(int)$_REQUEST['preview'] ? $out['class_by_type']->showPrevItems($out['class_items']) : $out['class_by_type']->showItems($out['class_items'])?>
+<?php } elseif((int)$_REQUEST['preview'] || !(int)$_REQUEST['window']){?>
+<div class="warning">Элементы не найдены</div>
+<?php }?>

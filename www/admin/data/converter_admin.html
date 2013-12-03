@@ -1,0 +1,28 @@
+			<form action="." method="post" enctype="multipart/form-data">
+				<input type="hidden" name="action" value="converter" />
+				<table width="100%" border="0" cellpadding="1" cellspacing="0">
+					<tr>
+						<th colspan="2" >HTML конвертер</th>
+					</tr>
+					<tr>
+						<td>Исходный текст:</td>
+						<td>
+							<textarea cols="90" rows="14" name="text"><?=$out['text']?></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td>Результат:</td>
+						<td>
+							<textarea cols="90" rows="14" name="converttext">
+								<?=$out['convert']?>
+							</textarea>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<input type="submit" value="Конвертировать" />
+						</td>	
+					</tr>
+				</table>
+			</form>

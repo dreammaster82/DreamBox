@@ -1,0 +1,114 @@
+<form name='edit_form' id='edit_form' action='.' method='post' enctype='multipart/form-data'>
+<table width='100%' border='0' cellpadding='3' cellspacing='0'>
+	<tr>
+		<th colspan='2' align='center'>Редактирование элемента</th>
+	</tr>
+	<tr>
+		<td>Id:</td>
+		<td><?=$out['id']?></td>	
+	</tr>
+	<tr>
+		<td>Название:</td>
+		<td>
+			<input type='text' name='name' size='60' value="<?=$out['name']?>" />
+		</td>	
+	</tr>
+	<tr>
+		<td>Alias:</td>
+		<td>
+			<input type='text' name='alias' size='60' value="<?=$out['alias']?>" />
+		</td>
+	</tr>
+	<tr>
+		<td>Родитель:</td>
+		<td>
+			<select name="parent_id">
+				<?php foreach($out['parent_options'] as $ov){?>
+				<option value="<?=$ov['value']?>"<?=$ov['select']?>><?=$ov['text']?>
+				<?php }?>
+			</select>
+		</td>	
+	</tr>
+	<tr>
+		<td>Показывать на сайте:</td>
+		<td><input type="checkbox" name="siteview" id="siteview" value="1"<?=$out['siteview'] ? ' checked' : ''?> /><label for="siteview"><span></span></label></td>	
+	</tr>
+	<tr>
+		<td>Текст:</td>
+		<td>
+			<a href='javascript:enter("item_textarea")'><img src='/admin/images/bb_break.gif' border='0' width='23' height='22' alt='Перевод строки' /></a>
+			<a href='javascript:nbsp("item_textarea")'><img src='/admin/images/bb_nbsp.gif' border='0' width='23' height='22' alt='Перевод строки' /></a>
+			<a href='javascript:bold("item_textarea")'><img src='/admin/images/bb_bold.gif' border='0' width='23' height='22' alt='Вставить жирный текст' /></a>
+			<a href='javascript:italicize("item_textarea")'><img src='/admin/images/bb_italicize.gif' border='0' width='23' height='22' alt='Вставить наклонный текст' /></a>
+			<a href='javascript:underline("item_textarea")'><img src='/admin/images/bb_underline.gif' border='0' width='23' height='22' alt='Вставить подчеркнутый текст' /></a>
+			<a href='javascript:center("item_textarea")'><img src='/admin/images/bb_center.gif' border='0' width='23' height='22' alt='Вставить отцентрированный текст' /></a>
+			<a href='javascript:hyperlink("item_textarea")'><img src='/admin/images/bb_url.gif' border='0' width='23' height='22' alt='Вставить ссылку' /></a>
+			<a href='javascript:email("item_textarea")'><img src='/admin/images/bb_email.gif' border='0' width='23' height='22' alt='Вставить e-mail адрес' /></a>
+			<a href='javascript:image("item_textarea")'><img src='/admin/images/bb_image.gif' border='0' width='23' height='22' alt='Вставить изображение' /></a>
+			<a href='javascript:paragraph("item_textarea")'><img src='/admin/images/bb_paragraph.gif' border='0' width='23' height='22' alt='Вставить параграф' /></a>
+			<a href='javascript:code("item_textarea")'><img src='/admin/images/bb_code.gif' border='0' width='23' height='22' alt='Преформатирование. Сохранение введеной структуры' /></a>
+			<a href='javascript:quote("item_textarea")'><img src='/admin/images/bb_quote.gif' border='0' width='23' height='22' alt='Вставить цитированный текст' /></a>
+			<a href='javascript:list("item_textarea")'><img src='/admin/images/bb_list.gif' border='0' width='23' height='22' alt='Вставить список' /></a>
+			<a href='javascript:slideshow_insert("item_textarea");'><img src='/admin/images/bb_gallery.gif' width='23' height='22' border='0' alt='Вставить слайд-шоу' /></a>
+			<a href='javascript:preview_insert("item_textarea");'><img src='/admin/images/bb_preview.gif' width='23' height='22' border='0' alt='Вставить предпросмотр' /></a>
+		</td>
+	</tr>
+	<tr>
+		<td align='right'>Текст:</td>
+		<td>
+			<textarea id="item_textarea" cols='90' rows='17' name='content' onselect='storeCaret(this);' onclick='storeCaret(this);' onkeyup='storeCaret(this);' style='width:90%'><?=$out['content'];?></textarea>
+		</td>
+	</tr>
+</table>
+<table style="width: 100%;">
+	<?php if($out['img_src']){ ?>
+	<tr>
+		<td></td>
+		<td>
+			Имя файла: <?=$out['img_src']?>, Тип файла: <?=$out['type']?>, размер: <?=$out['size']?> bytes<br>
+			<a href="<?php echo $this->config['files_path'].'/prevfoto'.$out['img_src']; ?>" target="image"> Скачать для редактирования...</a>
+		</td>	
+	</tr>
+	<? } ?>
+	<tr>
+		<td style="width:100px;">Предпросмотр:</td>
+		<td>
+			<input type='file' name='header' size='65' class='textfield' />
+			<?php if($out['img_src']){ ?>
+			<input type="checkbox" id="delete_file" name="delete_file" value="1" /><label for="delete_file"><span></span>удалить</label>
+			<? } ?>
+			<div style="display:inline-block;margin-left:20px;vertical-align: top">
+				<input type='submit' class='buttons' value='Обновить' name="reload" />
+			</div>
+		</td>	
+	</tr>
+</table>
+<table width='100%' border='0' cellpadding='1' cellspacing='0'>
+	<tr>
+		<td align='right' width='110' nowrap></td>
+		<td align='right' width='99%' nowrap>
+			<table width='100%' border='0' cellpadding='0' cellspacing='0'>
+				<tr>
+					<td>
+						<input type='submit' value='Сохранить' class='buttons' />
+						<input type='hidden' name='what' value="<?=$out['id']?>" />
+						<input type='hidden' name='action' value='saveItem' />
+						<input type='hidden' name='page' value="<?=$_REQUEST['page']?>" />
+						<input type='hidden' name='v' value="<?=$this->type?>" />
+					</td>
+					<td width='10' nowrap></td>
+					<td>
+						<input type='button' value='Отказаться' class='buttons' onclick="document.form_cancel.submit();" />
+					</td>
+					<td width='100%'></td>
+				</tr>
+			</table>
+		</td>
+	</tr>	
+</table>
+</form>
+<form action='.' method='get' name="form_cancel">
+    <input type='hidden' name='cId' value="<?=$out['parent_id']?>" />
+	<input type='hidden' name='page' value="<?=$_REQUEST['page']?>" />
+	<input type='hidden' name='v' value="<?=$this->type?>" />
+</form>

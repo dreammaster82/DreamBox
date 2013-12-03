@@ -1,0 +1,28 @@
+	<div>
+		<?=$this->getPages($this->getCountItems())?>
+		<ul class="foto_items">
+			<?php foreach($out as $ov){?>
+			<li>
+				<div style="text-align: center">
+					<?php
+					if($adm = $this->adminLinks($ov)){?>
+					<div class="admin_links">
+						<?php foreach($adm as $ov1){
+							if($ov1['type'] == 'link'){?>
+						<a href="<?=$ov1['link']?>"><?=$ov1['text']?></a>
+						<?php } else { ?>
+						<input type="<?=$ov1['type']?>" name="<?=$ov1['name']?>" value="<?=$ov1['text']?>" onclick="<?=$ov1['onclick']?>" />
+						<?php }
+						}?>
+					</div>
+					<?php }?>
+				</div>
+				<?php if($ov['img_big_src']){?>
+				<a href="?action=showItems&catId=<?=$this->catId?>&id=<?=$ov['id']?>&window=1" target="_blank" onClick="return wopenWH('?action=showItems&catId=<?=$this->catId?>&id=<?=$ov['id']?>&window=1', '_blank', <?=$this->config['big_pic_width'] + $this->config['wopenX3_offSET']?>, <?=$this->config['big_pic_height'] + $this->config['wopenY3_offSET']?>);">
+					<img src="<?=$this->config['files_path'].$ov['img_big_src']?>" style="width:<?=$ov['img_big_x'] > 250 ? 250 : $ov['img_big_x']?>px;height:<?=$ov['img_big_y'] > 245 ? 245 : $ov['img_big_y']?>" alt="<?=$ov['name']?>" />
+				</a>
+				<?php }?>
+			</li>
+			<?php }?>
+		</ul>
+	</div>

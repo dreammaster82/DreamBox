@@ -1,0 +1,150 @@
+	<form action='.' method='post' enctype='multipart/form-data' onSubmit='return formValidator(this);'>
+		<table style="width:100%">
+			<tr>
+				<th colspan='2'>Редактирование<?=(int)$_REQUEST['categoryId'] ? '' : ' наименования'?> параметра</th>
+			</tr>
+			<tr>
+				<td style="width:100px;">ID:</td>
+				<td>
+					<input type='text' name='groupId' value="<?=$out['item']['id']?>" readonly="" />
+				</td>	
+			</tr>
+			<? if($out['category']['id']){?>
+			<tr>
+				<td>Глобальный параметр?</td>
+				<td>
+					<input type="hidden" name="categoryId" value="<?=$out['category']['id']?>" />
+					<?if($out['groups_options']){?>
+					<select name="globalGroupId" onchange="isChanged(this, 'params_block')">
+						<option value="0">--------------</option>
+						<?foreach($out['groups_options'] as $ov){?>
+						<option value="<?=$ov['value']?>"<?=$ov['select']?>><?=$ov['text']?></option>
+						<?}?>
+					</select>
+					<?}?>
+				</td>	
+			</tr>
+			<?}?>
+			<tr>
+				<td colspan="2">
+					<div id="params_block">
+						<table style="width:100%">
+							<tr>
+								<td style="width:100px;">Название:</td>
+								<td>
+									<input type='text' name='name' value="<?=$out['item']['name']?>" size='50' maxlength='80' />
+								</td>	
+							</tr>
+							<tr>
+								<td>Тип:</td>
+								<td>
+									<?if($out['types']){?>
+									<select name='type'>
+									<?foreach($out['types'] as $ov){?>
+										<option value="<?=$ov['value']?>"<?=$ov['select']?>><?=$ov['text']?></option>
+									<?}?>
+									</select>
+									<?}?>
+								</td>	
+							</tr>
+							<tr>
+								<td>Фильтр?</td>
+								<td>
+									<input type='checkbox' value='1' id="is_filter" name='is_filter'<?=$out['item']['is_filter'] ? ' checked' : ''?> />
+									<label for="is_filter"><span></span></label>
+								</td>	
+							</tr>
+							<tr>
+								<td>Скрывать параметр?</td>
+								<td>
+									<input type='checkbox' value='1' id="is_hidden" name='is_hidden'<?=$out['item']['is_hidden'] ? ' checked' : ''?> />
+									<label for="is_hidden"><span></span></label>
+								</td>	
+							</tr>
+							<tr>
+								<td>Отсортировать список?</td>
+								<td>
+									<input type='checkbox' value='1' id="sort_parametr" name='sort_parametr' />
+									<label for="sort_parametr"><span></span></label>
+								</td>	
+							</tr>
+							<tr>
+								<td>Альтернативный параметр?</td>
+								<td>
+									<input type='checkbox' value='1' id="is_alternat" name='is_alternat'<?=$out['item']['is_alternat'] ? ' checked' : ''?> />
+									<label for="is_alternat"><span></span></label>
+								</td>	
+							</tr>
+							<tr>
+								<td>Разрешить индексирование?</td>
+								<td>
+									<input type='checkbox' value='1' id="not_index" name='not_index'<?=$out['item']['not_index'] ? ' checked' : ''?> />
+									<label for="not_index"><span></span></label>
+								</td>	
+							</tr>
+							<tr>
+								<td>Добавлять название фильтра в тайтл?</td>
+								<td>
+									<input type='checkbox' value='1' id="add_title" name='add_title'<?=$out['item']['add_title'] ? ' checked' : ''?> />
+									<label for="add_title"><span></span></label>
+								</td>	
+							</tr>
+							<tr>
+								<td>Дополнительный параметр?</td>
+								<td>
+									<input type='checkbox' value='1' id="is_base" name='is_base'<?=$out['item']['is_base'] ? ' checked' : ''?> />
+									<label for="is_base"><span></span></label>
+								</td>	
+							</tr>
+							<tr>
+								<td>Комментарий:</td>
+								<td><textarea rows='3' cols='45' name='comment' class='textfield' style='width:100%;'><?=$out['item']['comment']?></textarea></td>	
+							</tr>
+						</table>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					<input type="hidden" name="cl" value="Filters" />
+					<input type='hidden' name='action' value="saveGroup" />
+					<span style="margin-right: 10px;"><input type='submit' class='buttons'  value='Изменить' style='width:100px' /></span>
+					<span style="margin-right: 10px;"><input type='button' class='buttons'  value='Отказаться' style='width:100px' onclick="document.form_cancel.submit();" /></span>
+					<span><input type='submit' name="reload" class='buttons'  value='Обновить' style='width:100px' /></span>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<form action='.' method='get' name="form_cancel">
+		<input type="hidden" name="categoryId" value="<?=$out['category']['id']?>" />
+		<input type='hidden' name='action' value="showGroups" />
+		<input type="hidden" name="cl" value="Filters" />
+	</form>
+ <script>
+	function formValidator(theForm) {
+		var ind = 0;
+		if(typeof theForm.globalGroupId != 'undefined'){
+			ind = theForm.globalGroupId.selectedIndex;
+		}
+		if(!ind && !theForm.name.value){
+			alert('Пожалуйста, укажите название параметра!');
+			theForm.name.focus();
+			return(false);
+		}
+		var select_index = theForm.parametr_type.selectedIndex;
+		if(!ind && theForm.type.options[select_index].value == 0){
+			alert('Пожалуйста, укажите тип параметра!');
+			theForm.type.focus();
+			return(false);
+		}
+		return true;
+	}
+	function isChanged(obj, id){
+		if (obj.selectedIndex != 0) {
+			document.getElementById(id).style.display = 'none';
+		} else {
+			document.getElementById(id).style.display = 'block';
+		}
+	}
+</script>

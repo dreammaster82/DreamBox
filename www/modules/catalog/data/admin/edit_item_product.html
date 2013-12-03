@@ -1,0 +1,221 @@
+<form action='.' id='edit_form' method='post' enctype='multipart/form-data' class="edit_form">
+<table style="width: 100%;">
+	<tr>
+		<th colspan='2'>
+		    <?php
+		    if($out['id']){
+			echo'Редактирование продукта';
+		    } else {
+			echo'Создание продукта';
+		    }
+		    ?>
+		</th>
+	</tr>
+	<tr class="noline">
+		<td style="width:100px;">ID:</td>
+		<td>
+		    <table style="width:100%">
+			<tr>
+				<td>
+					<input type='text' name='what' value="<?=$out['id'];?>" size='10' readonly />
+				</td>
+				<td>
+					родитель:
+					<?php if($out['catalogs']){ ?>
+					<select name='ca_id'>
+					<?php foreach($out['catalogs'] as $ov){ ?>
+						<option value="<?=$ov['value']?>"<?=$ov['select']?>><?=$ov['text']?></option>
+					<? } ?>
+					</select>
+					<?php } else { ?>
+					<span style="color:red">Категории отсутствуют</span>
+					<?php } ?>
+				</td>
+			</tr>
+		    </table>
+		</td>
+	</tr>
+	<tr>
+		<td>Название:</td>
+		<td>
+		    <input type='text' name='name' value="<?=$out['name'];?>" style='width: 300px;' />
+		</td>	
+	</tr>
+	<tr>
+		<td>Alias:</td>
+		<td>
+		    <input type='text' name='alias' value="<?=$out['alias'];?>" style='width: 300px;' />
+		</td>	
+	</tr>
+	<tr>
+		<td>Цена:</td>
+		<td>
+			<input type="number" name="price" value="<?=$out['price']?>" style='width: 100px;' /> руб/м
+		</td>	
+	</tr>
+	<tr>
+		<td>Спецпредложение:</td>
+		<td>
+			<input type="checkbox" name="spec" value="1" id="spec"<?=$out['spec'] ? ' checked' : ''?> /><label for="spec"><span></span></label>
+		</td>	
+	</tr>
+	<tr>
+		<td>Параметры:</td>
+		<td>
+		    <?if($out['id']){
+				if($out['options']){?>
+			<?=$out['options']?>
+			<?}else{?>
+			<span style="color: red; font-weight: bold;">Отсутствуют параметры!</span>
+			<?}
+			}else{?>
+			<span style="color: red; font-weight: bold;">Сохраните чтобы выбрать!</span>
+			<?}?>
+		</td>	
+	</tr>
+	<tr>
+		<td>C этим товаром покупают:</td>
+		<td>
+		<?if($out['id']){?>
+			<div style="padding: 5px">
+				<input type="button" name="relate" onclick="return relateItem(<?=$out['id']?>);" value="Привязать товар" />
+			</div>
+			<?if($out['related_items']){?>
+			<?=$this->showRelatedItems($out['related_items'])?>
+			<?}
+		} else {?>
+			<div style="color: red; font-weight: bold;">Сохраните чтобы привязать!</div>
+		<?}?>
+		</td>	
+	</tr>
+	<tr>
+		<td style='empty-cells: show;white-space: nowrap'></td>
+		<td><a href='javascript:enter("item_textarea")'><img src='/admin/images/bb_break.gif' border='0' width='23' height='22' alt='Перевод строки' /></a>
+            <a href='javascript:nbsp("item_textarea")'><img src='/admin/images/bb_nbsp.gif' border='0' width='23' height='22' alt='Перевод строки' /></a>
+            <a href='javascript:bold("item_textarea")'><img src='/admin/images/bb_bold.gif' border='0' width='23' height='22' alt='Вставить жирный текст' /></a>
+            <a href='javascript:italicize("item_textarea")'><img src='/admin/images/bb_italicize.gif' border='0' width='23' height='22' alt='Вставить наклонный текст' /></a>
+            <a href='javascript:underline("item_textarea")'><img src='/admin/images/bb_underline.gif' border='0' width='23' height='22' alt='Вставить подчеркнутый текст' /></a>
+            <a href='javascript:center("item_textarea")'><img src='/admin/images/bb_center.gif' border='0' width='23' height='22' alt='Вставить отцентрированный текст' /></a>
+            <a href='javascript:hyperlink("item_textarea")'><img src='/admin/images/bb_url.gif' border='0' width='23' height='22' alt='Вставить ссылку' /></a>
+            <a href='javascript:email("item_textarea")'><img src='/admin/images/bb_email.gif' border='0' width='23' height='22' alt='Вставить e-mail адрес' /></a>
+            <a href='javascript:image("item_textarea");'><img src='/admin/images/bb_image.gif' border='0' width='23' height='22' alt='Вставить изображение' /></a>
+            <a href='javascript:paragraph("item_textarea")'><img src='/admin/images/bb_paragraph.gif' border='0' width='23' height='22' alt='Вставить параграф' /></a>
+            <a href='javascript:code("item_textarea")'><img src='/admin/images/bb_code.gif' border='0' width='23' height='22' alt='Преформатирование. Сохранение введеной структуры' /></a>
+            <a href='javascript:quote("item_textarea")'><img src='/admin/images/bb_quote.gif' border='0' width='23' height='22' alt='Вставить цитированный текст' /></a>
+            <a href='javascript:list("item_textarea")'><img src='/admin/images/bb_list.gif' border='0' width='23' height='22' alt='Вставить список' /></a>
+            <a href='javascript:slideshow_insert("item_textarea");'><img src='/admin/images/bb_gallery.gif' width='23' height='22' border='0' alt='Вставить слайд-шоу' /></a>
+            <a href='javascript:preview_insert("item_textarea");'><img src='/admin/images/bb_preview.gif' width='23' height='22' border='0' alt='Вставить предпросмотр' /></a>
+			<a href='javascript:hiperLink2("item_textarea");'><img src='/admin/images/bb_quote2.gif' width='23' height='22' border='0' alt='Вставить ссылку на статью' /></a>
+		</td>
+	</tr>
+	<tr class="noline">
+		<td>Текст:</td>
+		<td>
+			<textarea id="item_textarea" cols='90' rows='17' name='content' onselect='storeCaret(this);' onclick='storeCaret(this);' onkeyup='storeCaret(this);' style='width:100%'><?=$out['content'];?></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			<table style="width:100%">
+				<tr>
+					<td><input type='button' value='Добавить изображение' onClick="addRow('edit_table');" class='buttons'><td>
+					<td align='right'><input type='submit' value='Обновить...'  class='buttons' name='reload'><td>
+				</tr>
+			</table>
+			<table id='edit_table'>
+	<?php if($out['files']){
+		foreach($out['files'] as $ok => $ov){
+	?>
+				<tr class="row<?=$ok?>">
+					<td style="width:60px;">
+						<input type="hidden" name="image[<?=$ok?>]" value="1" />img <b><?=$ok?></b>:
+					</td>
+					<td>
+						<input type="file" name="files[<?=$ok?>]" class="textfield" size="25" />&nbsp;&nbsp;или URL: <input type="text" name="url[<?=$ok?>]" class="textfield" size="25" /> 
+					</td>
+					<td>
+						<input type="checkbox" name="delete_img[<?=$ok?>]" id="delete_img_<?=$ok?>" value="1" /><label for="delete_img_<?=$ok?>"><span></span>X</label> (<b><a href="<?=$this->config['files_path'].$out['posted_path'].'/'.$out['id'].'/'.$ov?>" target="_blank"><?=$ov?></a></b>)
+						<span onclick="image2('item_textarea', '<?=$this->config['files_path'].$out['posted_path'].'/'.$out['id'].'/'.$ov?>')" style="cursor:pointer; cursor:hand;">[<u>вставить</u>]</span>
+					</td>	
+				</tr>
+	<?php
+		}
+	} ?>
+			</table>
+		</td>	
+    </tr>
+	<?php if($out['files']){ ?>
+	<tr>
+		<td></td>
+		<td>
+			<div style="overflow: hidden;">
+	<?php
+		foreach($out['files'] as $ok => $ov){
+			$size = getimagesize(CLIENT_PATH.$this->config['files_path'].$out['posted_path'].'/'.$out['id'].'/'.$ov);
+			$width = '';
+			$height = '';
+			if($size[1] > 100){
+				if($size[0] > $size[1]){
+					$width = 'width: 100px;';
+					$height = 'height: '.round((100/$size[0] * $size[1]),0).'px;';
+				} else {
+					$height = 'height: 100px;';
+				}
+			} else {
+				if($size[0] > 100){
+					$width = 'width: 100px;';
+				}
+			}
+	?>
+				<div style="float: left; width: 100px; height: 130px; text-align: center; margin-right: 10px;">
+					<a href="<?=$this->config['files_path'].$out['posted_path'].'/'.$out['id'].'/'.$ov?>" target="_blank" style="color: black;">
+						img <b><?=$ok?></b><br />
+						<?=$size[0]?> x <?=$size[1]?><br />
+						<img style="<?=$width.$height?>" src="<?=$this->config['files_path'].$out['posted_path'].'/'.$out['id'].'/'.$ov?>" />
+					</a>
+				</div>
+	<?php } ?>
+			</div>
+		</td>
+	</tr>
+	<?php } ?>
+	<tr>
+		<td></td>
+		<td>
+			<input type='hidden' name='id' value="<?=(int)$_REQUEST['id']?>" />
+			<input type='hidden' name='action' value='saveItem' />
+			<input type='hidden' name='page' value="<?=$_REQUEST['page']?>" />
+			<input type='hidden' name='sort' value="<?=$_REQUEST['sort']?>" />
+			<input type="hidden" name="cl" value="Product" />
+			<input type='hidden' name='fpc_id' value="<?=$out['fpc_id']?>" />
+			<span style="margin-right: 10px;"><input type='submit' class='buttons'  value='Изменить' style='width:100px' /></span>
+			<span style="margin-right: 10px;"><input type='button' class='buttons'  value='Отказаться' style='width:100px' onclick="document.form_cancel.submit();" /></span>
+			<span><input type='submit' name="reload" class='buttons'  value='Обновить' style='width:100px' /></span>
+		</td>
+	</tr>
+</table>
+</form>
+<form action='.' method='get' name="form_cancel">
+	<input type='hidden' name='id' value="<?=(int)$_REQUEST['id']?>" />
+	<input type='hidden' name='page' value="<?=$_REQUEST['page']?>" />
+	<input type='hidden' name='sort' value="<?=$_REQUEST['sort']?>" />
+</form>
+<script>
+function getMulti(obj){
+	var sel = $(obj).parent().find('select');
+	if(sel.prop('multiple')){
+		sel.removeProp('multiple');
+		$(obj).val('+');
+		var s = $(':selected', sel).eq(0);
+		$(':selected', sel).removeProp('selected');
+		s.prop('selected', 'true');
+	} else {
+		sel.prop('multiple', 'true');
+		$(obj).val('-');
+	}
+}
+function relateItem(id){
+	window.open('/admin/catalog/?window=1&prodId=' + id, 'relate_window', 'width=500, height=400, resizable=yes, scrollbars=yes, menubar=no, status=yes');
+}
+</script>

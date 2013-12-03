@@ -1,0 +1,49 @@
+			<?if($out['spec']){?>
+			<section class="spec">
+				<div class="close_block"><h2>Спецпредложения</h2></div>
+				<div class="title">
+					<a href="/catalog/spec/">Спецпредложения</a>
+				</div>
+				<?=$out['product_view_class']->showItems($out['spec'])?>
+			</section>
+			<?}?>
+			<?if($out['tips'] || $out['news']){?>
+			<section class="content">
+				<?if($out['tips']){?>
+				<aside>
+					<h2>Советы</h2>
+					<ul class="items">
+						<?foreach($out['tips'] as $ov){?>
+						<li class="one_item" itemscope itemtype="http://schema.org/Article">
+							<a href="/tips/<?=$ov['id']?>_<?=$ov['alias']?>.html" itemprop="url"><?=$ov['name']?></a>
+						</li>
+						<?}?>
+					</ul>
+					<a href="/tips/">Смотреть все советы</a>
+				</aside>
+				<?}?>
+				<div class="main_list">
+					<?if($out['news']){?>
+					<div class="close_block"><h2>Новости</h2></div>
+					<a href="/news/" class="h2">Новости</a>
+					<ul>
+						<?foreach($out['news'] as $ov){
+						$href = '/news/'.$ov['id'].'_'.$ov['alias'].'.html';
+						$posted = reset(explode(' ', $ov['posted']));
+						$dt = explode('-', $posted)?>
+						<li class="one_item" itemscope itemtype="http://schema.org/NewsArticle">
+							<div class="image">
+								<a href="<?=$href?>">
+									<img itemprop="image" src="/preview/type_small<?=$ov['img_src'] ? '/files/news'.$ov['img_src'] : '/images/no_photo.jpg'?>" alt="<?=$ov['name']?>" />
+								</a>
+							</div>
+							<a class="name" href="<?=$href?>" itemprop="url"><?=$ov['name']?></a>
+							<div class="description" itemprop="description"><?=$ov['annotation']?></div>
+							<time datetime="<?=$posted?>" itemprop="datePublished"><?=$dt[2]?> <?=$out['news_class']->months[(int)$dt[1]]?> <?=$dt[0]?></time>
+						</li>
+						<?}?>
+					</ul>
+					<?}?>
+				</div>
+			</section>
+			<?}?>

@@ -1,0 +1,45 @@
+<form name='edit_form' id='edit_form' action='.' method='post' enctype='multipart/form-data'>
+<table width='100%' border='0' cellpadding='3' cellspacing='0'>
+	<tr>
+		<th align='right' width='110' nowrap class=z>&nbsp;</th>
+		<th width='100%'>Редактирование типа</th>
+	</tr>
+	<tr>
+		<td align='right'>Id:</td>
+		<td><?=$out['id']?></td>	
+	</tr>
+	<tr>
+		<td align='right'>Name:</td>
+		<td>
+			<input type='text' name='name' size='40' class='textfield' value="<?=$out['name']?>" />
+		</td>	
+	</tr>
+</table>
+<table width='100%' border='0' cellpadding='1' cellspacing='0'>
+	<tr>
+		<td align='right' width='110' nowrap></td>
+		<td align='right' width='99%' nowrap>
+			<table width='100%' border='0' cellpadding='0' cellspacing='0'>
+				<tr>
+					<td>
+						<input type='submit' value='Сохранить' class='buttons' />
+						<input type='hidden' name='what' value="<?=$out['id']?>" />
+						<input type='hidden' name='action' value='saveType' />
+						<input type='hidden' name='window' value="<?=$_REQUEST['window']?>" />
+						<input type='hidden' name='types' value="<?=$_REQUEST['types']?>" />
+					</td>
+					<td width='10' nowrap></td>
+					<td>
+						<input type='button' value='Отказаться' class='buttons' onclick="document.form_cancel.submit();" />
+					</td>
+					<td width='100%'></td>
+				</tr>
+			</table>
+		</td>
+	</tr>	
+</table>
+</form>
+<form action='.' method='get' name="form_cancel">
+    <input type='hidden' name='window' value="<?=$_REQUEST['window']?>" />
+	<input type='hidden' name='types' value="<?=$_REQUEST['types']?>" />
+</form>

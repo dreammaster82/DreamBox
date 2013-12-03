@@ -1,0 +1,18 @@
+				<div class="top_name">
+					<?=$this->showPath($this->getPath($out['item']['id']))?>
+					<h1><?=$out['item']['name']?></h1>
+				</div>
+				<section class="content">
+					<?if($out['count_products']){?>
+					<?=$this->showProducts($out['products'], $out['count_products'], $out['cond'], $out['item'])?>
+					<?} else {
+					$catArr = $this->getCatalogArray()?>
+					<?=$this->showItems($catArr[$out['item']['id']]['children'], $out['item']['alias'])?>
+					<?}
+					if($out['item']['content']){?>
+					<section class="content">
+						<?=$out['item']['content']?>
+					</section>
+					<?}?>
+				</section>
+				

@@ -1,0 +1,28 @@
+			<article itemscope itemtype="http://schema.org/Article">
+				<div class="top_name">
+					<?if($out['img_src']){?>
+					<img src="/preview/type_content_name<?=$this->config['files_path'].$out['img_src']?>" alt="<?=$out['name']?>" title="<?=$out['name']?>" />
+					<?}?>
+					<h1 itemprop="name"><?=$out['name']?></h1>
+				</div>
+				<section class="content" itemprop="articleBody">
+					<?=$out['content']?>
+					<?php if($out['toprint'] && !(int)$_REQUEST['print']) { ?>
+					<div style="padding: 20px 0px;">
+						<a class="to_print" href="/<?=$this->module?>/<?=$out['alias']?>.html?print=1" target="_blank"><span>Версия для печати</span></a>
+					</div>
+					<?php }
+					$this->Core->getClass('Auth')->process();
+					if($this->Core->getClass('Auth')->user['permission'][$this->config['admin']] && !(int)$_REQUEST['print']){?>
+					<p align=right>
+						<a href="/admin/content/?action=editItem&what=<?=$out['id']?>" target="_blank">[редактировать раздел]</a>
+					</p>
+					<?php }?>
+					<time itemprop="dateModified" datetime="<?=$out['posted']?>"><?=$out['date']?></time>
+				</section>
+				<?php if($out['children']){?>
+				<section class="content children">
+					<?=$this->showItems($out['children'])?>
+				</section>
+				<?php }?>
+			</article>

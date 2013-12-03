@@ -1,0 +1,81 @@
+<form name='edit_form' id='edit_form' action='.' method='post' enctype='multipart/form-data'>
+    <table id='edit_table' width="100%" border='0' cellpadding='1' cellspacing='0'>
+	<tr>
+		<th colspan="2">Редактирование элемента</th>
+	</tr>
+	<tr>
+		<td>Категория:</td>
+		<td><b><?=$out['parent']['name']?></b></td>	
+	</tr>
+	<tr>
+		<td>Идентификатор:</td>
+		<td><input type='text' name='what' value="<?=$out['id']?>" size='10' readonly /></td>	
+	</tr>	
+	<tr>
+		<td>Название:</td>
+		<td><input type='text' name='name' value="<?=$out['name']?>" size='80' /></td>	
+	</tr>	
+	<tr>
+		<td>Описание файла:</td>
+		<td><input type='text' name='description' value="<?=$out['description']?>" size='80' /></td>	
+	</tr>
+	<?php if($out['file_src']){ ?>
+	<tr>
+		<td></td>
+		<td>
+			Имя файла: <?=$out['file_src']?>, Тип файла: <?=$out['type']?>, размер: <?=$out['size']?> bytes<br>
+			<a href="<?=$this->config['files_path'].$out['file_src']; ?>" target="image"> Скачать для редактирования...</a>
+		</td>	
+	</tr>
+	<? } ?>
+	<tr>
+		<td>Файл:</td>
+		<td>
+			<input type='file' name='file_src' />
+			<?php if($out['file_src']){?>
+			<input type="checkbox" id="delete_file" name="delete_file" value="1" /><label for="delete_file"><span></span>удалить</label>
+			<? }?>
+			<div style="display: inline-block; margin-left: 20px;">
+				<input type='submit' class='buttons' value='Обновить' name="reload" />
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>Загруженные файлы:</td>
+		<td>
+			<?php if($out['loaded_files']){?>
+			<select name="select_file">
+				<option value="">-------------</option>
+				<?php foreach($out['loaded_files'] as $ov){?>
+				<option value="<?=$ov['filename']?>"><?$ov['filename']?></option>
+				<?php }?>
+			</select>
+			<?php } else {
+				$out['load_error'] = 'Загруженных файлов нет!';
+			}?>
+			<?=$out['load_error']?>
+			<small>Для загрузки больших файлов, загрузите их сначала в папку /files/temp/, а затем воспользуйтесь этим полем</small>
+		</td>
+	</tr>
+	</table>
+	<hr>
+	<center>
+	<table width='120' border='0' cellpadding='1' cellspacing='0'>
+	<tr>
+		<td>
+			<input type='submit' class='buttons' value='Изменить' />
+			<input type='hidden' name='id' value="<?=$out['parent_id']?>" />
+			<input type='hidden' name='action' value='saveItemFiles' />
+			<input type='hidden' name='page' value="<?=(int)$_REQUEST['page'];?>" />
+		</td>
+		<td>
+			<input type='button' class='buttons' value='Отказаться' onclick="document.form_cancel.submit();" />
+		</td>
+	</tr>	
+	</table>
+</center>
+</form>
+<form action='.' method='get' name="form_cancel">
+    <input type='hidden' name='id' value="<?=$out['parent_id']?>" />
+    <input type='hidden' name='page' value="<?=(int)$_REQUEST['page'];?>" />
+</form>

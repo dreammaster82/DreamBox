@@ -1,0 +1,50 @@
+<form action='.' method='post' enctype='multipart/form-data'>
+    <table width="100%" border="0" cellpadding="1" cellspacing="0">
+	
+	<tr class=z height="24">
+		<td align="right" width="120" class=z>&nbsp;</td>
+		<td class=z>Перемещение продукта</td>
+	</tr>
+	<tr class=x>
+		<td align="right">Идентификатор:</td>
+		<td><input type="text" name="id" class="textfield" value="<?=$item['id'];?>" size="20" readonly /></td>	
+	</tr>
+	<tr class=y>
+		<td align="right" width="140" nowrap>Что перемещаем:</td>
+		<td><b><?=$item['name'];?></b></td>	
+	</tr>
+	<tr class=x>
+		<td align="right" width="140" nowrap>Пункт назначения:</td>
+		<td><?=$category;?></td>	
+	</tr>
+	<tr class=y>
+		<td align="right" nowrap>Пункт возврата:</td>
+		<td>
+			<br>
+			<input type="radio" name="return_to" value="1" checked />в старого родителя
+			<br>
+			<input type="radio" name="return_to" value="2" />в нового родителя 
+		</td>	
+	</tr>
+	<tr class=x>
+		<td align="right">Изменить</td>
+		<td>
+			<input type="submit" class="buttons" value="&nbsp;>>&nbsp;" />
+			<input type="hidden" name="catId" value="<?=$this->catId?>" />
+			<input type="hidden" name="action" value="moveItem2" />
+			<input type="hidden" name="move" value="1" />
+			<input type="hidden" name="v" value="<?=(int)$_REQUEST['v']?>" />
+		</td>	
+	</tr>	
+	<tr class=y>
+		<td align="right">Отказаться</td>
+		<td>
+			<input type="button" class="buttons" value="&nbsp;>>&nbsp;" onclick="document.form_cancel.submit();" />
+		</td>	
+	</tr>
+    </table>
+</form>
+<form action="." method="get" name="form_cancel">
+    <input type="hidden" name="catId" value="<?=$this->catId?>" />
+	<input type="hidden" name="v" value="<?=(int)$_REQUEST['v']?>" />
+</form>

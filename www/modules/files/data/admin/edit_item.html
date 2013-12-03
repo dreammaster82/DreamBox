@@ -1,0 +1,61 @@
+<form action='.' method='post' enctype='multipart/form-data'>
+    <table width='100%' border='0' cellpadding='1' cellspacing='0'>
+		<tr>
+			<th colspan="2">Редактирование категории</th>
+		</tr>
+<?php
+if($this->ret['warning']){
+	echo '
+		<tr>
+			<td colspan="2"><span style="color:red">'.$this->ret['warning'].'</span></td>
+		</tr>';
+}
+?>
+		<tr>
+			<td>Уровень:</td>
+			<td>
+				<input type='text' name='level' class='textfield' value="<?=$out['level'];?>" readonly /> id = <?=$out['id']?>
+			</td>	
+		</tr>
+		<tr>
+			<td>Название:</td>
+			<td>
+				<input type='text' name='name' class='textfield' value="<?=$out['name'];?>" style="width: 60%;" />
+			</td>	
+		</tr>
+		<tr>
+			<td>Alias:</td>
+			<td>
+				<input type='text' name='alias' class='textfield' value="<?=$out['alias'];?>" style="width: 60%;" />
+			</td>	
+		</tr>
+		<tr>
+			<td>Описание:</td>
+			<td><input type='text' name='description' class='textfield' value="<?=$out['description'];?>" style="width: 90%;" /></td>	
+		</tr>
+		<tr>
+			<td>Скрыть папку:</td>
+			<td>
+				<input type='checkbox' name='is_hide' id="is_hide" value='1'<?=$out['is_hide']?> /><label for="is_hide"><span></span></label>
+			</td>	
+		</tr>
+    </table>
+	<hr>
+    <table width='100%' border='0' cellpadding='1' cellspacing='0'>
+		<tr>
+			<td nowrap></td>
+			<td nowrap>
+				<input type='submit' class='buttons' value='Изменить' />
+				<input type='hidden' name='action' value='saveItem' />
+				<input type='hidden' name='id' value="<?=$this->id?>" />
+				<input type='hidden' name='what' value="<?=$out['id']?>" />
+			</td>
+			<td width='100%'>
+				<input type='button' class='buttons' value='Отказаться' onclick="document.form_cancel.submit();" />
+			</td>
+		</tr>	
+    </table>
+</form>
+<form action='.' method='get' name="form_cancel">
+    <input type='hidden' name='id' value="<?=$this->id?>" />
+</form>

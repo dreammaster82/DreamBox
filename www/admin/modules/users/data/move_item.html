@@ -1,0 +1,42 @@
+<form action='.' method='post' enctype='multipart/form-data'>
+<table style='width:100%'>
+	<tr>
+		<th colspan='2'>Перемещение пользователя</th>
+	</tr>
+	<tr>
+		<td>Что перемещаем:</td>
+		<td><b><?=$out['login']?></b></td>	
+	</tr>
+	<tr>
+		<td>Пункт назначения:</td>
+		<td>
+			<select name="move_to">
+			<?php foreach($out['parents_options'] as $ok => $ov){ ?>
+				<option value="<?=$ov['value']?>"<?=$ov['select']?>><?=$ov['text']?></option>
+			<?php } ?>
+			</select>
+		</td>	
+	</tr>
+	<tr>
+		<td>Пункт возврата:</td>
+		<td>
+			<input type='radio' name='return_to' id="return2" value='2' checked /><label for="return2"><span></span>в старую группу</label>
+			<br>
+			<input type='radio' name='return_to' id="return3" value='3' /><label for="return3"><span></span>в новую группу</label> 
+		</td>	
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			<input type='submit' class='buttons' value='ОК' style='width:100px' />
+			<input type='hidden' name='what' value="<?=$out['id']?>" />
+			<input type='hidden' name='action' value='userMove2' />
+			<input type='hidden' name='catId' value="<?=$this->catId?>" />
+			<input type='button' value='Cancel' style='width:100px;' onclick="document.form_cancel.submit();" />
+		</td>	
+	</tr>
+</table>
+</form>
+<form method='GET' name="form_cancel">			
+    <input type='hidden' name='catId' value="<?=$this->catId?>" />
+</form>

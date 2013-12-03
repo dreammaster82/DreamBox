@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage">
+	<head>
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+		<title><?=$out['title']?></title>
+		<meta name="description" content="<?=$out['description']?>" />
+		<meta name="keywords" content="<?=$out['keywords']?>" />
+		<meta itemprop="name" content="<?=$out['title']?>" />
+		<meta itemprop="description" content="<?=$out['description']?>" />
+		<?php if($out['propImage']){?>
+		<meta itemprop="image" content="http://<?=$CONFIG['site'].$out['propImage']?>" />
+		<?php }?>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic|Open+Sans:400,300,600,700" />
+        <link rel="stylesheet" href="/css/style.css" />
+		<link rel="stylesheet" href="/js/formstyler/jquery.formstyler.css" />
+		<?=$out['style']?>
+		<!--[if lt IE 9]>
+		<link rel="stylesheet" type="text/css" href="/css/style-ie8.css" />
+		<script src="/js/html5.js"></script>
+		<![endif]-->
+		<?=$out['style']?>
+		<script src="/js/jquery-1.10.2.min.js"></script>
+		<script defer src="/js/jquery.maskedinput.js"></script>
+		<script defer src="/js/formstyler/jquery.formstyler.min.js"></script>
+		<script defer src="/js/utils.js"></script>
+		<?=$out['js']?>
+	</head>
+	<body>
+		<?php include CLIENT_PATH.'/data/header.html'; ?>
+		<section id="content">
+			<div class="wrapper">
+				<?=$out['content']?>
+			</div>
+		</section>
+    </body>
+</html>

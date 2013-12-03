@@ -1,0 +1,17 @@
+				<div class="top_name">
+					<?=$this->showPath($this->getPath())?>
+					<h1><?=$this->config['header']?></h1>
+				</div>
+				<section class="content">
+				<?php if($out['cnt']){?>
+					<?=$this->showItems($out['items'])?>
+					<?if($S = $this->Core->getClass('Scroll')){
+						$S->cnt = $out['cnt'];
+						$S->limit = $this->config['items_on_page'];
+						$S->pageInLine = $this->config['pages_in_line'];
+						echo $S->showPages();
+					}
+				} else {?>
+					<div class="warning">Раздел находится в разработке</div>
+				<?php }?>
+				</section>

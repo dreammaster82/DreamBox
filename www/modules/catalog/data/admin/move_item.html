@@ -1,0 +1,49 @@
+<form action='.' name='move_to_form' method='post' enctype='multipart/form-data' class="edit_form">
+    <table style="width:100%">
+	<tr>
+		<th colspan='2'>Перемещение категории</th>
+	</tr>
+	<tr>
+		<td style="width: 100px;">Что перемещаем:</td>
+		<td><b><?=$out['name']?></b></td>	
+	</tr>
+	<tr>
+		<td>Пункт назначения:</td>
+		<td>
+		    <input type='text' name='move_to' id='move_to' value='' size='4' />
+		    <input type='text' name='cat_name' id='cat_name' value='' size='20' readonly />
+		    <a href='?window=1' target="_blank" onClick="return wopenWH('?window=1&insCat=1','_blank',500,500);"><b class='title'><u>найти категорию</u></b></a>
+		</td>	
+	</tr>
+	<tr>
+		<td>Пункт возврата:</td>
+		<td>
+			<input type='radio' name='return_to' id="return1" value='1' checked /><label for="return1"><span></span>в себя</label>
+		    <br>
+		    <input type='radio' name='return_to' id="return2" value='2' /><label for="return2"><span></span>в старого родителя</label>
+		    <br>
+		    <input type='radio' name='return_to' id="return3" value='3' /><label for="return3"><span></span>в нового родителя</label> 
+		</td>	
+	</tr>
+	<tr>
+		<td>Изменить:</td>
+		<td>
+			<input type='submit' class='buttons' value=' >> ' />
+			<input type='hidden' name='action' value='moveItem2' />
+			<input type='hidden' name='id' value="<?=$this->id?>" />
+			<input type='hidden' name='what' value="<?=$out['id']?>" />
+			<input type="hidden" name="sort" value="<?=$_REQUEST['sort']?>" />
+		</td>	
+	</tr>
+	<tr>
+		<td>Отказаться</td>
+		<td>
+			<input type='button' class='buttons' value=' >> ' onclick="document.form_cancel.submit();" />
+		</td>	
+	</tr>
+    </table>
+</form>
+<form action='.' method='get' name="form_cancel">			
+    <input type='hidden' name='id' value="<?=$this->id?>" />
+    <input type="hidden" name="sort" value="<?=$_REQUEST['sort']?>" />
+</form>

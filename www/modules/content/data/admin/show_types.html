@@ -1,0 +1,16 @@
+<table class="oneelem hovered">
+	<tr>
+		<td width="99%"><?=$out['name']?></td>
+		<td nowrap>
+			<?php
+			if($out['admin_links']){
+				echo'<div class="admin_links">';
+				foreach($out['admin_links'] as $ov){
+					echo'<a href="'.$ov['link'].'">'.$ov['text'].'</a>';
+				}
+				echo'</div>';
+			}
+			?>
+		</td>
+	</tr>
+</table>

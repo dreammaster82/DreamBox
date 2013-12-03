@@ -1,0 +1,24 @@
+<div class="pages">
+	<?php if(($data['page'] + 1) > $this->config['pages_in_line']){
+		$start = $data['i'] - 1;
+		$link = 'page='.$start.$data['add'];
+	?>
+	<a href="?<?=$data['link']?>">назад</a> |
+	<?php } 
+	while ($data['i'] < $data['end']){
+			$start = $data['i'];
+			$link = 'page='.$start.$data['add'];
+			$step = $data['i'] + 1;
+			if ($data['i'] != $data['page']){ ?>
+	<a href="?<?=$data['link']?>"><?=$step?>|</a>
+			<?php } else { ?>
+	<span><?=$step?></span>|
+			<?php }
+			++$data['i'];
+	} 
+	if($data['iteration'] > $data['end']){
+		    $start = $data['i'];
+			$link = 'page='.$start.$data['add']; ?>
+	<a href="?<?=$data['link']?>">далее</a>
+	<?php } ?>
+</div>

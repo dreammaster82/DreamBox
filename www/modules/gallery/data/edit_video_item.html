@@ -1,0 +1,72 @@
+<form name="edit_form" id="edit_form" action="." method="post" enctype="multipart/form-data">
+<table id="edit_table" width="100%" border="0" cellpadding="1" cellspacing="0">
+	<tr class=z>
+		<td align="right" class=z>&nbsp;</td>
+		<td class=z>Редактирование элемента</td>
+	</tr>
+	<tr class=x>
+		<td width="140" nowrap align="right">Категория:</td>
+		<td width="100%"><b><?=$cItem['name']?></b></td>	
+	</tr>
+	<tr class=y>
+		<td align="right">Идентификатор:</td>
+		<td><input type="text" name="id" class="textfield" value="<?=$item['id']?>" size="10" readonly /></td>	
+	</tr>	
+	<tr class=x>
+		<td align="right">Название:</td>
+		<td><input type="text" name="name" class="textfield" value="<?=$item['name']?>" size="80" /></td>	
+	</tr>
+	<tr class=y>
+		<td align="right">Ссылка на видео:</td>
+		<td><input type="text" name="link" class="textfield" value="<?=$item['link']?>" size="80" /></td>	
+	</tr>
+	<tr class=y>
+		<td align="right">Аннотация:</td>
+		<td><textarea rows="5" cols="100" name="content" class="textfield"><?=$item['content']?></textarea></td>	
+	</tr>
+</table>
+<table width='100%' border='0' cellpadding='1' cellspacing='0'>
+	<?php
+	if($info) echo'
+	<tr class=y>
+		<td align="right"></td>
+		<td>'.$info.'</td>	
+	</tr>';
+	?>
+	<tr class=x>
+		<td align='right' width='100' nowrap>Предпросмотр:</td>
+		<td width='100%'>
+			Желательный размер (470px x 307px), другой будет преобразован!<br />
+			<input type='file' name='header' size='65' class='textfield' /><?=$del;?>
+            <div style="display: inline-block; margin-left: 20px; *display: inline; *zoom:1;">
+                <input type='submit' class='buttons' value='Обновить' name="reload" />
+            </div>
+		</td>	
+	</tr>
+</table>
+<hr>
+<center>
+<table width="120" border="0" cellpadding="1" cellspacing="0">
+	<tr>
+		<td>
+			<input type="submit" class="buttons" value="Изменить" />
+			<input type="hidden" name="catId" value="<?=$this->catId?>" />
+			<input type="hidden" name="action" value="editItem2" />
+			<input type="hidden" name="window" value="<?=$_REQUEST['window']?>" />
+			<input type="hidden" name="is_copy" value="<?=$_REQUEST['is_copy']?>" />
+			<input type="hidden" name="page" value="<?=$_REQUEST['page']?>" />
+			<input type="hidden" name="v" value="1" />
+		</td>
+		<td>
+			<input type='button' class='buttons' value='Отказаться' style='width:100px;' onclick="document.form_cancel.submit();" />
+		</td>
+	</tr>	
+</table>
+</center>
+</form>
+<form action='.' method='get' name="form_cancel">
+	<input type="hidden" name="catId" value="<?=$this->catId?>" />
+	<input type="hidden" name="page" value="<?=$_REQUEST['page']?>" />
+    <input type='hidden' name='action' value='show' />
+	<input type="hidden" name="v" value="<?=$_REQUEST['v']?>" />
+</form>

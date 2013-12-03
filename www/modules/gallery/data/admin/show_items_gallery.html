@@ -1,0 +1,51 @@
+<?php $addArr = array();
+if((int)$_REQUEST['window']){
+	$addArr[] = 'window='.(int)$_REQUEST['window'];
+}
+if((int)$_REQUEST['preview']){
+	$addArr[] = 'preview='.(int)$_REQUEST['preview'];
+}
+if((int)$_REQUEST['idArea']){
+	$addArr[] = 'idArea='.(int)$_REQUEST['idArea'];
+}
+if((int)$_REQUEST['insItem']){
+	$addArr[] = 'insItem='.(int)$_REQUEST['insItem'];
+}
+$add = '';
+if($addArr){	
+	$add = '&'.implode('&', $addArr);
+}
+foreach($out['items'] as $ov){?>
+			<table class="onecat">
+				<tr>
+					<td style="padding-left:<?=$out['width']?>px;" nowrap></td>				
+					<td>
+						<?php if($out['is_parents']) { ?>
+						<img src="/admin/images/open.gif" width="18" height="15" border="0" alt="">
+						<?php } else { ?>
+						<img src="/admin/images/closed.gif" width="18" height="15" border="0" alt="">
+						<?php } ?>
+					</td>
+					<td style="width:100%"><a href="?cId=<?=$ov['id']?><?=$add?>"><?=$ov['name']?></a></td>
+					<td><div style="width: 50px; text-align: center;"><?=$ov['id']?></div></td>
+					<td style="width:50px;white-space:nowrap">
+						<?php
+						if($adm = $this->adminLinks($ov)){?>
+						<div class="admin_links">
+							<?php foreach($adm as $ov1){
+								if($ov1['type'] == 'link'){?>
+							<a href="<?=$ov1['link']?>"><?=$ov1['text']?></a>
+							<?php } else { ?>
+							<input type="<?=$ov1['type']?>" name="<?=$ov1['name']?>" value="<?=$ov1['text']?>" onclick="<?=$ov1['onclick']?>" />
+							<?php }
+							}?>
+						</div>
+						<?php }?>
+					</td>
+				</tr>
+			</table>
+<?php 
+	if($out['is_parents']){
+		++$this->wi;
+	}
+}?>

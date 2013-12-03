@@ -1,0 +1,33 @@
+			<center><?=$this->getPages($this->getCountItems(array('parent_id' => $parId)))?></center>
+			<table width="100%" border="0" cellpadding="2" cellspacing="1" style="margin-top:10px;">
+				<tr>
+					<th width="16">&nbsp;</th>
+					<th align="center">Файл</th>
+					<th align="center">Ссылка</th>
+					<th align="center">Дата загрузки</th>
+					<th>&nbsp;</th>
+				</tr>
+				<?php foreach($out as $ok => $ov){ 
+				$fDate = $ov['file_date'] ? date('d.m.y', strtotime($ov['file_date'])) : ''; ?>
+				<tr class="oneelem hovered">
+					<td><img src="/files/icons/<?=$ov['file_type']?>.gif" width="16" height="16"></td>
+					<td style="text-align:left;width:100%"><b><?=$ov['real_file']?></b></td>
+					<td style="text-align:center"><div style="width:150px">/download/<?=$ov['hache']?>/</div></td>
+					<td style="text-align:center"><div style="width:150px"><?=$fDate?></div></td>
+					<td style="text-align:left" nowrap>
+						<?php
+						if($adm = $this->adminLinks($ov)){?>
+						<div class="admin_links">
+							<?php foreach($adm as $ov1){
+								if($ov1['type'] == 'link'){?>
+							<a href="<?=$ov1['link']?>"><?=$ov1['text']?></a>
+							<?php } else { ?>
+							<input type="<?=$ov1['type']?>" name="<?=$ov1['name']?>" value="<?=$ov1['text']?>" onclick="<?=$ov1['onclick']?>" />
+							<?php }
+							}?>
+						</div>
+						<?php }?>
+					</td>
+				</tr>
+				<?php } ?>
+			</table>

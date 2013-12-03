@@ -1,0 +1,25 @@
+				<div class="top_name">
+					<?=$this->showPath($out['path'])?>
+					<h1><?=$this->ret['title']?></h1>
+				</div>
+				<section class="content">
+					<?if($P){?>
+					<div class="sort_views blue_block">
+						Сортировать по:
+						<a href="?sort=price" class="sort<?if($out['sort']['price'] == 'active'){?> active<?}?>">цене</a>
+						|
+						<a href="?sort=name" class="sort<?if($out['sort']['name'] == 'active'){?> active<?}?>">названию</a>
+						<div class="views">
+							Показывать:
+							<span class="grid<?if(!$_COOKIE['view']){?> active<?}?>">плиткой</span>
+							<span class="list<?if($_COOKIE['view']){?> active<?}?>">списком</span>
+						</div>
+					</div>
+					<?=$P->showItems($out['items'])?>
+					<?=$out['pages']?>
+					<?} else {?>
+					<script>$(document).ready(function(){setHeight();});</script>
+					<div class="warning">Каталог пуст</div>
+					<?}?>
+				</section>
+				

@@ -1,0 +1,17 @@
+.foto_items{
+	padding: 0px;
+	text-align: left;
+}
+	.foto_items li{
+		display: inline-block;
+		width: 250px;
+		margin: 0 10px 10px 0;
+		border: 1px black solid;
+		background-color: #fff4b8;
+		height: 165px;
+		overflow: hidden;
+		list-style: none;
+	}
+		.foto_items li .admin_links{
+			margin-bottom: 5px;
+		}

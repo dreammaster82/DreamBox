@@ -1,0 +1,167 @@
+				<div class="top_name">
+					<?=$this->showPath([['name' => $this->config['header']]])?>
+					<h1><?=$this->config['header']?></h1>
+				</div>
+				<section class="basket">
+					<?if($out['items']){
+					$price = 0?>
+					<form method="POST">
+						<ul class="product_items list">
+							<?
+							$arr = array();
+							foreach($out['items'] as $ok => $ov){
+								$href = '/catalog'.$ov['ca_alias'].'/'.$ok.'_'.$ov['alias'].'.html';
+								$pr = (int)$ov['price'] * $_SESSION['basket'][$ok]['count'];?>
+							<li class="one_item">
+								<div class="image">
+									<a href="<?=$href?>" data-ajax="catalog" itemprop="logo">
+										<img itemprop="image" src="/preview/type_basket<?=$ov['img_src'] ? '/files/product'.$ov['img_src'] : '/images/no_photo.jpg'?>" alt="<?=$ov['name']?>" />
+									</a>
+								</div>
+								<div class="text">
+									<div class="name">
+										<a href="<?=$href?>"><?=$ov['name']?></a>
+										<?if($ov['params']){?>
+										<div class="params">
+											<?foreach($ov['params'] as $ok1 => $ov1){?>
+											<?=$ov1['name']?>:
+												<?$arr = array();
+												foreach($ov1['items'] as $ov2){
+													$arr[] = $ov2[0];
+												}
+												echo implode(', ', $arr);
+												?>
+											<br />
+											<?}?>
+										</div>
+										<?}?>
+									</div>
+									<div class="prices_block">
+										<input type="hidden" name="price[<?=$ov['id']?>]" value="<?=$pr?>" />
+										<span class="price" content="<?=(float)$out['price']?>">
+											<?=number_format($pr, 0, '', ' ')?> <span>руб./м.</span>
+										</span>
+										<span class="but">
+											<button type="button" name="plus"><span>+</span></button>
+											<input type="text" name="cnt[<?=$ov['id']?>]"  value="<?=$_SESSION['basket'][$ov['id']] ? $_SESSION['basket'][$ov['id']]['count'] : 1?>" />
+											<button type="button" name="minus"><span>-</span></button>
+										</span>
+										<span class="itog">= <?=number_format($pr, 0, '', ' ')?> <span>руб./м.</span></span>
+									</div>
+									<span class="delete"></span>
+								</div>
+							</li>
+							<?$price += $pr;
+							}?>
+						</ul>
+						<div class="itogo">
+							<span class="left">Итого:</span>
+							<span class="right"><?=number_format($price, 0, '', ' ')?> <b>руб./м.</b></span>
+						</div>
+						<?if($this->ret['warning']){?>
+						<div class="warning"><?=$this->ret['warning']?></div>
+						<?}?>
+						<section class="order_form">
+							<h2>Оформить заказ</h2>
+							<div class="body">
+								<table>
+									<tr>
+										<td>
+											Фамилия<i>*</i>
+										</td>
+										<td>
+											<input type="text" name="name[0]" value="<?=html_entity_decode($_REQUEST['name'][0], ENT_COMPAT | ENT_HTML5, 'UTF-8')?>" placeholder="Фамилия" required />
+										</td>
+									</tr>
+									<tr>
+										<td>
+											Имя<i>*</i>
+										</td>
+										<td>
+											<input type="text" name="name[1]" value="<?=html_entity_decode($_REQUEST['name'][1], ENT_COMPAT | ENT_HTML5, 'UTF-8')?>" placeholder="Имя" required />
+										</td>
+									</tr>
+									<tr>
+										<td>
+											Отчество<i>*</i>
+										</td>
+										<td>
+											<input type="text" name="name[2]" value="<?=html_entity_decode($_REQUEST['name'][2], ENT_COMPAT | ENT_HTML5, 'UTF-8')?>" placeholder="Отчество" required />
+										</td>
+									</tr>
+								</table>
+								<div class="blue">
+									<table>
+										<tr class="blue">
+											<td>
+												Способ оплаты
+											</td>
+											<td>
+												<select name="payment">
+													<option value="0">Наличными</option>
+													<option value="1">Безналичный</option>
+												</select>
+											</td>
+										</tr>
+										<tr class="blue">
+											<td>
+												Способ доставки
+											</td>
+											<td>
+												<select name="delivery" id="deliv">
+													<option value="0">Самовывоз</option>
+													<option value="1">Доставка</option>
+												</select>
+											</td>
+										</tr>
+										<tr class="blue hidden" id="deliv_adres">
+											<td>
+												Адресс доставки<i>*</i>
+											</td>
+											<td>
+												<input type="text" name="adres" value="<?=html_entity_decode($_REQUEST['adres'], ENT_COMPAT | ENT_HTML5, 'UTF-8')?>" placeholder="Адресс доставки" />
+											</td>
+										</tr>
+									</table>
+								</div>
+								<table>
+									<tr>
+										<td>
+											Телефон<i>*</i>
+										</td>
+										<td>
+											<input type="tel" name="phone" value="<?=html_entity_decode($_REQUEST['phone'], ENT_COMPAT | ENT_HTML5, 'UTF-8')?>" required />
+										</td>
+									</tr>
+									<tr>
+										<td>
+											E-mail
+										</td>
+										<td>
+											<input type="email" name="email" value="<?=html_entity_decode($_REQUEST['email'], ENT_COMPAT | ENT_HTML5, 'UTF-8')?>" />
+										</td>
+									</tr>
+									<tr>
+										<td style="vertical-align: top;">
+											Ваш комментарий
+										</td>
+										<td>
+											<textarea name="comment"></textarea>
+										</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td style="line-height: 30px;">
+											<button type="submit" name="go"><span>Отправить заказ</span></button>
+											или
+											<a href="/catalog<?=$_SESSION['catalog_alias']?>/">продолжить покупки</a>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</section>
+					</form>
+					<?php } else {?>
+					<div class="warning">По вашим параметрам ничего не найдено</div>
+					<?php }?>
+				</section>

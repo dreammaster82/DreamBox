@@ -1,0 +1,30 @@
+			<div style="text-align: center; font-size: 13px;">Список категорий параметров</div>
+			<table class="filters">
+				<?foreach($out['items'] as $ov){?>
+				<tr class="oneelem hovered">
+					<td style="padding-left:2px;width:100%;text-align: left;">
+						<a href="?cl=Filters&action=showGroups&categoryId=<?=$ov['id']?>"><?=$ov['name']?></a>
+					</td>
+					<td style="padding-left:4px;text-align: right;">
+						<div class="admin_links">
+						<?$adm = $this->adminCategories($ov);
+							foreach($adm as $ov1){
+								if($ov1['type'] == 'link'){?>
+							<a href="<?=$ov1['link']?>"><?=$ov1['text']?></a>
+						<?}else{?>
+							<input type="<?=$ov1['type']?>" name="<?=$ov1['name']?>" value="<?=$ov1['text']?>" onclick="<?=$ov1['onclick']?>" />
+						<?}
+						}?>
+						</div>
+					</td>
+				</tr>
+				<?}?>
+			</table>
+			<div style="text-align: right">
+				<a href="?cl=Filters&action=editOptionCategories"><img src="/admin/images/action_add.gif" width="16" height="16" border="0" alt="Новая категория" /></a>
+			</div>
+			<hr />
+			<form action="." method="get">
+			    <div style="text-align: right;"><input type="submit" class="buttons" value="Назад" style="width:80px" /></div>
+				<input type="hidden" value="Filters" name="cl">
+			</form>

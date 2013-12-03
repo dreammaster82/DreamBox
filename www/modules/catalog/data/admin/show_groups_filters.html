@@ -1,0 +1,49 @@
+			<div style="text-align: center; font-size: 13px;">Список глобальных параметров</div>
+			<?if($out['items']){?>
+			<table class="filters">
+			<?foreach($out['items'] as $ov){?>
+				<tr class="oneelem hovered">
+					<td style="padding-left:2px;width:100%;text-align: left;">
+						<?if($ov['type'] != 1 && $ov['type'] != 6 && !$ov['alias_of']){?>
+						<a href="?cl=Filters&action=showItems&groupId=<?=$ov['id']?><?=$out['category']['id'] ? '&categoryId='.$out['category']['id'] : ''?>"><?=$ov['name']?></a>
+						<?}else{?>
+						<?=$ov['name']?>
+						<?}?>
+					</td>
+					<td>
+						<div style="width: 20px; text-align: center;">
+							<?=$ov['is_filter'] ? 'F' : ''?>
+						</div>
+					</td>
+					<td>
+						<div style="width: 20px; text-align: center;">
+							<?=$ov['is_hidden'] ? 'H' : ''?>
+						</div>
+					</td>
+					<td style="width:220px;padding-left:4px;">
+						<div class="admin_links">
+						<?$adm = $this->adminGroups($ov, (int)$_REQUEST['categoryId']);
+							foreach($adm as $ov1){
+								if($ov1['type'] == 'link'){?>
+							<a href="<?=$ov1['link']?>"><?=$ov1['text']?></a>
+						<?}else{?>
+							<input type="<?=$ov1['type']?>" name="<?=$ov1['name']?>" value="<?=$ov1['text']?>" onclick="<?=$ov1['onclick']?>" />
+						<?}
+						}?>
+						</div>
+					</td>
+				</tr>
+			<?}?>
+			</table>
+			<?}?>
+			<div style="text-align: right">
+				<a href="?cl=Filters&action=editGroup<?=$out['category']['id'] ? '&categoryId='.$out['category']['id'] : ''?>"><img src="/admin/images/action_add.gif" width="16" height="16" border="0" alt="Новая категория" /></a>
+			</div>
+			<hr />
+			<form action="." method="get">
+			    <div style="text-align: right;"><input type="submit" class="buttons" value="Назад" style="width:80px" /></div>
+				<input type="hidden" value="Filters" name="cl">
+				<?if($out['category']['id']){?>
+				<input type="hidden" name="action" value="showOptionCategories" />
+				<?}?>
+			</form>

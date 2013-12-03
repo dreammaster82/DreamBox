@@ -1,0 +1,51 @@
+	<div class="header"><?=$out['header']?></div>
+	<?php if(!(int)$_REQUEST['window']){ ?>
+	<div class="admin_toplinks">
+		<a href="?cl=Product&action=editItem&id=<?=$out['item']['id']?><?=$_REQUEST['sort'] ? '&sort='.$_REQUEST['sort'] : ''?>">[Новый продукт]</a>
+	</div>
+	<div class="admin_toplinks">
+		<div class="floating">
+			<form action="." method="GET">
+				<input type="hidden" name="sort" value="<?=$_REQUEST['sort']?>" />
+				<input type="text" name="find" value="<?=htmlentities($_REQUEST['find'], ENT_COMPAT | ENT_HTML401, 'UTF-8')?>" />
+				<input type="submit" name="go_find" value="Найти" />
+			</form>
+		</div>
+		<?php if($out['sort_option']){?>
+		<div class="admin_sort">
+			Сортировать по:
+			<select name="sort" onchange="window.location='./?id=<?=$out['item']['id']?><?=(int)$_REQUEST['no_edit'] ? '&no_edit=1' : ''?>&sort='+ this.options[this.selectedIndex].value;">
+			<?php foreach($out['sort_option'] as $ok => $ov){ ?>
+				<option value="<?=$ok?>"<?=$ok==(int)$_REQUEST['sort']?' selected':''?>><?=$ov?></option>
+			<?php } ?>
+			</select>
+		</div>
+		<?php } ?>
+	</div>
+	<?php } elseif($out['related_items'] || $out['link_items']){?>
+	<div style="text-align:center;font-weight:bold;padding:5px 0px"><?=$out['link_items'] ? 'Сопряженные каталоги' : 'Сопутствующие товары'?></div>
+	<form method="POST">
+		<?php if($out['link_items']){?>
+		<?=$this->showLinkedItems($out['link_items'])?>
+		<input type="hidden" name="rId" value="<?=(int)$_REQUEST['rId']?>" />
+		<input type="hidden" name="insCat" value="1" />
+		<input type="hidden" name="action" value="linkItem" />
+		<?php } elseif($P){?>
+		<?=$P->showRelatedItems($out['related_items'])?>
+		<input type="hidden" name="action" value="relateItem" />
+		<input type="hidden" name="m" value="Product" />
+		<input type="hidden" name="prodId" value="<?=$out['product']['id']?>" />
+		<?php }?>
+		<div style="padding:5px 0px">
+			<input type="submit" name="go" value="Обновить" />
+		</div>
+		<input type="hidden" name="id" value="<?=$out['item']['id']?>" />
+		<input type="hidden" name="window" value="1" />
+	</form>
+	<div style="height:10px;border-bottom:1px solid #BDBDBD"></div>
+	<?php } ?>
+	<?=$this->showItems($out['parents'], true)?>
+	<?=$this->showItems($out['items'])?>
+	<?php if(!(int)$_REQUEST['insCat'] && is_object($P)){?>
+	<?=$P->show()?>
+	<?php }?>

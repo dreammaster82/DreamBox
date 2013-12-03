@@ -1,0 +1,30 @@
+<?if($out['options']){?>
+				<table style="width: 520px">
+					<?foreach($out['options'] as $ok => $ov){?>
+					<tr>
+						<td nowrap><b><?=$ov['name']?></b></td>
+						<td style="width:100%;padding-left:5px;">
+							<?if($ov['items'] && $ov['type'] > 1){?>
+							<select class="textfield" name="params[<?=$ok?>][]" id="param<?=$ok?>"<?=sizeof($out['col_param'][$ok]) > 1 ? ' multiple="multiple"' : ''?>>
+								<option value="0">---------</option>
+								<?foreach($ov['items'] as $ov1){?>
+								<option value="<?=$ov1['id']?>"<?=$out['col_param'][$ok][$ov1['id']] ? ' selected' : ''?>><?=$ov1['name']?></option>
+								<?}?>
+							</select> <input type="button" onclick="getMulti(this);" value="+" />
+							<?}elseif(!$ov['items'] && $ov['type'] == 1){?>
+							<input type="text" name="params[<?=$ok?>][]" id="param<?=$ok?>" class="textfield" value="<?=$out['col_param'][$ok][0]?>" size="20" />
+							<?}elseif($ov['type'] == 6){?>
+							<input type="hidden" name="params[<?=$ok?>]" id="param<?=$ok?>" value="1" />
+							<?}else{?>
+							<font color="red"><b>Параметры не найдены!</b></font>
+							<?}?>
+						</td>
+						<td style="width:70px;text-align: right;white-space: nowrap"><?=$ov['is_filter'] ? 'фильтр' : ''?></td>
+						<td style="width:70px;text-align: right;white-space: nowrap"><?=$ov['is_hidden'] ? 'невидимый' : ''?></td>
+					</tr>
+					<?}?>
+				</table>
+<?}
+if($out['error']){?>
+				<font color="red"><b><?=$out['error']?></b></font>
+<?}?>
