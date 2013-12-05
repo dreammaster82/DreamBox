@@ -20,7 +20,7 @@ namespace admin{
 			'wopenY2_offSET' => '105',
 			'wopenX3_offSET' => '50',
 			'wopenY3_offSET' => '80',
-			'items_on_page' => 20,
+			'items_on_page' => 18,
 			'pages_in_line' => 25,
 			'reqId' => 'id'
 		), $id;
@@ -249,8 +249,8 @@ namespace admin{
 					$item['img_big_y'] = $nHeight;
 				}
 			}
-			if($_REQUEST['small_pic_width']){
-				$rArr = $this->getResizeParam($_REQUEST['small_pic_width'], $item['img_small_y'], 'small');
+			if($_REQUEST['small_pic_width'] && $item['img_small_src']){
+				$rArr = $this->getResizeParam($item['img_small_x'], $item['img_small_y'], 'small');
 				if($rArr){
 					$width = $rArr[0];
 					$height = $rArr[1];
@@ -298,14 +298,12 @@ namespace admin{
 							}
 						}
 					} else {
-						if(($width > $w) || ($height > $this->config['small_pic_height'])){
-							if($width > $w){
-								$h = round(($w / $width) * $height, 0);
-							}
-							if($h > $this->config['small_pic_height']){
-								$h = $this->config['small_pic_height'];
-								$w = round(($h / $height) * $width, 0);
-							}
+						if($width != $w){
+							$h = round(($w / $width) * $height, 0);
+						}
+						if($h > $this->config['small_pic_height']){
+							$h = $this->config['small_pic_height'];
+							$w = round(($h / $height) * $width, 0);
 						}
 					}
 				} else {
@@ -350,7 +348,7 @@ namespace admin{
 			parent::priorityItem(true);
 		}
 
-		function showPrevItems($out) {
+		function showPrevItems($out, $parId = 0) {
 			ob_start();
 			include $this->path.'/data/admin/show_prev_items_foto.html';
 			return ob_get_clean();
@@ -379,7 +377,7 @@ namespace admin{
 			return $ret;
 		}
 
-		function showItems($out){
+		function showItems($out, $parId = 0){
 			ob_start();
 			if((int)$_REQUEST['window']){
 				$items = $out;
@@ -391,22 +389,34 @@ namespace admin{
 				$size = sizeof($items);
 				foreach($items as $k => $v){
 					$num = $k + 1;
-					if($v['id'] == $it['id']){
+					if($v['id'] == $out['id']){
 						$prev = ($k > 0) ? $items[$k-1]['id'] : 0;
 						$next = ($k < $size) ? $items[$k+1]['id'] : 0;
 						$_SESSION['next'] = $next;
 						$_SESSION['prev'] = $prev;
 						$out['links'] .= '<span class=z><font style="font-weight:bold;font-size:12px;">&nbsp;'.$num.'&nbsp;</font></span>';
 					} else {
-						$out['links'] .= '&nbsp;<a href="?action=showItems&catId='.$this->catId.'&id='.$v['id'].'&window=1"><b class="title"><u>'.$num.'</u></b></a>&nbsp;';
+						$out['links'] .= '&nbsp;<a href="?cId='.$this->catId.'&id='.$v['id'].'&window=1&show_object_items=1"><b class="title"><u>'.$num.'</u></b></a>&nbsp;';
 					}
 				}
-				$nPrev = $prev ? '<a href="?action=showItems&catId='.$this->catId.'&id='.$prev.'&window=1"> <b>предыдущая << </b> </a>' : '';
-				$nNext = $next ? '<a href="?action=showItems&catId='.$this->catId.'&id='.$next.'&window=1"><b> >>  следующая</b> </a>' : '';
+				$nPrev = $prev ? '<a href="?cId='.$this->catId.'&id='.$prev.'&window=1&show_object_items=1"> <b>предыдущая << </b> </a>' : '';
+				$nNext = $next ? '<a href="?cId='.$this->catId.'&id='.$next.'&window=1&show_object_items=1"><b> >>  следующая</b> </a>' : '';
 				$out['navigate'] = $nPrev.' &nbsp; '.$nNext.'<hr>'.$nLinks;
 				$templ = 'show_items_window_foto';
 			} else {
 				$templ = 'show_items_foto';
+				$items = $out;
+				$out = array();
+				$out['items'] = $items;
+				unset($items);
+			}
+			$arr = [];
+			if((int)$_REQUEST['cId']){
+				$arr[] = 'cId='.(int)$_REQUEST['cId'];
+			}
+			$out['lnk'] = implode('&', $arr);
+			if($parId){
+				$out['parent_id'] = $parId;
 			}
 			include $this->path.'/data/admin/'.$templ.'.html';
 			return ob_get_clean();
