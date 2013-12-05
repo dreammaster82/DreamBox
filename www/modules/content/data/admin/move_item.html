@@ -1,0 +1,53 @@
+<form action='.' method='post' enctype='multipart/form-data'>
+    <table width="100%" border='0' cellpadding='1' cellspacing='0'>
+		<tr>
+			<th colspan='2' align='center'>Перемещение категории</th>
+		</tr>
+		<tr>
+			<td align='right' width='140' nowrap>Что перемещаем:</td>
+			<td><b><?=$out['name']?></b></td>	
+		</tr>
+		<tr>
+			<td align='right' width='140' nowrap>Пункт назначения:</td>
+			<td>
+			<?php if($out['move_to']) { ?>
+				<select class="textfield" name="move_to">
+					<?php foreach($out['move_to'] as $ov){ ?>
+					<option value="<?=$ov['value']?>"<?=$ov['select']?>><?=$ov['text']?></option>
+					<?php } ?>
+				</select>
+			<?php } ?>
+			</td>	
+		</tr>
+		<tr>
+			<td align='right' nowrap>Пункт возврата:</td>
+			<td>
+				<input type='radio' name='return_to' id="return_to_1" value='1' checked /><label for="return_to_1"><span></span>в себя</label>
+				<br>
+				<input type='radio' name='return_to' id="return_to_2" value='2' /><label for="return_to_2"><span></span>в старого родителя</label>
+				<br>
+				<input type='radio' name='return_to' id="return_to_3" value='3' /><label for="return_to_3"><span></span>в нового родителя</label>
+			</td>	
+		</tr>
+		<tr>
+			<td align='right'>изменить</td>
+			<td>
+				<input type='submit' class='buttons' value=' >> ' />
+				<input type='hidden' name='action' value='moveItem2' />
+				<input type='hidden' name='id' value="<?=$out['parent_id']?>" />
+				<input type='hidden' name='what' value="<?=$out['id']?>" />
+				<input type='hidden' name='type' value="<?=(int)$_REQUEST['type']?>" />
+			</td>	
+		</tr>	
+		<tr class=y>
+			<td align='right'>отказаться</td>
+			<td>
+				<input type='button' class='buttons' value=' >> ' onclick="document.form_cancel.submit();" />
+			</td>	
+		</tr>
+    </table>
+</form>
+<form action='.' method='get' name="form_cancel">			
+    <input type='hidden' name='id' value="<?=$out['parent_id']?>" />
+	<input type='hidden' name='type' value="<?=(int)$_REQUEST['type']?>" />
+</form>

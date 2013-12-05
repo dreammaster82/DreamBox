@@ -1,0 +1,23 @@
+				<div class="items_list">
+					<?php foreach($out as $ov){
+					$posted = reset(explode(' ', $ov['posted']));
+					$class = strtolower($this->class);
+					$dt = explode('-', $posted);?>
+					<article class="one_item" itemscope itemtype="http://schema.org/NewsArticle">
+						<?php if($ov['img_src']){?>
+						<div class="image">
+							<img itemprop="image" src="/preview/type_small<?=$this->config['files_path'].$ov['img_src']?>" alt="<?=$ov['name']?>" title="<?=$ov['name']?>" />
+						</div>
+						<?php }?>
+						<div class="text<?=$ov['img_src'] ? ' marg' : ''?>">
+							<div class="title">
+								<a href="/<?=$class?>/<?=$ov['id']?>_<?=$ov['alias']?>.html" itemprop="url"><?=$ov['name']?></a>
+							</div>
+							<div class="note" itemprop="description">
+								<?=$ov['annotation']?>
+							</div>
+							<time datetime="<?=$posted?>" itemprop="datePublished"><?=$dt[2]?> <?=$this->months[(int)$dt[1]]?> <?=$dt[0]?></time>
+						</div>
+					</article>
+					<?php }?>
+				</div>

@@ -1,0 +1,47 @@
+<form action='.' method='post' enctype='multipart/form-data'>
+<table width="100%" border='0' cellpadding='1' cellspacing='0'>
+	<tr>
+		<th colspan="2">Перемещение продукта</th>
+	</tr>
+	<tr>
+		<td>Идентификатор:</td>
+		<td><input type='text' name='id' value="<?=$out['id']?>" size='20' readonly /></td>	
+	</tr>
+	<tr>
+		<td>Что перемещаем:</td>
+		<td><b><?=$out['name'].' ['.$out['file_name'].']'?></b></td>	
+	</tr>
+	<tr>
+		<td>Пункт назначения:</td>
+		<td>
+			<select name="move_to">
+			<?php foreach($out['catalogs'] as $ok => $ov){ ?>
+				<option value="<?=$ov['value']?>"<?=$ov['select']?>><?=$ov['text']?></option>
+			<?php } ?>
+			</select>
+		</td>	
+	</tr>
+	<tr>
+		<td>Пункт возврата:</td>
+	    <td>
+			<input type='radio' name='return_to' value='2' id="return_to_2" /><label for="return_to_2"><span></span>в старого родителя</label>
+			<br>
+			<input type='radio' name='return_to' value='3' id="return_to_3" /><label for="return_to_3"><span></span>в нового родителя</label> 
+	    </td>	
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			<input type='submit' value='Оk' style='width:100px'>
+			<input type='hidden' name='what' value="<?=$out['id']?>" />
+			<input type='hidden' name='action' value='moveItem2Files'>
+			<input type='hidden' name='page' value="<?=$_REQUEST['page']?>" />
+			<input type='button' value='Cancel' style='width:100px;' onclick="document.form_cancel.submit();" />
+			<input type='hidden' name='id' value="<?=$_REQUEST['id']?>" />
+		</td>	
+	</tr>	
+</table>
+</form>
+<form action='.' method='get' name="form_cancel">
+    <input type='hidden' name='id' value="<?=$_REQUEST['id'];?>" />
+</form>

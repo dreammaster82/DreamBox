@@ -1,0 +1,46 @@
+			<?=$out['file_show']?>
+			<table border="0" width="100%" cellpadding="2" cellspacing="0">
+				<tr><th>менеджер файлов</th></tr>
+				<tr>
+					<td>
+						<b>
+							<a href="?action=filesChoose&goback=1&window=1">/</a>
+							<?php if($out['links']){ 
+							foreach($out['links'] as $ok => $ov){ ?>
+							<a href="?action=filesChoose&path=<?=$ov['link']?>&goback=1&window=1"><?=$ov['text']?></a> / 
+							<?php }
+							} ?>
+						</b>
+					</td>
+				</tr>
+			</table>
+			<?php foreach ($out['dirs'] as $ok => $ov){ ?>
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="onecat">
+				<tr>
+					<td><img src="/admin/images/closed.gif" width="17" height="18" border="0" alt="" /></td>
+					<td width="100%">
+						<a href="?action=filesChoose&path=<?=$out['link'].$ov?>&goback=1&window=1"><?=$out['items'][(int)$ov]['name']?></a>
+					</td>
+				</tr>
+			</table>
+			<?php } ?>
+			<table width="100%" cellpadding="2" cellspacing="0">
+				<tr>
+					<th width="16"></th>
+					<th>Имя файла</th>
+					<th>Размер</th>
+					<th>Дата</th>
+					<th>Загрузить</th>
+				</tr>
+				<?php foreach($out['list'] as $ok => $ov){ ?>
+				<tr class="oneelem hovered">
+					<td valign="middle"><img src="/admin/images/file.gif" width="16" height="15" border="0" /></td>
+					<td valign="middle"><b><?=$ov?> [<?=$out['files_items'][$ok]['name']?>]</b></td>
+					<td><?=$out['files_items'][$ok]['size']?>KB</td>
+					<td><?=date('d.m.y', strtotime($out['files_items'][$ok]['file_date']))?></td>
+					<td>
+						<a href="#" title="вставить ссылку для загрузки" onclick="return OpenerFilePathInsert(<?=$ok?>, 'file', 'load')">вставить</a>
+					</td>
+				</tr>
+				<?php } ?>
+			</table>

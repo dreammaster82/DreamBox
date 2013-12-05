@@ -1,0 +1,41 @@
+			<?=$out['file_show']?>
+			<div class="header"><?=$out['header']?></div>
+			<div class="admin_toplinks">
+				<a href="/admin/files/?id=<?=$this->id?>&download_stat=1" title="Статистика общая">Инфо</a>
+			</div>
+			<?php if($out['items']){?>
+			<div>
+				<?=$this->showItems($out['items'])?>
+			</div>
+			<?php }?>
+			<div class="admin_toplinks">
+				<a href="?action=editItemFiles&id=<?=$this->id?>&page=<?=(int)$_REQUEST['page']?>" title="Upload new file">
+					<img src="/admin/images/action_add.gif" width="16" height="16" border="0" alt="">
+				</a>
+			</div>
+			<?php if($out['files_items']){?>
+				<?=$C->showItems($out['files_items'], $this->id)?>
+			<?php }?>
+			<?=$out['show_files_items']?>
+			<?php if ($_REQUEST['download_stat']){ ?>
+			<br>
+			<table width="100%" border="0" cellpadding="2" cellspacing="0">
+				<tr>
+					<th colspan="5" align="center" class="z">статистика скачиваний (последние 50)</th>
+				</tr>
+				<tr>
+					<td><b>Дата</b></td>
+					<td><b>Имя файла</b></td>
+					<td><b>Название</b></td>
+					<td><b>ip</b></td>
+				</tr>
+				<?php foreach($out['download_stat'] as $ok => $ov){ ?>
+				<tr>
+					<td nowrap><?=$ov['date']?></td>
+					<td nowrap><?=$ov['file_src']?></td>
+					<td nowrap><?=$ov['name']?></td>
+					<td nowrap><?=$ov['ip']?></td>
+				</tr>
+				<?php } ?>
+			</table>
+			<?php } ?>

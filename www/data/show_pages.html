@@ -1,0 +1,32 @@
+		<div class="pages">
+			<div class="pages_box">
+				<div class="page_left">
+					<a class="before<?=$out['active']?>" href="<?=$out['href'].$out['cur_page']?>">Назад</a>
+				</div>
+				<div class="page_middle">
+					<ul class="pages_list">
+					<?php if(($this->page + 1) > $this->pagesInLine){?>
+						<li><a href="<?=$out['href']?>0">1</a></li><li class="sep">...</li>
+					<?php }
+					while ($out['next'] < $out['end']){?>
+						<li><a href="<?=$out['href'].$out['next']?>"<?=$out['next'] == $this->page ? ' class="active"' : ''?>><?=$out['next'] + 1?></a></li>
+					<?php
+					++$out['next'];
+					}
+					if($out['iteration'] > $out['end']){?>
+						<li class="sep">...</li><li><a href="<?=$out['href'].($out['iteration'] - 1)?>"><?=$out['iteration']?></a></li>
+					<?php }?>
+					</ul>
+				</div>
+				<?php $out['active'] = '';
+					if($out['iteration'] > $out['end']){
+						$out['cur_page'] = $out['next'];
+						$out['active'] = ' active';
+					} else {
+						$out['cur_page'] = $out['next']-1;
+					}?>
+				<div class="page_right">
+					<a class="after<?=$out['active']?>" href="<?=$out['href'].$out['cur_page']?>">Вперед</a>
+				</div>
+			</div>
+		</div>

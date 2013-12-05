@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage">
+	<head>
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+		<title><?=$out['title']?></title>
+		<meta name="description" content="<?=$out['description']?>" />
+		<meta name="keywords" content="<?=$out['keywords']?>" />
+		<meta itemprop="name" content="<?=$out['title']?>" />
+		<meta itemprop="description" content="<?=$out['description']?>" />
+		<?php if($out['propImage']){?>
+		<meta itemprop="image" content="http://<?=$CONFIG['site'].$out['propImage']?>" />
+		<?php }?>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" type="text/css" href="/css/fonts/stylesheet.css" />
+		<link rel="stylesheet" type="text/css" href="/css/style.css" />
+		<link rel="stylesheet" type="text/css" href="/css/autocomplete.css" />
+		<?=$OUT['style'];?>
+		<!--[if lt IE 9]>
+		<script src="/js/html5.js"></script>
+		<![endif]-->
+		<script src="/js/jquery-1.9.0.min.js"></script>
+		<script src="/js/jquery.maskedinput.js"></script>
+		<script src="/js/utils.js"></script>
+		<script src="/js/autocomplete.js"></script>
+		<?=$out['script']?>
+	</head>
+	<body<?=$out['adding']?>>
+		<header style="height:148px">
+			<div class="wrapper">
+				<div class="top">
+					<div class="logo"><?=$out['logo']?></div>
+					<div class="top_right" style="padding-top:20px;padding-left:20px">
+						<div class="phone_cont" style="color: #000000;font-family: Georgia,'Times New Roman',serif;font-size: 30px;margin-right: 15px;width: 225px;">
+							<span style="font-size: 12px;vertical-align: baseline;">+7 (831)</span> 468-12-04
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+		<section class="content"><?=$out['content']?></section>
+    </body>
+</html>

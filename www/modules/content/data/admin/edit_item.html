@@ -1,0 +1,297 @@
+<form name='edit_form' id='edit_form' action='.' method='post' enctype='multipart/form-data'>
+<table width='100%' border='0' cellpadding='3' cellspacing='0'>
+	<tr>
+		<th align='right' width='110' nowrap class=z>&nbsp;</th>
+		<th width='100%'>Редактирование содержания</th>
+	</tr>
+	<tr>
+		<td align='right'>Id:</td>
+		<td><?=$out['id']?></td>	
+	</tr>
+	<tr>
+		<td align='right'>Название:</td>
+		<td>
+			<input type='text' name='name' size='40' class='textfield' value="<?=$out['name']?>" onkeyup='put_alias();' />
+		</td>	
+	</tr>
+	<tr>
+		<td align='right'>Alias:</td>
+		<td>
+			<input type='text' name='alias' size='100' class='textfield' value="<?=$out['alias']?>" />
+		</td>
+	</tr>	
+	<tr>
+		<td align='right'>Title:</td>
+		<td>
+			<input type='text' name='title' size='104' class='textfield' value="<?=$out['title']?>" maxlength='80' />
+		</td>	
+	</tr>
+	<tr>
+		<td align='right'>Description:</td>
+		<td>
+			<input type='text' name='description' size='104' class='textfield' value="<?=$out['description']?>" maxlength='255' />
+		</td>	
+	</tr>	
+	<tr>
+		<td align='right'>Keywords:</td>
+		<td>
+			<input type='text' name='keywords' size='104' class='textfield' value="<?=$out['keywords']?>" maxlength='255' />
+		</td>	
+	</tr>
+	<tr>
+		<td align='right'>Текстовая:</td>
+		<td>
+			<input type='checkbox' name='is_text' id="is_text" value='1'<?=$out['is_text'] ? ' checked' : ''?> /><label for="is_text"><span></span>Да/Нет</label>
+		</td>	
+	</tr>
+	<tr>
+		<td align='right'>В главном меню:</td>
+		<td>
+			<input type='checkbox' name='on_top' id="on_top" value='1'<?=$out['on_top'] ? ' checked' : ''?> /><label for="on_top"><span></span>Да/Нет</label>
+		</td>	
+	</tr>
+	<?php if($out['all_types']){ ?>
+	<tr>
+		<td align='right'>Тип:</td>
+		<td>
+			<select name="rtype[]" multiple>
+				<option value="0">Не выбрано</option>
+				<?php foreach($out['all_types'] as $ok => $ov){
+				$sel = array_key_exists($ok, $out['types']) ? ' selected' : '';
+				?>
+				<option value="<?=$ok?>"<?=$sel?>><?=$ov['name']?></option>
+				<?php } ?>
+			</select>
+		</td>	
+	</tr>
+	<?php } ?>
+	<tr>
+		<td style='empty-cells: show;' nowrap></td>
+		<td>
+			<a href='javascript:enter()'><img src='/admin/images/bb_break.gif' border='0' width='23' height='22' alt='Перевод строки' /></a>
+			<a href='javascript:nbsp()'><img src='/admin/images/bb_nbsp.gif' border='0' width='23' height='22' alt='Перевод строки' /></a>
+			<a href='javascript:bold()'><img src='/admin/images/bb_bold.gif' border='0' width='23' height='22' alt='Вставить жирный текст' /></a>
+			<a href='javascript:italicize()'><img src='/admin/images/bb_italicize.gif' border='0' width='23' height='22' alt='Вставить наклонный текст' /></a>
+			<a href='javascript:underline()'><img src='/admin/images/bb_underline.gif' border='0' width='23' height='22' alt='Вставить подчеркнутый текст' /></a>
+			<a href='javascript:center()'><img src='/admin/images/bb_center.gif' border='0' width='23' height='22' alt='Вставить отцентрированный текст' /></a>
+			<a href='javascript:hyperlink()'><img src='/admin/images/bb_url.gif' border='0' width='23' height='22' alt='Вставить ссылку' /></a>
+			<a href='javascript:email()'><img src='/admin/images/bb_email.gif' border='0' width='23' height='22' alt='Вставить e-mail адрес' /></a>
+			<a href='javascript:image();'><img src='/admin/images/bb_image.gif' border='0' width='23' height='22' alt='Вставить изображение' /></a>
+			<a href='javascript:paragraph()'><img src='/admin/images/bb_paragraph.gif' border='0' width='23' height='22' alt='Вставить параграф' /></a>
+			<a href='javascript:code()'><img src='/admin/images/bb_code.gif' border='0' width='23' height='22' alt='Преформатирование. Сохранение введеной структуры' /></a>
+			<a href='javascript:quote()'><img src='/admin/images/bb_quote.gif' border='0' width='23' height='22' alt='Вставить цитированный текст' /></a>
+			<a href='javascript:list()'><img src='/admin/images/bb_list.gif' border='0' width='23' height='22' alt='Вставить список' /></a>
+			<a href='?action=files&child_id=<?=$out['id']?>&window=1' onclick='wopenWH("?action=files&child_id=<?=$out['id']?>&window=1", "files_choose",700,400);' target='files_choose'><img id='img_have_download' src='/admin/images/null.gif' border='0' alt='Вставить таблицу download' /></a>
+			<a href='javascript:slideshow_insert();'><img src='/admin/images/bb_gallery.gif' width='23' height='22' border='0' alt='Вставить слайд-шоу' /></a>
+			<a href='javascript:preview_insert();'><img src='/admin/images/bb_preview.gif' width='23' height='22' border='0' alt='Вставить предпросмотр' /></a>
+			<a href='javascript:hiperLink2("item_textarea");'><img src='/admin/images/bb_quote2.gif' width='23' height='22' border='0' alt='Вставить ссылку на статью' /></a>
+		</td>
+	</tr>
+	<tr>
+		<td align='right'>Текст:</td>
+		<td>
+			<textarea id="item_textarea" cols='104' rows='17' name='content' onselect='storeCaret(this);' onclick='storeCaret(this);' onkeyup='storeCaret(this);' style='width:100%'><?=$out['content'];?></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			<table width='100%' border='0' cellpadding='0' cellspacing='0'>
+				<tr>
+					<td><input type='button' value='Добавить изображение' onClick='addRow();' class='buttons'><td>
+					<td align='right'><input type='submit' value='Обновить...'  class='buttons' name='reload'><td>
+				</tr>
+				<tr height='3'><td colspan=2><td></tr>
+			</table>
+			<table border='0' cellpadding='1' cellspacing='0' id='edit_table'>
+	<?php if($out['files']){
+		foreach($out['files'] as $ok => $ov){
+			$size = getimagesize(CLIENT_PATH.$out['path'].'/'.$out['id'].'/'.$ov);
+	?>
+				<tr>
+					<td>
+						<input id="row<?=$ok?>" type="hidden" name="image[<?=$ok?>]" value="1" />img <b><?=$ok?></b>:
+					</td>
+					<td>
+						<input type="file" name="files[<?=$ok?>]" class="textfield" size="25" />&nbsp;&nbsp;или URL: <input type="text" name="url[<?=$ok?>]" class="textfield" size="25" /> 
+					</td>
+					<td>
+						<input type="checkbox" name="delete_img[<?=$ok?>]" value="1" id="delete_img_<?=$ok?>" /><label for="delete_img_<?=$ok?>"><span></span>X</label> (<b><a href="<?php echo $out['path'].'/'.$out['id'].'/'.$ov; ?>" target="_blank"><?=$ov?></a></b>)
+						<span onclick="image2('item_textarea', '<?php echo $out['path'].'/'.$out['id'].'/'.$ov; ?>')" style="cursor:pointer; cursor:hand;">[<u>вставить</u>]</span>
+					</td>	
+				</tr>
+	<?php
+		}
+	}
+	?>
+			</table>
+		</td>	
+	</tr>
+</table>
+<table width='100%' border='0' cellpadding='1' cellspacing='0'>
+	<tr>
+		<td align='right' width='110' nowrap>Заголовок:</td>
+		<td width='100%'><input type='file' name='header' size='65' class='textfield' />
+			<?php if($out['img_src']){ ?>
+			<input type="checkbox" name="delete_file" id="delete_file" value="1"><label for="delete_file"><span></span>удалить</label>
+			<? } ?>
+		</td>	
+	</tr>
+	<?php if($out['img_src']){ ?>
+	<tr>
+		<td align="right"></td>
+		<td>
+			Имя файла: <?=$out['img_src']?>, Тип файла: <?=$out['type']?>, размер: <?=$out['size']?> bytes<br>
+			<a href="<?php echo $out['path'].$out['img_src']; ?>" target="image"> Скачать для редактирования...</a>
+		</td>	
+	</tr>
+	<? } ?>
+	<tr>
+		<td></td>
+		<td>
+			<input type='checkbox' name='toprint' id="toprint" value='1'<?=$out['toprint'] ? ' checked' : ''?> /><label for="toprint"><span></span>Версия для печати</label>
+		</td>	
+	</tr>
+	<tr>
+		<td align='right'>Шаблон:</td>
+		<td>
+			<?php if($out['templates']){ ?>
+			<select name="template">
+			<?php 
+			foreach($out['templates'] as $ov){
+				$sel = $out['template'] == $ov ? ' selected' : '';
+				echo '<option value="'.$ov.'"'.$sel.'>'.$ov.'</option>';
+			}
+			?>
+			</select>
+			<?php } ?>
+		</td>	
+	</tr>
+</table>
+<table width='100%' border='0' cellpadding='1' cellspacing='0'>
+	<tr>
+		<td align='right' width='110' nowrap></td>
+		<td align='right' width='99%' nowrap>
+			<table width='100%' border='0' cellpadding='0' cellspacing='0'>
+				<tr>
+					<td>
+						<input type='submit' value='Сохранить' class='buttons' />
+						<input type='hidden' name='what' value="<?=$out['id']?>" />
+						<input type='hidden' name='action' value='saveItem' />
+						<input type='hidden' name='id' value="<?=$out['parent_id']?>" />
+						<input type='hidden' name='window' value="<?=$_REQUEST['window']?>" />
+						<input type='hidden' name='type' value="<?=(int)$_REQUEST['type']?>" />
+					</td>
+					<td width='10' nowrap></td>
+					<td>
+						<input type='button' value='Отказаться' class='buttons' onclick="document.form_cancel.submit();" />
+					</td>
+					<td width='100%'></td>
+				</tr>
+			</table>
+		</td>
+	</tr>	
+</table>
+</form>
+<form action='.' method='get' name="form_cancel">
+    <input type='hidden' name='id' value="<?=$out['parent_id']?>" />
+	<input type='hidden' name='window' value="<?=$_REQUEST['window']?>" />
+	<input type='hidden' name='type' value="<?=(int)$_REQUEST['type']?>" />
+</form>
+<script type='text/javascript' language='javascript'>
+isAlias=<?=($out['alias'] && $out['alias'] != '/content/') ? 'true' : 'false'?>;
+	$(document).ready(function(){
+		$(document.forms.edit_form.alias).on('focus', function(){
+			isAlias = true;
+		})
+	});
+function put_alias(){
+		var form = document.forms.edit_form;
+		if(!isAlias){
+			form.alias.value = '/<?=$out['module']?>/' + ru_en_encode(form.name.value) + '.html';
+		}
+}
+function ru_en_encode(str){
+    var ru = Array('а','б','в','г','д','е','ё','ж','з','и','й','к','л','м','н','о','п','р','с','т','у','ф','х','ц','ч','ш','щ','ъ','ы','ь','э','ю','я',' ','-', '.');
+    var en = Array('a','b','v','g','d','e','e','zh','z','i','i','k','l','m','n','o','p','r','s','t','u','f','h','c','ch','sh','sh','_','i','_','e','u','a','_','_','');
+    return strtr(str.toLowerCase(), ru, en);
+}
+function strtr(str, from, to){
+    for(var i in from){
+	if(str.indexOf(from[i]) != -1){
+	    str = str.replace(new RegExp(from[i], 'g'), to[i]);
+	}
+    }
+    return str;
+}
+function addRow() 
+{
+	var table = document.getElementById('edit_table');
+	index = 0; rowindex = 1;
+	if (table.rows.length > 0)
+	{
+		//table.rows[index]
+		while (document.getElementById('row'+rowindex)) 
+		{
+			index++;
+			rowindex = index + 1;
+		}
+	}
+
+	//index = table.rows.length;
+	rownum = index + 1;
+	var newRow = table.insertRow(index);
+	var newCell = newRow.insertCell(0);
+
+	// image
+	var obj_input = document.createElement('INPUT');
+	obj_input.setAttribute('id', 'row'+rownum);
+	obj_input.type = 'hidden';
+	obj_input.name = 'image['+rownum+']';
+	var obj_span = document.createElement('SPAN');
+	obj_span.innerHTML = 'img <b>'+rownum+'</b>:';
+	newCell.appendChild(obj_input);
+	newCell.appendChild(obj_span);
+
+	var newCell = newRow.insertCell(1);	
+	// files
+	var obj_input = document.createElement('INPUT');
+	obj_input.type = 'file';
+	obj_input.name = 'files['+rownum+']';
+	obj_input.size = 25;
+	obj_input.className = 'textfield';
+	newCell.appendChild(obj_input);
+
+	var obj_span = document.createElement('SPAN');
+	obj_span.innerHTML = '&nbsp;&nbsp;или URL: ';
+	newCell.appendChild(obj_span);
+
+	// URL
+	var obj_input = document.createElement('INPUT');
+	obj_input.type = 'text';
+	obj_input.name = 'url['+rownum+']';
+	obj_input.size = 25;
+	obj_input.className = 'textfield';
+	newCell.appendChild(obj_input);
+
+	var newCell = newRow.insertCell(2);	
+	// removeRow
+	var obj_input = document.createElement('INPUT');
+	obj_input.setAttribute('type', 'button');
+	obj_input.setAttribute('name', 'delrow'+index+'');
+	obj_input.className = 'buttons';
+	obj_input.setAttribute('value', ' Х ');
+	obj_input.onclick = function()
+	{
+		removeRow(newRow);
+	}
+	newCell.appendChild(obj_input);
+}
+
+function removeRow(row)
+{
+	row.parentNode.removeChild(row);
+}
+
+</script>
+<script src='/admin/include/script/addtags.js'></script>

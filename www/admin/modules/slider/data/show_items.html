@@ -1,0 +1,26 @@
+			<table style="width:100%">
+				<tr>
+					<th style="width:20px;">Id</th>
+					<th style="width: 90%">Название</th>
+					<th>Управление</th>
+				</tr>
+				<?php foreach($out as $ov){ ?>
+				<tr>
+					<td style="text-align:center;"><?=$ov['id']?></td>
+					<td><?=$ov['name']?> (<?=$this->sliderId[$ov['slider_id']]?>)</td>
+					<td nowrap>
+						<?php
+						$adm = $this->adminLinks($ov);
+							foreach($adm as $ov1){
+								if($ov1['type'] == 'link'){?>
+						<a href="<?=$ov1['link']?>"><?=$ov1['text']?></a>
+						<?php } else { ?>
+						<input type="<?=$ov1['type']?>" name="<?=$ov1['name']?>" value="<?=$ov1['text']?>" onclick="<?=$ov1['onclick']?>" />
+						<?			}
+								}
+						?>
+					</td>
+			    </tr>
+				<?php } ?>
+			</table>
+				

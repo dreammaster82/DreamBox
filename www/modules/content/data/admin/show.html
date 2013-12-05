@@ -1,0 +1,25 @@
+<div class="header"><?=$out['header']?></div>
+<!--<div class="admin_toplinks">
+	<div class="floating">
+		<?php if($out['types']){ ?>
+		<form method="GET">
+			<i>Тип:</i>
+			<select name='type' onchange="window.location='?<?php if($out['item']['id']){ echo 'id='.$out['item']['id'].'&'; } ?>type='+ this.options[this.selectedIndex].value;">
+				<option value="0">Все типы</option>
+				<?php foreach($out['types'] as $ok => $ov){ 
+				$sel = $ok == (int)$_REQUEST['type'] ? ' selected' : '';
+				?>
+				<option value="<?=$ok?>"<?=$sel?>><?=$ov['name']?></option>
+				<?php } ?>
+			</select>
+		</form>
+		<?php } ?>
+	</div>
+	<a href="?types=1">[types]</a>
+</div>-->
+<?php if($out['item']){ ?>
+<div class="elements">
+	<?php if($out['parents']){ echo $this->showParents($out['parents']); } ?>
+	<?php if($out['sub_cats']){ echo $this->showItems($out['sub_cats']); } ?>
+<div>		
+<?php } ?>

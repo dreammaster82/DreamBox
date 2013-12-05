@@ -1,0 +1,179 @@
+<form name="edit_form" id="edit_form" action="." method="post" enctype="multipart/form-data">
+<table id="edit_table" style="width: 100%">
+	<tr>
+		<th colspan="2">Редактирование элемента</th>
+	</tr>
+	<tr>
+		<td>Категория:</td>
+		<td><b><?=$out['category']?></b></td>	
+	</tr>
+	<tr>
+		<td>Идентификатор:</td>
+		<td><input type="text" name="what" value="<?=$out['id']?>" size="10" readonly /></td>	
+	</tr>	
+	<tr>
+		<td>Название:</td>
+		<td><input type="text" name="name" value="<?=$out['name']?>" size="90" /></td>	
+	</tr>	
+	<tr>
+		<td>Аннотация:</td>
+		<td><textarea rows="5" cols="90" name="note"><?=$out['note']?></textarea></td>	
+	</tr>
+	<tr>
+		<td align="right">Описание:</td>
+		<td>
+			<a href="javascript:enter()"><img src="/admin/images/bb_break.gif" border="0" width="23" height="22" alt="Перевод строки" /></a>
+			<a href="javascript:nbsp()"><img src="/admin/images/bb_nbsp.gif" border="0" width="23" height="22" alt="Перевод строки" /></a>
+			<a href="javascript:bold()"><img src="/admin/images/bb_bold.gif" border="0" width="23" height="22" alt="Вставить жирный текст" /></a>
+			<a href="javascript:italicize()"><img src="/admin/images/bb_italicize.gif" border="0" width="23" height="22" alt="Вставить наклонный текст" /></a>
+			<a href="javascript:underline()"><img src="/admin/images/bb_underline.gif" border="0" width="23" height="22" alt="Вставить подчеркнутый текст" /></a>
+			<a href="javascript:center()"><img src="/admin/images/bb_center.gif" border="0" width="23" height="22" alt="Вставить отцентрированный текст" /></a>
+			<a href="javascript:hyperlink()"><img src="/admin/images/bb_url.gif" border="0" width="23" height="22" alt="Вставить ссылку" /></a>
+			<a href="javascript:email()"><img src="/admin/images/bb_email.gif" border="0" width="23" height="22" alt="Вставить e-mail адрес" /></a>
+			<a href="javascript:paragraph()"><img src="/admin/images/bb_paragraph.gif" border="0" width="23" height="22" alt="Вставить параграф" /></a>
+			<a href="javascript:code()"><img src="/admin/images/bb_code.gif" border="0" width="23" height="22" alt="Преформатирование. Сохранение введеной структуры" /></a>
+			<a href="javascript:quote()"><img src="/admin/images/bb_quote.gif" border="0" width="23" height="22" alt="Вставить цитированный текст" /></a>
+			<a href="javascript:list()"><img src="/admin/images/bb_list.gif" border="0" width="23" height="22" alt="Вставить список" /></a>	
+		</td>	
+	</tr>
+	<tr>
+		<td>Описание:</td>
+		<td><textarea rows="12" cols="90" name="textarea" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);"><?=$out['description']?></textarea></td>	
+	</tr>
+	<!--<tr>
+		<td align="right">Привязать видео:</td>
+		<td><?=$video?><button type="button" name="get_video" onclick="getVideo();">Выбрать</button><input type="hidden" name="video_id" value="<?=$item['video_id']?>" /></td>	
+	</tr>-->
+	<tr>
+		<td style="vertical-align: top">Большая картинка:</td>
+		<td>
+			<input type="file" name="img2" />
+			<?php if($out['img_big_src']){?>
+			<input type="checkbox" name="delete_bsimg" id="delete_bsimg" value="1" /><label for="delete_bsimg"><span></span>удалить</label>
+			<?php }?>
+			<input type="submit" value="Обновить..."  name="reload" onclick="" />
+			<table style="width:100%">
+			<tr>
+				<td style="text-align: left;">
+					<?php if($out['img_big_src']){?>
+					Имя файла: <?=$out['img_big_src']?>, Тип файла: <?=$out['big_type']?>,<br />
+					размер: <?=$out['big_size']?> bytes, <?=$out['img_big_x']?> x <?=$out['img_big_y']?><br />
+					<a href="<?=$this->config['files_path'].$out['img_big_src']?>" target="_blank">
+						<img src="<?=$this->config['files_path'].$out['img_big_src']?>" style="width: <?=$out['img_big_x'] > 300 ? 300 : $out['img_big_x']?>px" />
+					</a>
+					<?php } else {?>
+					<br />
+					<?php }?>
+				</td>
+				<td>
+					<br />
+					скопировать большую картинку в маленькую с масштабированием? <input type="checkbox" name="img2_to_img1" id="img2_to_img1" value="1" /><label for="img2_to_img1"><span></span></label>
+					<hr>установить текущие пропорции в качестве шаблона? <input type="checkbox" name="setProportions2" id="setProportions2" value="1" /><label for="setProportions2"><span></span></label><br />
+					<?=$_SESSION['use_proportions2'] ? '(Текущий шаблон: '.$_SESSION['width2'].' х '.$_SESSION['height2'].' px)' : ''?><hr>
+					перемасштабировать изображение? <input type="checkbox" name="resize_img2" id="resize_img2" value="1" /><label for="resize_img2"><span></span></label>
+					<br />
+					<a href="?action=getModulator&id=<?=$out['id']?>&img=2&window=1" target="_blank"  onClick="wopenWH('?action=getModulator&id=<?=$out['id']?>&img=2&window=1', '_blank', 400, 300);"><b>[модуляция изображение]</b></a>
+					<br />
+					<?php if($out['img_big_x'] && $out['img_big_y']){
+						if($out['img_big_x'] > $out['img_big_y']) {
+							$width = $this->config['big_to_cadr_width'];
+							$height = $width * $out['img_big_y'] / $out['img_big_x'];
+						} else {
+							$height = $this->config['big_to_cadr_height'];
+							$width = $height * $out['img_big_x'] / $out['img_big_y'];
+						}
+						$wopenX2 = $width + $this->config['wopenX2_offSET'];
+						if($wopenX2 < $this->config['wopenX2']){
+							$wopenX2 = $this->config['wopenX2'];
+						}
+						$wopenY2 = $height + $this->config['wopenY2_offSET'];
+					}?>
+					<a href="?action=getCadr&id=<?=$out['id']?>&type=2&window=1" target="_blank" onClick="wopenWH('?action=getCadr&id=<?=$out['id']?>&type=2&window=1', '_blank', <?=$wopenX2?>, <=$wopenY2?>);"><b>[кадрировать из большой]</b></a>
+					<br />
+					масштабировать в ширину <input type="text" name="big_pic_width" value="<?=$_SESSION['big_pic_width'] ? $_SESSION['big_pic_width'] : $this->config['big_pic_width']?>" size="3" />
+					<br />
+					кадрировать под высоту <input type="text" name="big_cadr_height" value="" size="3" />
+					<br />
+					подогнать под высоту <input type="text" name="big_resize_height" value="" size="3" />
+				</td>
+			</tr>	
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td>Маленькая картинка:</td>
+		<td>
+			<input type="file" name="img1" />
+			<?php if($out['img_small_src']){?>
+			<input type="checkbox" name="delete_bimg" id="delete_bimg" value="1" /><label for="delete_bimg"><span></span>удалить</label>
+			<?php }?>
+			<input type="submit" value="Обновить..."  name="reload" />
+			<table style="width:100%">
+			<tr>
+				<td style="text-align: left;">
+					<?php if($out['img_small_src']){?>
+					Имя файла: <?=$out['img_small_src']?>, Тип файла: <?=$out['small_type']?>,<br />
+					размер: <?=$out['small_size']?> bytes, <?=$out['img_small_x']?> x <?=$out['img_small_y']?><br />
+					<a href="<?=$this->config['files_path'].$out['img_small_src']?>" target="_blank">
+						<img src="<?=$this->config['files_path'].$out['img_small_src']?>" style="width: <?=$out['img_small_x'] > 300 ? 300 : $out['img_small_x']?>px" />
+					</a>
+					<?php } else {?>
+					<br />
+					<?php }?>
+				</td>
+				<td>
+					установить текущие пропорции в качестве шаблона? <input type="checkbox" name="setProportions1" is="setProportions1" value="1" /><label for="setProportions1"><span></span></label><br />
+					<?=$_SESSION['use_proportions1'] ? '(Текущий шаблон: '.$_SESSION['width1'].' х '.$_SESSION['height1'].' px)' : ''?>
+					<hr />
+					<a href="?action=getCadr&id=<?=$out['id']?>&type=3&window=1" target="_blank" onClick="wopenWH('?action=getCadr&id=<?=$out['id']?>&type=3&window=1', '_blank', <?=$this->config['wopenX3']?>, <?=$this->config['wopenY3']?>);"><b>[кадрировать из исходного]</b></a>
+					<br />
+					<a href="?action=getModulator&id=<?=$out['id']?>&img=1&window=1" target="_blank"  onClick="wopenWH('?action=getModulator&id=<?=$out['id']?>&img=1&window=1', '_blank', 400, 300);"><b>[модуляция изображение]</b></a>
+					<br>
+					масштабировать в ширину <input type="text" name="small_pic_width" value="<?=$_SESSION['small_pic_width'] ? $_SESSION['small_pic_width'] : $this->config['small_pic_width']?>" size="3" />
+					<br>
+					кадрировать под высоту <input type="text" name="small_cadr_height" value="" size="3" />
+					<br>
+					подогнать под высоту <input type="text" name="small_resize_height" value="" size="3" />
+				</td>
+			</tr>	
+			</table>
+		</td>
+	</tr>
+</table>
+<hr>
+<center>
+<table width="120" border="0" cellpadding="1" cellspacing="0">
+	<tr>
+		<td>
+			<input type="submit" class="buttons" value="Изменить" />
+			<input type="hidden" name="id" value="<?=$out['id']?>" />
+			<input type="hidden" name="cId" value="<?=$this->catId?>" />
+			<input type="hidden" name="action" value="saveObjectItem" />
+			<input type="hidden" name="window" value="<?=$_REQUEST['window']?>" />
+			<input type="hidden" name="is_copy" value="<?=$_REQUEST['is_copy']?>" />
+			<input type="hidden" name="page" value="<?=$_REQUEST['page']?>" />
+			<input type='hidden' name='v' value="0" />
+		</td>
+		<td>
+			<input type='button' class='buttons' value='Отказаться' style='width:100px;' onclick="document.form_cancel.submit();" />
+		</td>
+	</tr>	
+</table>
+</center>
+</form>
+<form action='.' method='get' name="form_cancel">
+	<input type="hidden" name="cId" value="<?=$this->catId?>" />
+	<input type="hidden" name="page" value="<?=$_REQUEST['page']?>" />
+    <input type='hidden' name='action' value='show' />
+</form>
+<script language="javascript" src="/scripts/addtags.js"></script>
+<script>
+	function getVideo(id){
+		if (!id){
+			window.open('/admin/gallery/?window=1&preview=1&v=1', 'preview_choose', 'width=600, height=400, resizable=yes, scrollbars=yes, menubar=no, status=yes');
+		} else if (id){
+			var el = $('span.video_obj').append('<a href="./?action=showItems&catId=' + arguments[1] + '&id=' + id + '&v=1&window=1" target="_blank">' + arguments[2] + '</a>&nbsp;<input type="checkbox" name="video_del" value="1" />&nbsp;Удалить&nbsp;&nbsp;');
+			el.parent().find('input[name="video_id"]').attr('value', id);
+		}
+	}
+</script>

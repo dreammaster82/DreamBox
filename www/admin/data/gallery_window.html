@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage">
+	<head>
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+		<title><?=$out['title']?></title>
+		<meta name="description" content="<?=$out['description']?>" />
+		<meta name="keywords" content="<?=$out['keywords']?>" />
+		<meta itemprop="name" content="<?=$out['title']?>" />
+		<meta itemprop="description" content="<?=$out['description']?>" />
+		<?php if($out['propImage']){?>
+		<meta itemprop="image" content="http://<?=$this->Core->globalCofig['site'].$out['propImage']?>" />
+		<?php }?>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="robots" content="noindex">
+		<link rel="stylesheet" type="text/css" href="/admin/css/admin.css">
+		<?=$out['style']?>
+		<?=$out['js'];?>
+	</head>
+	<body style="padding: 10px;">
+	<?php if($out['warning']){?>
+		<center><p><b><font color=red><?=$out['warning']?></font></b></center>
+	<?php }?>
+	<?=$out['content']?>
+	</body>
+</html>

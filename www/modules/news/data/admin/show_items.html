@@ -1,0 +1,28 @@
+	<div>
+		<?=$this->getPages($this->getCountItems())?>
+		<div class="elements">
+			<?php foreach($out as $ov){?>
+			<table class="oneelem hovered">
+			    <tr>
+					<td>[<?=reset(explode(' ', $ov['posted']))?>]</td>
+					<td><?php if($ov['img_src']) echo'<a href="?id='.$ov['id'].'"><img src="/preview/type_admin_img'.$this->config['files_path'].$ov['img_src'].'" border="0" alt="'.$ov['name'].'"></a>'; ?></td>
+					<td width="99%"><a href="?id=<?=$ov['id']?>"><?=$ov['name']?></a></td>
+					<td style="width:50px;white-space:nowrap">
+						<?php
+						if($adm = $this->adminLinks($ov)){?>
+						<div class="admin_links">
+							<?php foreach($adm as $ov1){
+								if($ov1['type'] == 'link'){?>
+							<a href="<?=$ov1['link']?>"><?=$ov1['text']?></a>
+							<?php } else { ?>
+							<input type="<?=$ov1['type']?>" name="<?=$ov1['name']?>" value="<?=$ov1['text']?>" onclick="<?=$ov1['onclick']?>" />
+							<?php }
+							}?>
+						</div>
+						<?php }?>
+					</td>
+			    </tr>
+			</table>
+			<?php }?>
+		</div>
+	</div>

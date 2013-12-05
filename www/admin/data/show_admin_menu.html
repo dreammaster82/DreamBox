@@ -1,0 +1,8 @@
+			<ul>
+				<?php foreach($data['admin_menu'] as $dk => $dv){
+					if(($data['user']['permission'][$dv['admin']] || $dv['always']) && $dv['show']){?>
+				<li data-contentid="<?=$dv['module'] ? $dv['module'] : $dv['admin']?>"><a href="<?=$dv['link']?>"><?=$dv['text']?></a></li>
+				<?php }
+				}?>
+				<li><a href="/admin/?logout=1">Log-out</a></li>
+			</ul>

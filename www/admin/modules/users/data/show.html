@@ -1,0 +1,16 @@
+			<div class="header"><?=$out['name'] ? $out['name'] : $this->config['header']?></div>
+			<div class="admin_toplinks">
+				<?php if($out['id']){?>
+				<div class="floating">
+					<a href="?catId=<?=$out['parent_id']?>">[назад]</a>
+				</div>
+				<a href="?action=editItem&catId=<?=$out['id']?>">[новый пользователь]</a>
+				<?php }?>
+				<a href="?action=catEdit&catId=<?=$out['id']?>">[Новая группа]</a>
+			</div>
+			<?=$this->showGroups()?>
+			<?php if($out['items']){?>
+			<?=$this->showItems($out['items'])?>
+			<?php } else {?>
+			<center>Пользователи отсутствуют</center>
+			<?php }?>

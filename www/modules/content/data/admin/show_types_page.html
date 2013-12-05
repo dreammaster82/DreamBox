@@ -1,0 +1,10 @@
+<div class="header"><?=$out['header']?></div>
+<div class="admin_toplinks">
+	<a href="./">[content]</a>
+	<a href='?action=editType&types=<?=(int)$_REQUEST['types']?>'>[new]</a>
+</div>
+<?php if($out['items']){ ?>
+<div class="elements">
+	<?=$this->showTypes($out['items'])?>
+<div>		
+<?php } ?>

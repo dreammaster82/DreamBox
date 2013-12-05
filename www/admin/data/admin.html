@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage">
+	<head>
+		<link rel="icon" href="/favicon.ico" type="image/x-icon">
+		<title><?=$out['title']?></title>
+		<meta name="description" content="<?=$out['description']?>" />
+		<meta name="keywords" content="<?=$out['keywords']?>" />
+		<meta itemprop="name" content="<?=$out['title']?>">
+		<meta itemprop="description" content="<?=$out['description']?>">
+		<?php if($out['propImage']){?>
+		<meta itemprop="image" content="http://<?=$this->Core->globalCofig['site'].$out['propImage']?>">
+		<?php }?>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="/admin/css/admin.css">
+		<?=$out['style']?>
+		<script src="/js/jquery-1.10.2.min.js"></script>
+		<script src="/admin/js/utils.js"></script>
+		<script src="/js/wopen.js"></script>
+		<script src="/admin/js/admin.js"></script>
+		<?=$out['js']?>
+	</head>
+	<body data-contentid="<?=$out['cont_id']?>">
+		<div id="wrapper">
+			<div class="content">
+				<table style="width: 100%" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td style="padding-right: 5px;width:90%;vertical-align: top">
+							<div class="admin_content">
+							<?php 
+							if($out[warning]) echo "<center><p><b><font color=red>" . $out[warning] . "</font></b></center>"; 
+							echo $out[content];
+							?>
+							</div>
+						</td>
+						<td style="padding-left: 5px;vertical-align: top" nowrap class="admin_menu_table">
+							<div class="admin_menu_top">Меню администратора</div>
+							<div class="admin_menu">
+							<?php echo $out[menu];?>
+							</div>
+							<div class="admin_menu2_top">Меню сайта</div>
+							<div class="admin_menu2">
+								<ul>
+									<li><a href='/' target="_blank">Главная</a></li>
+								</ul>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</body>
+</html>

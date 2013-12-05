@@ -1,0 +1,5 @@
+<div class="header"><?=$out['header']?></div>
+<div class="admin_toplinks">
+	<a href="?action=editItem<?php if((int)$_REQUEST['page']) echo'&page='.(int)$_REQUEST['page']; ?>">[new]</a>
+</div>
+<?php if($out['items']){ echo $this->showItems($out['items']); } else { echo'<center>Элементы не найдены</center>'; } ?>

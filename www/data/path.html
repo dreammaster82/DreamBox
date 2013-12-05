@@ -1,0 +1,13 @@
+			<div class="path">
+				<a href="/">Главная</a>
+				<span class="separator"></span>
+				<?php 
+				foreach($data as $dv){
+					if($dv['link']){?>
+				<a href="<?=$dv['link']?>"><?=$dv['name']?></a>
+				<span class="separator"></span>
+					<?php } else { ?>
+				<?=$dv['name']?>
+				<?php }
+				} ?>
+			</div>

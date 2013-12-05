@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage">
+	<head>
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+		<title itemprop="name"><?=$out['title']?></title>
+		<meta name="description" content="<?=$out['description']?>" />
+		<meta name="keywords" content="<?=$out['keywords']?>" />
+		<meta itemprop="description" content="<?=$out['description']?>" />
+		<?php if($out['propImage']){?>
+		<meta itemprop="image" content="http://<?=$CONFIG['site'].$out['propImage']?>" />
+		<?php }?>
+		<meta charset="utf-8">
+		<meta name='yandex-verification' content='618a363c58599a13' />
+        <link rel="stylesheet" href="/css/style.css" />
+		<link rel="stylesheet" href="/js/chosen/chosen.css" />
+		<link rel="stylesheet" href="/modules/catalog/css/autocomplete.css" />
+		<?=$out['style']?>
+		<!--[if lt IE 9]>
+		<link rel="stylesheet" type="text/css" href="/css/style-ie8.css" />
+		<script src="/js/html5.js"></script>
+		<![endif]-->
+		<?=$out['style']?>
+		<script src="/js/jquery-1.10.2.min.js"></script>
+		<script defer src="/js/jquery.maskedinput.js"></script>
+		<script defer src="/js/chosen/chosen.jquery.min.js"></script>
+		<script defer src="/modules/catalog/js/autocomplete.js"></script>
+		<script defer src="/js/utils.js"></script>
+		<?=$out['js']?>
+	</head>
+	<body>
+		<?php include CLIENT_PATH.'/data/header.html'; ?>
+		<section id="content">
+			<?=$out['content']?>
+		</section>
+		<?php include CLIENT_PATH.'/data/footer.html'; ?>
+    </body>
+</html>
