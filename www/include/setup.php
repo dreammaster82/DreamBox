@@ -28,7 +28,7 @@ class Core{
 
 	private $errors = array();
 
-	public $ret = array(), $memcache, $cfg = array(), $globalConfig;
+	public $ret = array(), $memcache, $cfg = array(), $globalConfig, $memType = 0;
 
 	const NOT_KEYS = 0, CONNECTED = 1, UTIL = 4, SCROLL = 8, ALL_KEYS = 15,
 			CLASS_NAME = 0, MODULE = 1, ADMIN = 2, ABSTRACT_CLASS = 3;
@@ -39,9 +39,17 @@ class Core{
 		if($flags === false){
 			$flags = self::CONNECTED | self::UTIL | self::SCROLL;
 		}
-		if(class_exists('Memcache')){
+		if(class_exists('Memcached')){
+			$this->memcache = new Memcached();
+			$this->memcache->setOptions([
+				Memcached::OPT_PREFIX_KEY => $this->globalConfig['site'].'_'
+			]);
+			$this->memType = 1;
+		} elseif(class_exists('Memcache')){
 			$this->memcache = new Memcache;
-			if(!$this->memcache->connect($this->globalConfig['debug'] ? '127.0.0.1' : $this->globalConfig['site'], 11211)){
+		}
+		if($this->memcache){
+			if(!$this->memcache->addServer($this->globalConfig['debug'] ? '127.0.0.1' : $this->globalConfig['site'], 11211)){
 				$this->ret['js_after'] .= '<script>console.log("Cache not conected!");</script>';
 			} elseif((int)$_REQUEST['flush_cache']){
 				$ip = $this->getRealIp();
@@ -56,6 +64,9 @@ class Core{
 						$this->memcache->flush();
 					}
 				}
+			}
+			if(!$this->memType){
+				$this->memcache->setCompressThreshold(2000, 1);
 			}
 		}
 		if($flags & self::UTIL){
@@ -447,10 +458,14 @@ class Util{
 		return $files;
 	}
 
-	function memcacheSet($ind, $data, $class = 'all', $flag = false, $expire = 0){
+	function memcacheSet($ind, $data, $class = 'all', $expire = 0){
 		$ret = false;
 		if(isset($this->Core->memcache) && $data){
-			$ret = $this->Core->memcache->set($this->Core->globalConfig['site'].'_'.$ind, json_encode($data), $flag, $expire);
+			if($this->Core->memType){
+				$ret = $this->Core->memcache->set($ind, $dat, $expire);
+			} else {
+				$ret = $this->Core->memcache->set($this->Core->globalConfig['site'].'_'.$ind, ${(function_exists('igbinary_serialize') ? 'igbinary_serialize' : 'json_encode')}($data), false, $expire);
+			}
 			$mc = array();
 			if(is_file(CLIENT_PATH.'/files/memcache.txt')){
 				$s = file_get_contents(CLIENT_PATH.'/files/memcache.txt');
@@ -476,11 +491,15 @@ class Util{
 
 	function memcacheGet($ind){
 		if(isset($this->Core->memcache)){
-			$js = $this->Core->memcache->get($this->Core->globalConfig['site'].'_'.$ind);
-			if($js){
-				return json_decode($js, true);
+			if($this->Core->memType){
+				return $this->Core->memcache->get($ind);
 			} else {
-				return false;
+				$js = $this->Core->memcache->get($this->Core->globalConfig['site'].'_'.$ind);
+				if($js){
+					return json_decode($js, true);
+				} else {
+					return false;
+				}
 			}
 		} else {
 			return false;
@@ -489,7 +508,12 @@ class Util{
 
 	function memcacheDelete($ind, $class = 'all'){
 		if(isset($this->Core->memcache)){
-			if($this->Core->memcache->delete($this->Core->globalConfig['site'].'_'.$ind) && is_file(CLIENT_PATH.'/files/memcache.txt')){
+			if($this->Core->memType){
+				$d = $this->Core->memcache->delete($ind);
+			} else {
+				$d = $this->Core->memcache->delete($this->Core->globalConfig['site'].'_'.$ind);
+			}
+			if($d && is_file(CLIENT_PATH.'/files/memcache.txt')){
 				$mc = array();
 				$s = file_get_contents(CLIENT_PATH.'/files/memcache.txt');
 				$arr = explode(';', $s);
@@ -520,7 +544,11 @@ class Util{
 					if($v){
 						list($cl, $param) = explode('_', $v);
 						if($cl == $class){
-							$this->Core->memcache->delete($this->Core->globalConfig['site'].'_'.$param);
+							if($this->Core->memType){
+								$this->Core->memcache->delete($param);
+							} else {
+								$this->Core->memcache->delete($this->Core->globalConfig['site'].'_'.$param);
+							}
 						} else {
 							$mc[$cl][$param] = 1;
 						}
