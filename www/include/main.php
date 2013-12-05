@@ -1,3 +1,3 @@
 <?php
-
+//For main page
 ?>
