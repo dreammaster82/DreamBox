@@ -2,7 +2,7 @@
 if(file_exists(realpath($_SERVER['DOCUMENT_ROOT']).'/cache'.$_SERVER['REQUEST_URI']) && stppos($_SERVER['REQUEST_URI'], '?') === false){
 	include realpath($_SERVER['DOCUMENT_ROOT']).'/cache'.$_SERVER['REQUEST_URI'];
 } else {
-	include_once 'include/setup.php';
+	include_once 'include/core.php';
 	if($CONFIG['no_apache'] && $_REQUEST['req']){
 		$arr = explode('/', ltrim($_REQUEST['req'], '/'));
 		$m = array_shift($arr);
