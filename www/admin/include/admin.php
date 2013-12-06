@@ -1,6 +1,7 @@
 <?php
-namespace admin{
-	class Admin extends AdminFunctions{
+namespace core\admin{
+	use core\admin as core;
+	class Admin extends core\AdminFunctions{
 
 		public $ret, $Auth, $path;
 

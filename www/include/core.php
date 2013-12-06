@@ -24,7 +24,7 @@ class Core{
 			$flags = self::ALL_KEYS;
 		}
 		if($flags & self::MEMCACHE){
-			$this->getClass('MemcacheCore');
+			$this->getClass('Memcache');
 		}
 		if($flags & self::UTIL){
 			$this->getClass('Util');
@@ -43,26 +43,28 @@ class Core{
 
 	function getClass($class = array(), $params = false){
 		static $classes = array();
+		$getCont = true;
 		if(is_string($class)){
-			$class = array(self::CLASS_NAME => $class, self::MODULE => '', self::ADMIN => false);
+			$class = array(self::CLASS_NAME => $class, self::MODULE => 'core', self::ADMIN => false);
+			$getCont = false;
 		}
 		if(!$class[self::CLASS_NAME]){
 			return false;
 		}
-		$cn = ($class[self::ADMIN] ? 'admin' : $class[self::MODULE]).'\\'.$class[self::CLASS_NAME];
+		$cn = ($class[self::ADMIN] ? 'core\\admin' : $class[self::MODULE]).'\\'.$class[self::CLASS_NAME];
 		if(!$classes[$cn]){
 			if(!class_exists($cn)){
 				$name = $mp = '';
-				if($class[self::CLASS_NAME] != 'CContent' && !$classes['\CContent']){
+				if($getCont && $class[self::CLASS_NAME] != 'CContent' && !$classes['core\CContent']){
 					if($class[self::ADMIN]){
 						$this->getClass(array(self::CLASS_NAME => 'CContent', self::ADMIN => true, self::ABSTRACT_CLASS => true));
 					} else {
-						$this->getClass(array(self::CLASS_NAME => 'CContent', self::ABSTRACT_CLASS => true));
+						$this->getClass(array(self::CLASS_NAME => 'CContent', self::ABSTRACT_CLASS => true, self::MODULE => 'core'));
 					}
 				}
 				if(strpos($class[self::CLASS_NAME], 'Viewer')){
-					if($class[self::CLASS_NAME] != 'CContentViewer' && !$classes['\CContentViewer']){
-						$this->getClass(array(self::CLASS_NAME => 'CContentViewer', self::ABSTRACT_CLASS => true));
+					if($class[self::CLASS_NAME] != 'CContentViewer' && !$classes['core\CContentViewer']){
+						$this->getClass(array(self::CLASS_NAME => 'CContentViewer', self::ABSTRACT_CLASS => true, self::MODULE => 'core'));
 					}
 					$mp = str_replace('Viewer', '', $class[self::CLASS_NAME]);
 					$this->getClass(array(self::CLASS_NAME => $mp, self::MODULE => $class[self::MODULE]));
@@ -75,7 +77,7 @@ class Core{
 					}
 				}
 				$path = '';
-				if($class[self::MODULE]){
+				if($class[self::MODULE] != 'core'){
 					if($class[self::MODULE] == 'admin'){
 						$path .= ADMIN_PATH.'/modules/'.strtolower($class[self::CLASS_NAME]);
 					} else {
@@ -102,18 +104,18 @@ class Core{
 				} else {
 					$classes[$cn] = new $cn($mp, $params);
 					$classes[$cn]->Core = $this;
-					if(!in_array($cn, array('\Db', '\Util', '\Scroll', '\Memcache'))){
-						if($classes['\Db']){
-							$classes[$cn]->Db = $classes['\Db'];
+					if(!in_array($cn, array('core\Db', 'core\Util', 'core\Scroll', 'core\Memcache'))){
+						if($classes['core\Db']){
+							$classes[$cn]->Db = $classes['core\Db'];
 						}
-						if($classes['\Util']){
-							$classes[$cn]->Util = $classes['\Util'];
+						if($classes['core\Util']){
+							$classes[$cn]->Util = $classes['core\Util'];
 						}
-						if($classes['\Scroll']){
-							$classes[$cn]->Scroll = $classes['\Scroll'];
+						if($classes['core\Scroll']){
+							$classes[$cn]->Scroll = $classes['core\Scroll'];
 						}
-						if($classes['\Memcache']){
-							$classes[$cn]->Memcache = $classes['\Memcache'];
+						if($classes['core\Memcache']){
+							$classes[$cn]->Memcache = $classes['core\Memcache'];
 						}
 					}
 				}

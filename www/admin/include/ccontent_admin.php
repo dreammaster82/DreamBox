@@ -1,6 +1,7 @@
 <?php
-namespace admin{
-	abstract class CContent extends AdminFunctions{
+namespace core\admin{
+	use core\admin as core;
+	abstract class CContent extends core\AdminFunctions{
 		protected $config = array(), $class = __CLASS__, $module, $path, $Auth, $months = array(
 			'1'=>'января',
 			'2'=>'февраля',
