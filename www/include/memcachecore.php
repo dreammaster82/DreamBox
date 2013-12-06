@@ -1,6 +1,6 @@
 <?php
 
-class Memcache{
+class MemcacheCore{
 	private $memcache, $memType = 0;
 	
 	function __construct() {
@@ -20,6 +20,7 @@ class Memcache{
 				$this->memType = 1;
 			}
 		}
+		
 		if($this->memcache){
 			if(!$this->memcache->addServer($this->globalConfig['debug'] ? '127.0.0.1' : $this->globalConfig['site'], 11211)){
 				$this->Core->setError('Cache not conected', 'Memcache');
@@ -48,7 +49,8 @@ class Memcache{
 			if($this->memType){
 				$ret = $this->memcache->set($ind, $data, $expire);
 			} else {
-				$ret = $this->memcache->set($this->Core->globalConfig['site'].'_'.$ind, ${(function_exists('igbinary_serialize') ? 'igbinary_serialize' : 'json_encode')}($data), false, $expire);
+				$srz = function_exists('igbinary_serialize') ? 'igbinary_serialize' : 'json_encode';
+				$ret = $this->memcache->set($this->Core->globalConfig['site'].'_'.$ind, $srz($data), false, $expire);
 			}
 			$mc = array();
 			if(is_file(CLIENT_PATH.'/files/memcache.txt')){
@@ -67,6 +69,9 @@ class Memcache{
 				foreach ($v as $k1 => $v1){
 					$arr[] = $k.'_'.$k1;
 				}
+			}
+			if(!is_dir(CLIENT_PATH.'/files')){
+				mkdir(CLIENT_PATH.'/files', 0775, true);
 			}
 			file_put_contents(CLIENT_PATH.'/files/memcache.txt', implode(';', $arr));
 		}

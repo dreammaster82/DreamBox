@@ -24,7 +24,7 @@ class Core{
 			$flags = self::ALL_KEYS;
 		}
 		if($flags & self::MEMCACHE){
-			$this->getClass('Memcache');
+			$this->getClass('MemcacheCore');
 		}
 		if($flags & self::UTIL){
 			$this->getClass('Util');
