@@ -1,6 +1,7 @@
 <?php
 namespace news{
-	class News extends \CContent {
+	use core;
+	class News extends core\CContent {
 		protected $config = array(
 			'header' => 'Новости',
 			'table' => 'news',

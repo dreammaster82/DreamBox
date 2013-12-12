@@ -117,7 +117,7 @@ namespace core\admin{
 
 		function priorityItem($isParent = 1){
 			if((int)$_REQUEST['what']){
-				$item = $this->getItem(array('id', 'parent_id'), (int)$_REQUEST['what']);
+				$item = $this->getItem(($isParent ? ['id', 'parent_id'] : ['id']), (int)$_REQUEST['what']);
 				if($item['id']){
 					$r = $this->getItems(array('id', 'priority'), ($isParent ? array('parent_id' => $item['parent_id']) : false), array('priority'));
 					if($r){

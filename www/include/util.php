@@ -100,6 +100,10 @@ namespace core{
 			}
 			$add = '';
 			if($real){
+				if(substr($real, 0, 2) == '//'){
+					$add = '//';
+					$real = substr($real, 2);
+				}
 				if(stripos($real, '/') === 0){
 					$add = '/';
 				}

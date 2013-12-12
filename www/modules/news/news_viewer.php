@@ -1,6 +1,7 @@
 <?php
 namespace news{
-	class NewsViewer extends News implements \CContentViewer{
+	use core;
+	class NewsViewer extends News implements core\CContentViewer{
 
 		function __construct($m) {
 			parent::__construct($m);

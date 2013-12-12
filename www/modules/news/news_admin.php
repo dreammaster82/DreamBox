@@ -1,6 +1,7 @@
 <?php
-namespace admin{
-	class News extends CContent{
+namespace core\admin{
+	use core\admin as core;
+	class News extends core\CContent{
 		protected $config = array(
 			'admin' => 'news',
 			'header' => 'Редактирование новостей',
