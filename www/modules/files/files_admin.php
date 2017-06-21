@@ -17,26 +17,28 @@ namespace admin{
 
 		function adminLinks($item){
 			$ret = array();
-			$addArr = array();
-			if((int)$_REQUEST['page']){
-				$addArr[] = 'page='.(int)$_REQUEST['page'];
-			}
-			if($_REQUEST['sort']){
-				$addArr[] = 'sort='.$_REQUEST['sort'];
-			}
-			if($addArr){
-				$add = '&'.implode('&', $addArr);
-			}
-			if($item['id']){
-				$ret[] = array('type' => 'link', 'link' => '?id='.$this->id.'&action=showHideItem&what='.$item['id'].$add, 'text' => $item['active'] ? '[hide]' : '[show]');
-				$ret[] = array('type' => 'link', 'link' => '?id='.$this->id.'&action=deleteItem&what='.$item['id'].$add, 'text' => '[del]');
-				$ret[] = array('type' => 'link', 'link' => '?id='.$this->id.'&action=moveItem&what='.$item['id'].$add, 'text' => '[move]');
-				$ret[] = array('type' => 'link', 'link' => '?id='.$this->id.'&action=editItem&what='.$item['id'].$add, 'text' => '[edit]');
-			}
-			$ret[] = array('type' => 'link', 'link' => '?id='.$item['id'].'&action=editItem'.$add, 'text' => '[new]');
-			if($item['id']){
-				$ret[] = array('type' => 'link', 'link' => '?id='.$this->id.'&action=priorityItem&pr=0&what='.$item['id'].$add, 'text' => '[+]');
-				$ret[] = array('type' => 'link', 'link' => '?id='.$this->id.'&action=priorityItem&pr=1&what='.$item['id'].$add, 'text' => '[-]');
+			if(!$_REQUEST['window']){
+				$addArr = array();
+				if((int)$_REQUEST['page']){
+					$addArr[] = 'page='.(int)$_REQUEST['page'];
+				}
+				if($_REQUEST['sort']){
+					$addArr[] = 'sort='.$_REQUEST['sort'];
+				}
+				if($addArr){
+					$add = '&'.implode('&', $addArr);
+				}
+				if($item['id']){
+					$ret[] = array('type' => 'link', 'link' => '?id='.$this->id.'&action=showHideItem&what='.$item['id'].$add, 'text' => $item['active'] ? '[hide]' : '[show]');
+					$ret[] = array('type' => 'link', 'link' => '?id='.$this->id.'&action=deleteItem&what='.$item['id'].$add, 'text' => '[del]');
+					$ret[] = array('type' => 'link', 'link' => '?id='.$this->id.'&action=moveItem&what='.$item['id'].$add, 'text' => '[move]');
+					$ret[] = array('type' => 'link', 'link' => '?id='.$this->id.'&action=editItem&what='.$item['id'].$add, 'text' => '[edit]');
+				}
+				$ret[] = array('type' => 'link', 'link' => '?id='.$item['id'].'&action=editItem'.$add, 'text' => '[new]');
+				if($item['id']){
+					$ret[] = array('type' => 'link', 'link' => '?id='.$this->id.'&action=priorityItem&pr=0&what='.$item['id'].$add, 'text' => '[+]');
+					$ret[] = array('type' => 'link', 'link' => '?id='.$this->id.'&action=priorityItem&pr=1&what='.$item['id'].$add, 'text' => '[-]');
+				}
 			}
 			return $ret;
 		}
@@ -161,16 +163,28 @@ namespace admin{
 			if((int)$_REQUEST['fId']){
 				$fShow = $C->show();
 			}
-			if($_REQUEST['window']){
-				$out = $this->filesChoose();
+			/*if($_REQUEST['window']){
+				//$out = $this->filesChoose();
 				$inc = 'show_window';
-			} else {
+			} else */{
 				$out['header'] = $this->config['header'];
 				$out['files_items'] = $C->getItems(array('id', 'file_date', 'file_type', 'real_file', 'hache', 'parent_id', 'active'), array('parent_id' => $this->id), array('priority'), false, false, false, $C->config['items_on_page']);
 				if ($_REQUEST['download_stat']){
 					$out['download_stat'] = $this->getDownloadStat();
 				}
 				$out['items'] = $this->verifyItems($this->getItems(array('id', 'parent_id', 'alias', 'level', 'name', 'active'), false, array('priority')));
+				
+			}
+			if($_REQUEST['window']){
+				$this->ret['js_after'] .= '<script>
+	function OpenerFilePathInsert(id){
+		window.opener.InsText(\'\', \'[download]\' + id + \'[/download]\');
+		self.close(); 
+		return false;
+	}
+	</script>';
+				$inc = 'show_window';
+			} else {
 				$inc = 'show';
 			}
 			$out['file_show'] = $fShow;
@@ -396,80 +410,6 @@ namespace admin{
 			} else {
 				return $C->editItem();
 			}
-		}
-
-		function filesChoose(){
-			$ret = array();
-			if(isset($_REQUEST['path'])){
-				if($_REQUEST['path'] == '/'){
-					$_REQUEST['path'] = '';
-				}
-				$path = $_SESSION['files_path'] = $_REQUEST['path'];
-			} elseif($_SESSION['files_path'] && !$_REQUEST['goback']){
-				$path = $_SESSION['files_path'];
-			}
-			$path = str_replace('\\', '/', $path);
-			$dir = $this->getrealpath($this->config['files_path'].$path);
-			$ret['list'] = array();
-			$ret['dirs'] = array();
-			try{
-				$d = new \RecursiveDirectoryIterator($dir, \FilesystemIterator::NEW_CURRENT_AND_KEY | \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS);
-				foreach ($d as $v){
-					if($v->isFile()){
-						$arr = explode('_', $v->getFilename());
-						$ret['list'][(int)$arr[0]] = $v->getFilename();
-					}
-					if($v->isDir()){
-						$ret['dirs'][$v->getFilename()] = $v->getFilename();
-					}
-				}
-			} catch (\UnexpectedValueException $e){
-				echo $e->getMessage();
-			}
-			if(strlen($path)){
-				$dirArr = explode('/', $path);
-			} else {
-				$dirArr = array();
-			}
-			$ret['link'] = '';
-			$cur = false;
-			$ret['items'] = $this->getItems();
-			foreach ($dirArr as $k => $v){
-				if($k){
-					$ret['link'] .= '/';
-				}
-				$ret['link'] .= $v;
-				$ret['links'][] = array('link' => $ret['link'], 'text' => $ret['items'][(int)$v]['name']);
-				$cur = $v;
-			}
-			$this->ret['after'] .= '<script>
-	function OpenerFilePathInsert(path, type, params){
-		var display = \'[download]\';
-		if(path){
-			display += path;
-		}
-		if(type){
-			display += \'|\' + type;
-		}
-		if(params){
-			display += \'|\' + params;
-		}
-		display += \'[/download]\';
-		window.opener.AddText(display);
-		self.close(); 
-		return false;
-	}
-	</script>';
-			if($list){
-				$tData = array('id', 'parent_id', 'name', 'description', 'active', 'file_src', 'file_size', 'file_data',
-					'file_type', 'file_mime', 'ptiority', 'owner', 'download_cnt', 'view', 'real_file', 'hache');
-				$this->Core->getClass('FilesChildren', 'files', false, true)->getItems($tData, array('parent_id' => $cur));
-				$ret['files_items'] = array();
-				foreach ($r as $v){
-					$ret['files_items'][$v['id']] = $v;
-				}
-			}
-			return $ret;
 		}
 	}
 }

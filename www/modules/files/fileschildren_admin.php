@@ -28,12 +28,16 @@ namespace admin{
 			if($addArr){
 				$add = '&'.implode('&', $addArr);
 			}
-			$ret[] = array('type' => 'link', 'link' => '?id='.$item['parent_id'].'&action=showHideItemFiles&what='.$item['id'].$add, 'text' => $item['active'] ? '[hide]' : '[show]');
-			$ret[] = array('type' => 'link', 'link' => '?id='.$item['parent_id'].'&action=deleteItemFiles&what='.$item['id'].$add, 'text' => '[del]');
-			$ret[] = array('type' => 'link', 'link' => '?id='.$item['parent_id'].'&action=moveItemFiles&what='.$item['id'].$add, 'text' => '[move]');
-			$ret[] = array('type' => 'link', 'link' => '?id='.$item['parent_id'].'&action=editItemFiles&what='.$item['id'].$add, 'text' => '[edit]');
-			$ret[] = array('type' => 'link', 'link' => '?id='.$item['parent_id'].'&action=priorityItemFiles&pr=0&what='.$item['id'].$add, 'text' => '[+]');
-			$ret[] = array('type' => 'link', 'link' => '?id='.$item['parent_id'].'&action=priorityItemFiles&pr=1&what='.$item['id'].$add, 'text' => '[-]');
+			if((int)$_REQUEST['window']){
+				$ret[] = array('type' => 'button', 'name' => 'relate', 'text' => ' >> ', 'onclick' => 'return OpenerFilePathInsert('.$item['id'].');');
+			} else {
+				$ret[] = array('type' => 'link', 'link' => '?id='.$item['parent_id'].'&action=showHideItemFiles&what='.$item['id'].$add, 'text' => $item['active'] ? '[hide]' : '[show]');
+				$ret[] = array('type' => 'link', 'link' => '?id='.$item['parent_id'].'&action=deleteItemFiles&what='.$item['id'].$add, 'text' => '[del]');
+				$ret[] = array('type' => 'link', 'link' => '?id='.$item['parent_id'].'&action=moveItemFiles&what='.$item['id'].$add, 'text' => '[move]');
+				$ret[] = array('type' => 'link', 'link' => '?id='.$item['parent_id'].'&action=editItemFiles&what='.$item['id'].$add, 'text' => '[edit]');
+				$ret[] = array('type' => 'link', 'link' => '?id='.$item['parent_id'].'&action=priorityItemFiles&pr=0&what='.$item['id'].$add, 'text' => '[+]');
+				$ret[] = array('type' => 'link', 'link' => '?id='.$item['parent_id'].'&action=priorityItemFiles&pr=1&what='.$item['id'].$add, 'text' => '[-]');
+			}
 			return $ret;
 		}
 

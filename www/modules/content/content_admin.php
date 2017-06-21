@@ -1,6 +1,7 @@
 <?php
-namespace admin{
-	class Content extends CContent{
+namespace core\admin{
+	use core\admin as core;
+	class Content extends core\CContent{
 		protected $config = array(
 			'admin' => 'content',
 			'header' => 'Страницы сайта',
@@ -79,7 +80,7 @@ namespace admin{
 						$out['type'] = $this->fTypes[$fi];
 					}
 					$out['files'] = $this->Util->getImagesArray($this->config['files_path'].'/'.$out['id']);
-					$out['alias'] = '/'.$this->module.'/'.$out['alias'].'.html';
+					$out['alias'] = '/'.$out['alias'];
 				}
 			}
 			$out['module'] = $this->module;
@@ -94,7 +95,7 @@ namespace admin{
 
 		function getItem($data, $cond){
 			if(!$data){
-				$data = array('id', 'parent_id', 'name', 'content', 'img_src', 'title', 'description', 'keywords', 'toprint', 'parent', 'alias', 'template', 'active', 'is_text', 'on_top');
+				$data = array('id', 'parent_id', 'name', 'content', 'img_src', 'title', 'description', 'keywords', 'toprint', 'parent', 'alias', 'active', 'is_text', 'on_top', 'header');
 			}
 			$item = parent::getItem($data, $cond);
 			if($item){
@@ -175,7 +176,7 @@ namespace admin{
 			}
 			if(!$err){
 				$title = trim(stripslashes($_REQUEST['title']));
-				$alias = str_replace('/content/', '', str_replace('.html', '', trim(stripslashes($_REQUEST['alias']))));
+				$alias = ltrim(str_replace('/content/', '', $_REQUEST['alias']), '/');
 				if(!$alias){
 					$alias = $this->ru_en_encode($name);
 				}
@@ -183,7 +184,7 @@ namespace admin{
 				$content = str_replace("\n", "\n ", trim(stripslashes($_REQUEST['content'])));
 				$desc = trim(stripslashes($_REQUEST['description']));
 				$keywords = trim(stripslashes($_REQUEST['keywords']));
-				$template = trim(stripslashes($_REQUEST['template']));
+				$header = trim(stripslashes($_REQUEST['header']));
 				$types = 0;
 				if(is_array($_REQUEST['rtype'])){
 					foreach ($_REQUEST['rtype'] as $v){
@@ -205,12 +206,12 @@ namespace admin{
 						'.$this->config['pref'].'keywords=?,
 						'.$this->config['pref'].'toprint=?,
 						'.$this->config['pref'].'alias=?,
-						'.$this->config['pref'].'template=?,
 						'.$this->config['pref'].'is_text=?,
 						'.$this->config['pref'].'posted=?,
-						'.$this->config['pref'].'on_top=?
+						'.$this->config['pref'].'on_top=?,
+						'.$this->config['pref'].'header=?
 						WHERE '.$this->config['pref'].'id=?', 
-						array($name, $title, $desc, $keywords, (int)$_REQUEST['toprint'], $alias, $template, (int)$_REQUEST['is_text'], $posted, (int)$_REQUEST['on_top'], $item['id']));
+						array($name, $title, $desc, $keywords, (int)$_REQUEST['toprint'], $alias, (int)$_REQUEST['is_text'], $posted, (int)$_REQUEST['on_top'], $header, $item['id']));
 					if(!$_REQUEST['reload']){
 						$this->ret['warning'] .= 'Элемент изменен';
 					}
@@ -226,13 +227,12 @@ namespace admin{
 						'.$this->config['pref'].'keywords,
 						'.$this->config['pref'].'toprint,
 						'.$this->config['pref'].'alias,
-						'.$this->config['pref'].'template,
 						'.$this->config['pref'].'active,
 						'.$this->config['pref'].'priority,
 						'.$this->config['pref'].'is_text,
-						'.$this->config['pref'].'note,
-						'.$this->config['pref'].'on_top) VALUES (?, ?, "", ?, ?, ?, ?, ?, ?, 1, ?, ?, "", ?)',
-						array($this->id, $name, $title, $desc, $keywords, (int)$_REQUEST['toprint'], $alias, $template, ++$r['m'], (int)$_REQUEST['is_text'], (int)$_REQUEST['on_top']));
+						'.$this->config['pref'].'header,
+						'.$this->config['pref'].'on_top) VALUES (?, ?, "", ?, ?, ?, ?, ?, 1, ?, ?, ?, ?)',
+						array($this->id, $name, $title, $desc, $keywords, (int)$_REQUEST['toprint'], $alias, ++$r['m'], (int)$_REQUEST['is_text'], $header, (int)$_REQUEST['on_top']));
 					if(!$_REQUEST['reload']){
 						$this->ret['warning'] = 'Элемент добавлен ('.$item['id'].')';
 					}

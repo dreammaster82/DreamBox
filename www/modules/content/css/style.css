@@ -1,0 +1,18 @@
+	.send_form label{
+		display: block;
+		margin-bottom: 5px;
+	}
+		.send_form label .red{
+			color: red;
+		}
+	.send_form .line{
+		margin-bottom: 10px;
+	}
+	.send_form .return{
+		display: none;
+		color: red;
+		text-align: left;
+	}
+	.send_form input, .send_form textarea{
+		width: 180px;
+	}

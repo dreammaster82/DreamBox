@@ -1,6 +1,7 @@
 <?php
 namespace content{
-	class Content extends \CContent{
+	use core;
+	class Content extends core\CContent{
 		protected $config = array(
 					'header' => 'Содержание страниц',
 					'table' => 'content',
@@ -15,14 +16,7 @@ namespace content{
 
 		function parseRequest($request) {
 			$ret = array();
-			if(strpos($request, '/') !== false){
-				$this->setError('badRequest');
-			}
-			if(strpos($request, '.html') !== false){
-				$ret['alias'] = str_replace('.html', '', $request);
-			} else {
-				$this->setError('badRequest');
-			}
+			$ret['alias'] = $request;
 			return $ret;
 		}
 
@@ -51,7 +45,7 @@ namespace content{
 				$arr = array();
 				foreach ($r as $v){
 					$arr[$v['parent_id']][$v['id']] = $v;
-					$arr[$v['parent_id']][$v['id']]['real_alias'] = '/content/'.$v['alias'].'.html';
+					$arr[$v['parent_id']][$v['id']]['real_alias'] = '/'.$v['alias'];
 				}
 				foreach($arr[0] as $k => $v){
 					if($arr[$k]){
@@ -66,10 +60,57 @@ namespace content{
 		
 		function getPath($item = array()){
 			$ret = array();
+			if($item['parent_id']){
+				$arr = array();
+				if(class_exists('HandlerSocket')){
+					$hs = new \HandlerSocket($this->Core->globalConfig['database']['host'], $this->Core->globalConfig['handler_socket']['port']);
+					$fields = array(
+						$this->config['pref'].'id',
+						$this->config['pref'].'parent_id',
+						$this->config['pref'].'header',
+						$this->config['pref'].'alias'
+					);
+					if($hs->openIndex(1, $this->Core->globalConfig['database']['database'], $this->config['table'], \HandlerSocket::PRIMARY, implode(',', $fields))){
+						$pId = $item['parent_id'];
+						while($pId){
+							$it = $hs->executeSingle(1, '=', array($pId));
+							$pId = $it[0][1];
+							$arr[] = array('header' => $it[0][2], 'alias' => $it[0][3]);
+						}
+					}
+					unset($hs);
+				}
+				$arr = array_reverse($arr);
+				foreach ($arr as $v){
+					$ret[] = array('link' => '/'.$v['alias'], 'name' => $v['header']);
+				}
+			}
 			if($item){
-				$ret[] = array('link' => '', 'name' => $item['name']);
+				$ret[] = array('link' => '', 'name' => $item['header']);
 			}
 			return $ret;
+		}
+		
+		function getContentItems(){
+			if(isset($this->Memcache) && $it = $this->Memcache->get('getContentItems')){
+				return $it;
+			}
+			$r = $this->Db->query('SELECT
+				'.$this->config['pref'].'id ,
+				'.$this->config['pref'].'parent_id,
+				'.$this->config['pref'].'alias,
+				'.$this->config['pref'].'name,
+				'.$this->config['pref'].'on_top
+				FROM '.$this->config['table'].' WHERE '.$this->config['pref'].'active=1
+				ORDER BY '.$this->config['pref'].'priority', false, \PDO::FETCH_NUM);
+			$it = [];
+			foreach ($r as $v){
+				$it[$v[0]] = $v;
+			}
+			if(isset($this->Memcache)){
+				$this->Memcache->set('getContentItems', $it, $this->class);
+			}
+			return $it;
 		}
 	}
 }

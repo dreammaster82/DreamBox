@@ -7,11 +7,11 @@ $filename = $secret.'.png';
 getImageCode($secret, $filename);
 
 function getImageCode($secret, $filename){
-	$font = 'Scada-Bold.ttf';
+	$font = 'Scada-Regular.ttf';
 	$shFont = 'Scada-Regular.ttf';
 	$imgPath = 'fon_code.png';
 	$x0 = 5;							// отступ слева
-	$xMin = 10; $xMax = 15;			// диапазон смещений по Х
+	$xMin = 10; $xMax = 25;			// диапазон смещений по Х
 	$y0 = 15;							// отступ сверху
 	$yMin = 0; $yMax = 15;			// диапазон смещений по Y
 	$sizeMin = 12; $sizeMax = 18;		// диапазон размеров шрифта
@@ -26,7 +26,7 @@ function getImageCode($secret, $filename){
 		$angle = rand($angleMin, $angleMax);
 		$color = imagecolorallocate($img, 0xff, 0xff, 0xff); // ЧБ вариант
 		//---Shadow---//
-		imageTTFtext($img, $size, $angle, $x, $y-1, imagecolorallocate($img, 0x00, 0x96, 0x61), $shFont, $secret[$i]);
+		//imageTTFtext($img, $size, $angle, $x, $y-1, imagecolorallocate($img, 0x00, 0x96, 0x61), $shFont, $secret[$i]);
 		imageTTFtext($img, $size, $angle, $x, $y, $color, $font, $secret[$i]);
 		
 	}

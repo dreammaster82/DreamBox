@@ -1,0 +1,76 @@
+<form name='edit_form' id='edit_form' action='.' method='post' enctype='multipart/form-data'>
+<table style="width: 100%;">
+	<tr>
+		<th colspan='2'>Редактирование элемента</th>
+	</tr>
+	<tr>
+		<td style="width:100px;">Id:</td>
+		<td><?=$out['id']?></td>
+	</tr>
+	<tr >
+		<td>Дата:</td>
+		<td>
+			<input type='date' name='posted' value="<?=$out['posted'];?>" size='12' maxlength='10' />
+		</td>	
+	</tr>	
+	<tr>
+		<td>Имя:</td>
+		<td>
+			<input type='text' size='100' maxlength='255' name='name' value="<?=$out['name'];?>" />
+		</td>	
+	</tr>
+	<tr>
+		<td>E-mail:</td>
+		<td>
+			<input type='email' size='100' maxlength='255' name='alias' value="<?=$out['email'];?>" />
+		</td>	
+	</tr>
+	<tr>
+		<td>Тип:</td>
+		<td>
+			<select name="type">
+				<option value="0">Отзыв</option>
+				<option value="1">Вопрос</option>
+			</select>
+		</td>	
+	</tr>
+	<tr>
+		<td>Рейтинг:</td>
+		<td>
+			<input type="range" name="raiting" min="0" max="5" value="<?=(int)$out['raiting']?>" />
+		</td>	
+	</tr>
+	<tr>
+		<td>Отзыв/Вопрос:</td>
+		<td>
+			<textarea cols='100' rows='13' name='text'><?=$out['text']?></textarea>
+		</td>	
+	</tr>
+	<tr>
+		<td>Ответ</td>
+		<td>
+			<textarea cols='100' rows='13' name='ask'><?=$out['ask']?></textarea>
+		</td>
+	</tr>
+</table>
+<br>
+<table style="width: 100%;">
+	<tr>
+		<td style="width:100px;"></td>
+		<td style="width:100px;white-space: nowrap">
+			<input type='submit' class='buttons' value='ОК' style='width:100'>
+			<input type='hidden' name='what' value="<?=$out['id']?>" />
+			<input type='hidden' name='action' value='saveItem'>
+			<input type='hidden' name='page' value="<?=$_REQUEST['page']?>" />
+		</td>	
+		<td></td>
+		<td>
+			<input type='button' class='buttons' value='cancel' style='width:100px;' onclick="document.form_cancel.submit();" />
+		</td>
+	</tr>	
+</table>
+</form>
+<form action='.' method='get' name="form_cancel">
+    <input type='hidden' name='page' value="<?=$_REQUEST['page'];?>" />
+    <input type='hidden' name='action' value='show' />
+</form>

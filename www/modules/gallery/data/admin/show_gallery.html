@@ -13,7 +13,7 @@ if($out['items']){?>
 <?=$this->showItems($out['items'])?>
 <?php }
 if($out['class_items']){?>
-<?=(int)$_REQUEST['preview'] ? $out['class_by_type']->showPrevItems($out['class_items'], $this->id) : $out['class_by_type']->showItems($out['class_items'], $this->id)?>
+<?=(int)$_REQUEST['preview'] ? $out['class_by_type']->showPrevItems($out['class_items']) : $out['class_by_type']->showItems($out['class_items'])?>
 <?php } elseif((int)$_REQUEST['preview'] || !(int)$_REQUEST['window']){?>
 <div class="warning">Элементы не найдены</div>
 <?php }?>

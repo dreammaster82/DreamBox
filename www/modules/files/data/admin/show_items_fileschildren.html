@@ -12,12 +12,12 @@
 				<tr class="oneelem hovered">
 					<td><img src="/files/icons/<?=$ov['file_type']?>.gif" width="16" height="16"></td>
 					<td style="text-align:left;width:100%"><b><?=$ov['real_file']?></b></td>
-					<td style="text-align:center"><div style="width:150px">/download/<?=$ov['hache']?>/</div></td>
+					<td style="text-align:center"><div style="width:150px">/<?=$this->module?>/<?=$ov['hache']?>/</div></td>
 					<td style="text-align:center"><div style="width:150px"><?=$fDate?></div></td>
 					<td style="text-align:left" nowrap>
 						<?php
 						if($adm = $this->adminLinks($ov)){?>
-						<div class="admin_links">
+						<div class="admin_links"<?if((int)$_REQUEST['window']){?> style="width:50px;"<?}?>>
 							<?php foreach($adm as $ov1){
 								if($ov1['type'] == 'link'){?>
 							<a href="<?=$ov1['link']?>"><?=$ov1['text']?></a>

@@ -18,20 +18,6 @@ $CFG = array(
 			'check'	=> 1
 		),
 		array(
-			'admin' => 'catalog',
-			'text'	=> 'Каталог',
-			'link'	=> '/admin/catalog/',
-			'show'	=> 1,
-			'check'	=> 1
-		),
-		array(
-			'admin' => 'news',
-			'text'	=> 'Новости',
-			'link'	=> '/admin/news/',
-			'show'	=> 1,
-			'check'	=> 1
-		),
-		array(
 			'admin' => 'slider',
 			'text'	=> 'Слайдер',
 			'link'	=> '/admin/admin_slider/',
@@ -39,9 +25,16 @@ $CFG = array(
 			'check'	=> 1
 		),
 		array(
-			'admin' => 'tips',
-			'text'	=> 'Советы',
-			'link'	=> '/admin/tips/',
+			'admin' => 'reviews',
+			'text'	=> 'Отзывы',
+			'link'	=> '/admin/reviews/',
+			'show'	=> 1,
+			'check'	=> 1
+		),
+		array(
+			'admin' => 'articles',
+			'text'	=> 'Полезное',
+			'link'	=> '/admin/articles/',
 			'show'	=> 1,
 			'check'	=> 1
 		),
@@ -51,15 +44,6 @@ $CFG = array(
 			'link'	=> '/admin/content/',
 			'show'	=> 1,
 			'check'	=> 1
-		),
-		array(
-			'admin' => 'catalog',
-			'text'	=> 'Фильтры',
-			'link'	=> '/admin/catalog/?cl=Filters',
-			'show'	=> 1,
-			'check'	=> 1,
-			'noviews' => 1,
-			'module' => 'filters'
 		),
 		array(
 			'admin' => 'gallery',

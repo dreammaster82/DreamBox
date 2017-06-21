@@ -1,0 +1,58 @@
+				<div class="wrapper m20">
+					<div class="top_name">
+						<h1><?=$this->config['header']?></h1>
+						<?=$this->showPath($this->getPath())?>
+					</div>
+					<section class="content reviews">
+					<?php if($out['cnt']){?>
+						<a href="#send_form_view" id="to_send_button" class="button">Оставить отзыв</a>
+						<?=$this->showItems($out['items'])?>
+						<?if($S = $this->Core->getClass('Scroll')){
+							$S->cnt = $out['cnt'];
+							$S->limit = $this->config['items_on_page'];
+							$S->pageInLine = $this->config['pages_in_line'];
+							echo $S->showPages();
+						}
+					} else {?>
+						<div class="warning">Раздел пока пуст</div>
+					<?php }?>
+						<div class="for_send_button">
+							<a href="#send_form_view" id="send_form_button" class="button<?if($out['cnt'] < 5){?> hide<?}?>">Оставить отзыв</a>
+							<a name="send_form_view"></a>
+						</div>
+						<div id="send_review"<?if($out['cnt'] > 4){?> style="display:none;"<?}?>>
+							 <h3>Оставить отзыв</h3>
+							 <form id="send_review_form">
+								 <div class="return"></div>
+								 <div class="line">
+									 <label>ФИО<i>*</i></label>
+									 <input type="text" name="name" value="" required="" />
+								 </div>
+								 <div class="line">
+									 <label>E-mail<i>*</i></label>
+									 <input type="email" name="email" value="" required="" />
+								 </div>
+								 <div class="line">
+									 <label>Тип</label>
+									 <select name="type">
+<?									foreach($this->types as $ok => $ov){?>
+										<option value="<?=$ok?>"><?=$ov?></option>
+<?									}?>
+									 </select>
+								 </div>
+								 <div class="line">
+									 <label>Рейтинг</label>
+									 <input type="range" class="tochange" name="range" min="0" max="5" value="0" />
+								 </div>
+								 <div class="line">
+									 <label class="comment">Текст отзыва(вопроса)<i>*</i></label>
+									 <textarea name="text" required=""></textarea>
+								 </div>
+								 <div class="for_button">
+									 <button type="button" name="go"><span>Отправить</span></button>
+								 </div>
+							</form>
+						</div>
+					</section>
+				</div>
+				

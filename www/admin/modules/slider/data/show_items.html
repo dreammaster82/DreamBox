@@ -7,7 +7,7 @@
 				<?php foreach($out as $ov){ ?>
 				<tr>
 					<td style="text-align:center;"><?=$ov['id']?></td>
-					<td><?=$ov['name']?> (<?=$this->sliderId[$ov['slider_id']]?>)</td>
+					<td><?=$ov['name']?> (<?=$this->type[$ov['type']]?>)</td>
 					<td nowrap>
 						<?php
 						$adm = $this->adminLinks($ov);

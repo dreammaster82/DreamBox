@@ -5,11 +5,7 @@
 	'image/pjpeg'=>'jpg',
 	'image/png'=>'png'
     );
-<<<<<<< HEAD
 	$OUT['content'] .= '<script>
-=======
-	$ret = '<script>
->>>>>>> 41a0a7e... image plugin
 			function windowExit()
 			{
 				alert(\'Сюда так нельзя!\');
@@ -22,11 +18,7 @@
 
 	if(!$USER)
 	{
-<<<<<<< HEAD
 		$OUT['content'] .= '<script>windowExit();</script>';
-=======
-		$ret .= '<script>windowExit();</script>';
->>>>>>> 41a0a7e... image plugin
 	}
 	$path = '';
 	$patharr = array();
@@ -90,11 +82,7 @@
 	}
 	
 
-<<<<<<< HEAD
 	$OUT['content'] .= '<script>
-=======
-	$ret .= '<script>
->>>>>>> 41a0a7e... image plugin
 				function OpenerFilePathInsert(path, width, height)
 				{
 					window.opener.setImage(path, width, height);
@@ -110,22 +98,14 @@
 
 	if($USER)
 	{
-<<<<<<< HEAD
 		$OUT['content'] .= '<table border="0" width="100%" cellpadding="2" cellspacing="0" style="margin-top:1px;">
-=======
-		$ret .= '<table border="0" width="100%" cellpadding="2" cellspacing="0" style="margin-top:1px;">
->>>>>>> 41a0a7e... image plugin
 				<tr height="22" class=x>
 					<td><b>'.$curdirLink.'</b></td>
 				</tr>
 				</table>';
 	}
 
-<<<<<<< HEAD
 	$OUT['content'] .= '<table border="0" width="100%" cellpadding="4" cellspacing="0" style="margin-top:1px;">
-=======
-	$ret .= '<table border="0" width="100%" cellpadding="4" cellspacing="0" style="margin-top:1px;">
->>>>>>> 41a0a7e... image plugin
 				<tr class=z>
 					<td class=z width="16"></td>
 					<td class=z width="100%">имя файла</td>
@@ -137,11 +117,7 @@
     $class= ($k%2)? 'x' : 'y';
 		if($parentLink) 
 		{
-<<<<<<< HEAD
 			$OUT['content'] .= '<tr class="'.$class.'">
-=======
-			$ret .= '<tr class="'.$class.'">
->>>>>>> 41a0a7e... image plugin
 					<td><a href="'.$parentLink.'"><img src="/admin/images/folder.gif" width="16" height="15" border="0"></a></td>
 					<td><a href="'.$parentLink.'"><b>..</b></a></td>
 					<td colspan="3"></td>
@@ -157,11 +133,7 @@
 				$path_str = $path ? $path.$cur.'/' : $cur.'/';
 				$href = $rootHref.'&path='.$path_str;
 
-<<<<<<< HEAD
 				$OUT['content'] .= '<tr class="'.$class.'">
-=======
-				$ret .= '<tr class="'.$class.'">
->>>>>>> 41a0a7e... image plugin
 					<td nowrap valign="middle"><a href="'.$href.'"><img src="/admin/images/folder.gif" width="16" height="15" border="0"></a></td>
 					<td valign="middle"><a href="'.$href.'"><b>'.$cur.'</b></a></td>
 					<td></td>
@@ -185,11 +157,7 @@
 
 				$size = getimagesize($dir.$cur); 
 
-<<<<<<< HEAD
 				$OUT[content] .= '<tr class="'.$class.'">
-=======
-				$ret .= '<tr class="'.$class.'">
->>>>>>> 41a0a7e... image plugin
 					<td valign="middle"><img src="/admin/images/file.gif" width="16" height="15" border="0"></td>
 					<td valign="middle"><a href="'.$imageCFG['real_filesroot'].$path.$cur.'" title="просмотр" target="_blank"><b>'.$cur.'</b></a></td>
 					<td>'.$filesize.' kB <br> '.$filedate.' <br> '.$size[0].' x '.$size[1].' <br>'.$size['mime'].'<td><img src="/preview/preview.php?src=/'.$imageCFG['filesroot'].$path.$cur.'&zc=2&w='.$imageCFG['thumbnail_width'].'" border="0"></td>
@@ -199,18 +167,10 @@
 			}
 		}
 	} else {
-<<<<<<< HEAD
 		$OUT['content'] .= '<tr class="x">
-=======
-		$ret .= '<tr class="x">
->>>>>>> 41a0a7e... image plugin
 					<td colspan="5" align="center"><b>Категория пуста!</b></td>
 				</tr>';
 		return;
 	}
-<<<<<<< HEAD
 	$OUT[content] .= '</table>';
-=======
-	$ret .= '</table>';
->>>>>>> 41a0a7e... image plugin
 ?>

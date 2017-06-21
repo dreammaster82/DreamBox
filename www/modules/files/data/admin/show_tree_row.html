@@ -2,7 +2,7 @@
 				<tr>
 					<td style="padding-left:<?=($out['level'] * 15)?>px;width:0px" nowrap></td>				
 					<td><img src="<?=$out['image']?>" width="17" height="18" border="0" alt="" /></td>
-					<td width="100%"><a href="?id=<?=$out['id']?>"><?=$out['name']?></a></a></td>
+					<td width="100%"><a href="?id=<?=$out['id']?><?if((int)$_REQUEST['window']){?>&window=1<?}?>"><?=$out['name']?></a></a></td>
 					<td nowrap>
 						<div class="admin_links">
 							<?php foreach($out['admin_links'] as $ok => $ov){ ?>

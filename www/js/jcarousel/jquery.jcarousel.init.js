@@ -21,7 +21,7 @@ $(document).ready(function(){
 				e.list.find('[jcarouselindex="' + i + '"]').children().eq(0).attr('data-jcarouselindex', i);
 			}
 			e.options.contol_items = $('a', e.options.controls);
-			e.options.controls.width(width).css('marginLeft', -width/2);
+			//e.options.controls.width(width).css('marginLeft', -width/2);
 			e.container.append(e.options.controls);
 		},
 		itemVisibleOutCallback: {
@@ -30,5 +30,17 @@ $(document).ready(function(){
 				$('[data-jcarouselindex="' + e.list.find('[jcarouselindex="' + e.first + '"]').find('[data-jcarouselindex]').data('jcarouselindex') + '"]', e.options.controls).addClass('active');
 			}
 		}
+	});
+	$('#slider_bot').jcarousel({
+		scroll:1,
+		auto:3,
+		wrap:'both'
+	});
+	$('#slider_header').jcarousel({
+		buttonNextHTML: '',
+		buttonPrevHTML: '',
+		scroll:1,
+		auto:3,
+		wrap:'both'
 	});
 });

@@ -1,6 +1,27 @@
 var loadingAjax = false, isIndex = true, initAjax = false, timeOutId = 0;
 if(!window.console)window.console={};if(!window.console.log)window.console.log=function(){}
 
+$.ajaxSetup({
+    dataType: 'json',
+	cache: false,
+	type: 'post',
+	error: function(xhr, textStatus, errorObj) {
+		if(xhr.status == 0){
+			console.log('You are offline!!\n Please Check Your Network.');
+		} else if(xhr.status == 404){
+			console.log('Requested URL not found.');
+		} else if(xhr.status == 500){
+			console.log('Internel Server Error.');
+		} else if(textStatus == 'parsererror'){
+			console.log('Error.\nParsing JSON Request failed.');
+		} else if(textStatus == 'timeout'){
+			console.log('Request Time out.');
+		} else {
+			console.log('Unknow Error.\n'+xhr.responseText);
+		}
+	}
+});
+
 window.onload = function(){
 	if(supports_history_api()){
 		window.setTimeout(function() {
@@ -14,6 +35,267 @@ window.onload = function(){
 		}, 1); 
 	}
 }
+
+$(document).ready(function(){
+	initContent(document);
+	quotesLinks();
+	if(typeof $.fn.chosen == 'function'){
+		$('select').chosen({disable_search_threshold: 10});
+	}
+	buildCallForm();
+	buildNavBlock();
+});
+
+function buildCallForm(){
+	var callForm =
+	{
+		type: 'div',
+		attributes: {
+			id: 'call_form'
+		},
+		children: [
+			{
+				type: 'div',
+				attributes: {
+					'class': 'box'
+				},
+				children: [
+					{
+						type: 'div',
+						attributes: {
+							'class': 'title'
+						},
+						children: [
+							{
+								type: 'a',
+								attributes: {
+									href: '#',
+									'class': 'button'
+								},
+								innerHtml: 'Заказать звонок'
+							}
+						]
+					},
+					{
+						type: 'form',
+						attributes: {
+							method: 'POST',
+							action: '/service/send_form.php'
+						},
+						children: [
+							{
+								type: 'div',
+								children: [
+									{
+										type: 'label',
+										innerHtml: 'Имя'
+									},
+									{
+										type: 'input',
+										attributes: {
+											type: 'text',
+											name: 'name',
+											value: '',
+											required: ''
+										}
+									}
+								]
+							},
+							{
+								type: 'div',
+								children: [
+									{
+										type: 'label',
+										innerHtml: 'Телефон'
+									},
+									{
+										type: 'input',
+										attributes: {
+											type: 'tel',
+											name: 'tel',
+											value: '',
+											required: ''
+										}
+									}
+								]
+							},
+							{
+								type: 'div',
+								children: [
+									{
+										type: 'label',
+										innerHtml: 'Код защиты'
+									},
+									{
+										type: 'input',
+										attributes: {
+											type: 'text',
+											name: 'secret',
+											value: '',
+											required: '',
+											style: 'width:90px;margin-right:10px'
+										}
+									},
+									{
+										type: 'img',
+										attributes: {
+											'class': 'secr_img',
+											src: window.secretImage
+										}
+									},
+									{
+										type: 'a',
+										attributes: {
+											href: '#',
+											'class': 'rel_link'
+										},
+										innerHtml: 'Не видно'
+									},
+									{
+										type: 'input',
+										attributes: {
+											type: 'hidden',
+											name: 'secret_crypted',
+											value: window.secretCrypted
+										}
+									}
+								]
+							},
+							{
+								type: 'div',
+								attributes: {
+									style: 'text-align: left;'
+								},
+								children: [
+									{
+										type: 'button',
+										attributes: {
+											type: 'submit'
+										},
+										children: [
+											{
+												type: 'span',
+												innerHtml: 'Отправить'
+											}
+										]
+									}
+								]
+							},
+							{
+								type: 'div',
+								attributes: {
+									'class': 'return'
+								}
+							}
+						]
+					}
+				]
+			}
+		]
+	};
+	var call_form = new jQuery();
+	$('#get_call').on('click.init', function(){
+		if(!call_form.length){
+			call_form = generateItems(callForm);
+			call_form.appendTo('body');
+			var cform = call_form.find('form');
+			call_form.find('.title a').on('click.init', function(){
+				return clickShowHide(this, call_form);;
+			});
+			var rel_link = call_form.find('.rel_link');
+			rel_link.on('click', function(){
+				return reloadImg(rel_link);
+			});
+			cform.submit(function(){
+				return submitShowHide(call_form, cform);
+			});
+		}
+		return clickShowHide(this, call_form);
+	});
+}
+
+function buildNavBlock(){
+	var bl = $('.cont_children'),
+		nav = $('nav');
+	if(bl.length){
+		bl.each(function(){
+			var db = $('[data-index="' + $(this).data('index') + '"]', nav);
+			if(db.length){
+				db.append($(this));
+				$(this).css('marginLeft', -9999).removeClass('close_block');
+				if($(this).offset().left + 9999 + $(this).width() > $('body').width()){
+					$(this).css({
+						left: 'auto',
+						right: 0
+					});
+				}
+				$(this).css('marginLeft', '');
+			}
+		});
+	}
+}
+
+function clickShowHide(obj, block){
+	if(block.is(':visible')){
+		block.fadeToggle('1300', function(){
+			block.find('.title').css('text-align', '').find('a').css({'margin-right':''});
+		});
+		$(obj).removeClass('active');
+	} else {
+		$(obj).addClass('active');
+		var offset=$(obj).offset(),
+		title = block.find('.title a');
+		block.css('margin-left', -9999);
+		block.show();
+		var off = title.position(),
+		off2 = title.parent().position();
+		off.top += off2.top;
+		off.left += off2.left;
+		off.top = offset.top - (off.top + (title.innerHeight() - $(obj).innerHeight()) / 2);
+		off.left = offset.left - (off.left + (title.innerWidth() - $(obj).innerWidth()) / 2);
+		if(off.left + block.outerWidth() > $(document).width()){
+			off.left -= off.left + block.outerWidth() - $(document).width();
+			title.parent().css('text-align', 'right');
+			title.css('margin-right', -(offset.left - off.left - title.position().left));
+		} else if(off.left < 0){
+			off.left += Math.abs(off.left);
+			title.parent().css('text-align', 'left');
+			title.css('margin-right', -(offset.left - off.left - title.position().left));
+		}
+		block.hide().css('margin-left', '');
+		block.css({
+			'top': off.top,
+			'left': off.left
+		});
+		block.fadeToggle('1300');
+	}
+	return false;
+}
+
+function submitShowHide(block, form){
+	$.ajax({
+		url: form.attr('action'),
+		type: form.attr('method'),
+		data: form.serialize(),
+		dataType: 'json',
+		cache: false,
+		success: function(data, textStatus, xhr) {
+			if (!data.error){
+				block.find('.return').html(data.message)
+				block.fadeToggle('1300');
+			} else if (data.error) {
+				block.find('.return').html(data.message)
+			} else {
+				alert('Произошла неизвестная ошибка');
+			}
+		},
+		error: function(xhr, textStatus, errorObj) {
+			block.find('.return').html('Произошла непредвиденная ошибка! Сообщение отправлено не было.');
+		}
+	}); 
+	return false;
+}
+
 
 /*---services functions---*/
 (function(){
@@ -66,13 +348,6 @@ $.fn.effectTransfer = function(o){
 
 function supports_history_api() {
   return !!(window.history && history.pushState);
-}
-
-function setHeight(){
-	var h = $('header').outerHeight(true) + $('footer').outerHeight(true);
-	if(h + $('#content').outerHeight(true) < $(window).height()){
-		$('#content').css('min-height', $(window).height() - h);
-	}
 }
 
 function getMail(host, name, obj_a) { 
@@ -153,27 +428,6 @@ function setTitle(title, description, keywords){
 	$('head meta[name="description"]').attr('content', description);
 	$('head meta[name="keywords"]').attr('content', keywords);
 }
-
-$.ajaxSetup({
-    dataType: 'json',
-	cache: false,
-	type: 'post',
-	error: function(xhr, textStatus, errorObj) {
-		if(xhr.status == 0){
-			console.log('You are offline!!\n Please Check Your Network.');
-		} else if(xhr.status == 404){
-			console.log('Requested URL not found.');
-		} else if(xhr.status == 500){
-			console.log('Internel Server Error.');
-		} else if(textStatus == 'parsererror'){
-			console.log('Error.\nParsing JSON Request failed.');
-		} else if(textStatus == 'timeout'){
-			console.log('Request Time out.');
-		} else {
-			console.log('Unknow Error.\n'+xhr.responseText);
-		}
-	}
-});
 
 function reloadImg(obj){
     $.ajax({

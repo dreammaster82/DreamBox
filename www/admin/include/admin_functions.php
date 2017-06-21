@@ -1,5 +1,5 @@
 <?php
-namespace admin{
+namespace core\admin{
 	class AdminFunctions{
 		protected 
 		$fTypes=array(

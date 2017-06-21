@@ -168,9 +168,9 @@ function email(idArea){
 		var txt1 = prompt("Введите имя:","");
 		if (txt != null){
 			if (txt2 == ""){
-				AddTxt = "<a href=\"mailto:Скрыт в целях борьбы со спамом\" onmouseover=\"return getMail('" + txt + "', '" + txt1 + "');\">" + txt + "</a>";
+				AddTxt = "<a href=\"mailto:Скрыт в целях борьбы со спамом\" onmouseover=\"return getMail('" + txt + "', '" + txt1 + "', this);\">" + txt + "</a>";
 			} else {
-				AddTxt = "<a href=\"mailto:Скрыт в целях борьбы со спамом\" onmouseover=\"return getMail('" + txt + "', '" + txt1 + "');\">" + txt2 + "</a>";
+				AddTxt = "<a href=\"mailto:Скрыт в целях борьбы со спамом\" onmouseover=\"return getMail('" + txt + "', '" + txt1 + "', this);\">" + txt2 + "</a>";
 			}
 			AddText(area, AddTxt);
 		}

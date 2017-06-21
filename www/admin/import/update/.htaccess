@@ -1,0 +1,4 @@
+#AuthType Basic
+#AuthName "Login please to get access on this area"
+#AuthUserFile /www/elite/catalog/update/.htpasswd
+#require valid-user

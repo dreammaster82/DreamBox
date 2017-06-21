@@ -1,6 +1,7 @@
 <?php
-namespace admin{
-	class Gallery extends CContent{
+namespace core\admin{
+	use core\admin as core;
+	class Gallery extends core\CContent{
 		protected $config = array(
 			'admin' => 'gallery',
 			'header' => 'Редактирование фото галлереи',
@@ -147,11 +148,13 @@ namespace admin{
 					$arr[$v['parent_id']]['children'][$k] = &$arr[$k];
 				}
 				$items = $this->getKeyByLevel($arr[$item['id']]['children']);
-				$items = $this->Util->SortArray($items, array(1, 'DESC'));
+				$items = SortArray($items, array(1, 'DESC'));
 				if($item['type']){
-					$C = $this->Core->getClass(['VideoObject', 'gallery', true]);
+					include_once 'video_object_admin.php';
+					$C = new VideoObject();
 				} else {
-					$C = $this->Core->getClass(['FotoObject', 'gallery', true]);
+					include_once 'foto_object_admin.php';
+					$C = new FotoObject();
 				}
 				foreach ($items as $v){
 					if($item['type']){
@@ -169,15 +172,15 @@ namespace admin{
 					$this->Db->queryExec('DELETE FROM '.$this->config['table'].' WHERE id=?', array($v[0]));
 				}
 				if($item['type']){
-					$this->clearRecursiveAll($this->config['files_path'].'/video/'.$item['id']);
+					$this->Util->clearRecursiveAll($this->config['files_path'].'/video/'.$item['id']);
 				} else {
-					$this->clearRecursiveAll($this->config['files_path'].'/foto/'.$item['id']);
+					$this->Util->clearRecursiveAll($this->config['files_path'].'/foto/'.$item['id']);
 				}
 				$ch = $C->getAllItemsId($item['id']);
 				foreach ($ch as $k1 => $v1){
 					$C->delete($v1['id']);
 				}
-				$this->clearRecursiveAll($this->config['files_path'].'/prevfoto/'.$item['id']);
+				$this->Util->clearRecursiveAll($this->config['files_path'].'/prevfoto/'.$item['id']);
 				$this->Db->queryExec('DELETE FROM '.$this->config['table'].' WHERE id=?', array($item['id']));
 				return true;
 			} else {
@@ -423,14 +426,12 @@ namespace admin{
 			if((int)$_REQUEST['page']){
 				$out['add'][] = 'page='.(int)$_REQUEST['page'];
 			}
-			if(!(int)$_REQUEST['show_object_items']){
-				$out['parents'] = $this->getParents($this->id);
-				if($this->id){
-					$out['add'][] = $this->config['reqId'].'='.$this->id;
-				}
-				$out['items'] = $this->getItems(array('id', 'parent_id', 'name', 'active', 'type'), array('type' => $this->type, 'parent_id' => $this->id), array('priority'));
+			$out['parents'] = $this->getParents($this->id);
+			if($this->id){
+				$out['add'][] = $this->config['reqId'].'='.$this->id;
 			}
-			if((int)$_REQUEST['preview'] || !(int)$_REQUEST['window'] || (int)$_REQUEST['show_object_items']){
+			$out['items'] = $this->getItems(array('id', 'parent_id', 'name', 'active', 'type'), array('type' => $this->type, 'parent_id' => $this->id), array('priority'));
+			if((int)$_REQUEST['preview'] || !(int)$_REQUEST['window']){
 				$out['class_items'] = $out['class_by_type']->getItems($this->id);
 			}
 			$this->ret['style'] .= '<link rel="stylesheet" type="text/css" href="/modules/gallery/css/admin.css">';

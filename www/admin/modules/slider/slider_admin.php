@@ -1,6 +1,7 @@
 <?php
-namespace admin{
-	class Slider extends CContent{
+namespace core\admin{
+	use core\admin as core;
+	class Slider extends core\CContent{
 		protected $config = array(
 			'admin' => 'slider',
 			'table' => 'slider',
@@ -9,9 +10,9 @@ namespace admin{
 			'items_on_page' => 20,
 			'reqId' => 'id'
 		),
-		$sliderId = array(
-			'На главной',
-			'В каталоге'
+		$type = array(
+			'Большой на главной',
+			'Низ на главной'
 		);
 
 		function __construct($m = ''){
@@ -21,7 +22,7 @@ namespace admin{
 		function show(){
 			$out = array();
 			$out['header'] = $this->ret['title'] = $this->ret['keywords'] = $this->ret['description'] = $this->config['header'];
-			$out['items'] = $this->getItems(array('id', 'name', 'active', 'slider_id'), false, array('priority'), false, false, false, $this->config['items_on_page']);
+			$out['items'] = $this->getItems(array('id', 'name', 'active', 'type'), false, array('priority'), false, false, false, $this->config['items_on_page']);
 			ob_start(); 
 			include $this->path.'/data/show.html';
 			return ob_get_clean();
@@ -82,7 +83,7 @@ namespace admin{
 					'.$this->config['pref'].'alt=?,
 					'.$this->config['pref'].'active=?,
 					'.$this->config['pref'].'content=?,
-					'.$this->config['pref'].'slider_id=?
+					'.$this->config['pref'].'type=?
 					WHERE '.$this->config['pref'].'id=?', array($name, $link, $alt, (int)$_REQUEST['active'], $content, (int)$_REQUEST['slider_id'], $item['id']));
 				$this->ret['warning'] .= 'Элемент изменен';
 			} else {
@@ -94,7 +95,7 @@ namespace admin{
 					'.$this->config['pref'].'active,
 					'.$this->config['pref'].'priority,
 					'.$this->config['pref'].'content,
-					'.$this->config['pref'].'slider_id)
+					'.$this->config['pref'].'type)
 					VALUES (?, ?, ?, ?, ?, ?, ?)', array($name, $link, $alt, (int)$_REQUEST['active'], ++$r['m'], $content, (int)$_REQUEST['slider_id']));
 			}
 			if($_FILES['img_src']['size']>0){
@@ -136,7 +137,7 @@ namespace admin{
 		function deleteItem2(){
 			if((int)$_REQUEST['what']){
 				$item = $this->getItem(array('id', 'img_src'), (int)$_REQUEST['what']);
-				if($item['img_src'] && is_file($this->getrealpath($this->config['files_path'].$item['img_src']))){
+				if($item['img_src'] && is_file($this->Util->getrealpath($this->config['files_path'].$item['img_src']))){
 					$this->deleteImage($this->config['files_path'].$item['img_src']);
 				}
 				$this->Db->queryExec('DELETE FROM '.$this->config['table'].' WHERE '.$this->config['pref'].'id=?', array($item['id']));

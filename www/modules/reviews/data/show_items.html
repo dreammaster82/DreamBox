@@ -1,0 +1,46 @@
+				<div class="items_list">
+<?				foreach($out as $ov){
+					$posted = reset(explode(' ', $ov['posted']));
+					$class = strtolower($this->class);
+					$dt = explode('-', $posted);
+					if($ov['type']){?>
+					<article class="one_item questions">
+						<a name="review<?=$ov['id']?>"></a>
+						<div class="text">
+							<div class="title">
+								<span><?=$ov['name']?></span>
+							</div>
+							<div class="description">
+								<?=$ov['text']?>
+							</div>
+<?						if($ov['ask']){?>
+							<div class="ask">
+								<?=$ov['ask']?>
+							</div>
+<?						}?>
+							<time datetime="<?=$posted?>"><?=$dt[2]?> <?=$this->months[(int)$dt[1]]?> <?=$dt[0]?></time>
+						</div>
+					</article>
+<?					} else {?>
+					<article class="one_item" itemscope itemtype="http://schema.org/Review">
+						<a name="review<?=$ov['id']?>"></a>
+						<meta itemprop="url" content="http://m-krov.ru/reviews/#<?=$ov['id']?>" />
+						<div class="text">
+							<div class="title" itemprop="author" itemscope itemtype="http://schema.org/Person">
+								<span itemprop="name"><?=$ov['name']?></span>
+							</div>
+							<div class="description" itemprop="reviewBody">
+								<?=$ov['text']?>
+								<span class="type"><?=$this->types[$ov['type']]?></span>
+							</div>
+							<time content="<?=$posted?>" itemprop="datePublished"><?=$dt[2]?> <?=$this->months[(int)$dt[1]]?> <?=$dt[0]?></time>
+							<div itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating" class="raiting_value">
+								<meta itemprop="worstRating" content="0"/>
+								Рейтинг: <span itemprop="ratingValue" data-raiting="<?=$ov['raiting']?>"><?=$ov['raiting']?></span>
+								<meta itemprop="bestRating" content="5" />
+							</div>
+						</div>
+					</article>
+<?					}
+				}?>
+				</div>

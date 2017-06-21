@@ -1,6 +1,7 @@
 <?php
-namespace admin{
-	class Admin extends AdminFunctions{
+namespace core\admin{
+	use core\admin as core;
+	class Admin extends core\AdminFunctions{
 
 		public $ret, $Auth, $path;
 
@@ -24,7 +25,7 @@ namespace admin{
 				$this->Auth->user = $this->Auth->getUser($login, md5($pass));
 				if($this->Auth->user['id']){
 					$_SESSION['admin']['hash'] = encode_hash($this->Auth->user['id'], md5($this->Auth->user['id'].$this->Auth->user['login'].$this->Auth->user['permis']));
-					error_log(date('d.m.Y H:i')."\t".$login."\t".$_SERVER['REMOTE_ADDR']."\tadmin section logining\n", 3, '../data/log/log.log');
+					error_log(date('d.m.Y H:i')."\t".$login."\t".$_SERVER['REMOTE_ADDR']."\tadmin section logining\n", 3, CLIENT_PATH.'/data/log/log.log');
 				}
 			}
 			if(!$this->Auth->user['id']){

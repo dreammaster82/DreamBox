@@ -11,13 +11,15 @@ function getPreview($id, $th, $cnf){
 	$height = $preview['img_small_y'];
 	$alt = str_replace('"','',$preview['name']);
 	$note = ($preview['note']) ? $preview['note'] : '';
-	$link .= ($preview['img_big_x']) ? 
-	'	<div class="photo_gallery">
-		<a href="'.$href.'" title="'.$note.'"  jqLink="'.$imgSrc2.'">
-			<img src="'.$imgSrc.'" style="width:'.$width.'px;height:'.$height.'px" alt="'.$alt.'" />
-			<span>'.$alt.'</span>
-		</a>
-	</div>' : 
+	$link .= ($preview['img_big_x']) ? '
+		<div class="photo_gallery">
+			<span class="one_image">
+				<a href="'.$href.'" title="'.$note.'"  jqLink="'.$imgSrc2.'">
+					<img src="'.$imgSrc.'" style="width:'.$width.'px;height:'.$height.'px" alt="'.$alt.'" />'.
+			($alt ? '<span>'.$alt.'</span>' : '')
+				.'</a>
+			</span>
+		</div>' : 
 		'<img src="'.$imgSrc.'" style="width:'.$width.'px;height:'.$height.'px" alt="'.$alt.'" />';
 	return $link;
 }

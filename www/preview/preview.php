@@ -1,6 +1,5 @@
 <?php
 define ('VERSION', '2.8.10');
-if( file_exists(dirname(__FILE__) . '/previewtype.php'))	require_once('previewtype.php');
 if(! defined('FILE_CACHE_DIRECTORY') ) 		define ('FILE_CACHE_DIRECTORY', './cache');				// Directory where images are cached. Left blank it will use the system temporary directory (which is better for security)
 if(! defined('MAX_FILE_SIZE') )				define ('MAX_FILE_SIZE', 10485760);						// 10 Megs is 10485760. This is the max internal or external file size that we'll process.  
 //Browser caching

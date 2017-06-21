@@ -1,0 +1,18 @@
+			<div class="wrapper m20">
+				<article itemscope itemtype="http://schema.org/NewsArticle">
+					<div class="top_name">
+						<h1 itemprop="name"><?=$out['name']?></h1>
+						<?=$this->showPath($this->getPath($out))?>
+					</div>
+					<section class="content" >
+						<?if($out['img_src']){?>
+						<img src="<?=$this->config['files_path'].$out['img_src']?>" title="<?=$out['name']?>" alt="<?=$out['name']?>" itemprop="image" />
+						<?}?>
+						<div class="text" itemprop="articleBody">
+							<?=$out['content']?>
+							<time itemprop="dateModified" datetime="<?=$out['posted']?>"><?=$out['data_array'][2]?> <?=$this->months[(int)$out['data_array'][1]]?> <?=$out['data_array'][0]?></time>
+						</div>
+					</section>
+				</article>
+			</div>
+			

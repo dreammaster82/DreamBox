@@ -42,14 +42,14 @@
 			</div>
 		</td>	
 	</tr>
-	<!--<tr>
+	<tr>
 		<td>Расположение:</td>
 		<td>
-		<?php foreach ($this->sliderId as $ok => $ov){?>
-			<div><input type="radio" name="slider_id" id="slider_id_<?=$ok?>" value="<?=$ok?>"<?=$ok == $out['item']['slider_id'] ? ' checked' : ''?> /><label for="slider_id_<?=$ok?>"><span></span><?=$ov?></label></div>
+		<?php foreach ($this->type as $ok => $ov){?>
+			<div><input type="radio" name="slider_id" id="slider_id_<?=$ok?>" value="<?=$ok?>"<?=$ok == $out['item']['type'] ? ' checked' : ''?> /><label for="slider_id_<?=$ok?>"><span></span><?=$ov?></label></div>
 		<?php } ?>
 		</td>	
-	</tr>-->
+	</tr>
 	<tr>
 		<td>&nbsp;</td>
 		<td><input type="checkbox" name="active" id="active" value="1" <?=$out['item']['active'] ? ' checked' : ''?> /><label for="active"><span></span>активен</label></td>	

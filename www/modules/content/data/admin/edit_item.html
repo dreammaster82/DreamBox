@@ -19,11 +19,17 @@
 		<td>
 			<input type='text' name='alias' size='100' class='textfield' value="<?=$out['alias']?>" />
 		</td>
-	</tr>	
+	</tr>
+	<tr>
+		<td align='right'>Заголовок:</td>
+		<td>
+			<input type='text' name='header' size='104' class='textfield' value="<?=$out['header']?>" maxlength='255' />
+		</td>	
+	</tr>
 	<tr>
 		<td align='right'>Title:</td>
 		<td>
-			<input type='text' name='title' size='104' class='textfield' value="<?=$out['title']?>" maxlength='80' />
+			<input type='text' name='title' size='104' class='textfield' value="<?=$out['title']?>" maxlength='255' />
 		</td>	
 	</tr>
 	<tr>
@@ -150,21 +156,6 @@
 		<td></td>
 		<td>
 			<input type='checkbox' name='toprint' id="toprint" value='1'<?=$out['toprint'] ? ' checked' : ''?> /><label for="toprint"><span></span>Версия для печати</label>
-		</td>	
-	</tr>
-	<tr>
-		<td align='right'>Шаблон:</td>
-		<td>
-			<?php if($out['templates']){ ?>
-			<select name="template">
-			<?php 
-			foreach($out['templates'] as $ov){
-				$sel = $out['template'] == $ov ? ' selected' : '';
-				echo '<option value="'.$ov.'"'.$sel.'>'.$ov.'</option>';
-			}
-			?>
-			</select>
-			<?php } ?>
 		</td>	
 	</tr>
 </table>

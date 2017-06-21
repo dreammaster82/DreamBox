@@ -1,11 +1,12 @@
 <?php
-namespace admin{
-	class News extends CContent{
+namespace core\admin{
+	use core\admin as core;
+	class Articles extends core\CContent{
 		protected $config = array(
-			'admin' => 'news',
-			'header' => 'Редактирование новостей',
-			'table' => 'news',
-			'pref' => 'n_',
+			'admin' => 'articles',
+			'header' => 'Articles',
+			'table' => 'articles',
+			'pref' => 'ar_',
 			'items_on_page' => 20,
 			'pages_in_line' => 25,
 			'max_image_width' => 640,

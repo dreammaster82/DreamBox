@@ -1,28 +1,56 @@
-			<article itemscope itemtype="http://schema.org/Article">
-				<div class="top_name">
-					<?if($out['img_src']){?>
-					<img src="/preview/type_content_name<?=$this->config['files_path'].$out['img_src']?>" alt="<?=$out['name']?>" title="<?=$out['name']?>" />
+			<div class="wrapper m20">
+				<aside>
+					<?if($out['children']){?>
+					<section class="content children">
+						<h2>Еще статьи</h2>
+						<?=$this->showItems($out['children'])?>
+					</section>
 					<?}?>
-					<h1 itemprop="name"><?=$out['name']?></h1>
+					<section class="reviews">
+						<h2>Отзывы и вопросы</h2>
+<?						$C = $this->Core->getClass(array('Reviews', 'reviews'));
+						if($C->getCountItems(array('active' => 1))){
+							$items = $C->getItems(array('id', 'name', 'text', 'posted'), array('active' => 1), array('posted DESC'), false, false, false, 3);?>
+						<ul class="items_list">
+<?							foreach($items as $ov){?>
+							<li class="one_item">
+								<a href="/reviews/#review<?=$ov['id']?>">
+									<h3><?=$ov['name']?></h3>
+									<?=$this->Util->subString($ov['text'], 40)?>
+								</a>
+							</li>
+<?							}?>
+						</ul>
+						<a href="/reviews/" class="link1">Все отзывы и вопросы</a>
+<?						} else {?>
+						<a href="/reviews/" class="link1">Оставить отзыв или вопрос</a>
+<?						}?>
+					</section>
+					<h2>Обратная связь</h2>
+					<div id="call_back_form"></div>
+				</aside>
+				<div id="content" class="clear">
+					<article itemscope itemtype="http://schema.org/Article">
+						<div class="top_name">
+							<h1 itemprop="name"><?=$out['header']?></h1>
+							<?=$this->showPath($this->getPath($out))?>
+						</div>
+						<section class="content" itemprop="articleBody">
+							<?=$out['content']?>
+							<?php if($out['toprint'] && !(int)$_REQUEST['print']) { ?>
+							<div style="padding: 20px 0px;">
+								<a class="to_print" href="/<?=$this->module?>/<?=$out['alias']?>.html?print=1" target="_blank"><span>Версия для печати</span></a>
+							</div>
+							<?php }
+							$this->Core->getClass('Auth')->process();
+							if($this->Core->getClass('Auth')->user['permission'][$this->config['admin']] && !(int)$_REQUEST['print']){?>
+							<p align=right>
+								<a href="/admin/content/?action=editItem&what=<?=$out['id']?>" target="_blank">[редактировать раздел]</a>
+							</p>
+							<?php }?>
+							<time itemprop="dateModified" datetime="<?=$out['posted']?>"><?=$out['date']?></time>
+						</section>
+					</article>
 				</div>
-				<section class="content" itemprop="articleBody">
-					<?=$out['content']?>
-					<?php if($out['toprint'] && !(int)$_REQUEST['print']) { ?>
-					<div style="padding: 20px 0px;">
-						<a class="to_print" href="/<?=$this->module?>/<?=$out['alias']?>.html?print=1" target="_blank"><span>Версия для печати</span></a>
-					</div>
-					<?php }
-					$this->Core->getClass('Auth')->process();
-					if($this->Core->getClass('Auth')->user['permission'][$this->config['admin']] && !(int)$_REQUEST['print']){?>
-					<p align=right>
-						<a href="/admin/content/?action=editItem&what=<?=$out['id']?>" target="_blank">[редактировать раздел]</a>
-					</p>
-					<?php }?>
-					<time itemprop="dateModified" datetime="<?=$out['posted']?>"><?=$out['date']?></time>
-				</section>
-				<?php if($out['children']){?>
-				<section class="content children">
-					<?=$this->showItems($out['children'])?>
-				</section>
-				<?php }?>
-			</article>
+			</div>
+			

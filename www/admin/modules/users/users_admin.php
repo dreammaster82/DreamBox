@@ -1,6 +1,7 @@
 <?php
-namespace admin{
-	class Users extends CContent{
+namespace core\admin{
+	use core\admin as core;
+	class Users extends core\CContent{
 
 		public $config = array(
 			'admin' => 'users',

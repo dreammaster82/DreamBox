@@ -1,10 +1,11 @@
 <?php
-namespace news{
-	class News extends \CContent {
+namespace articles{
+	use core;
+	class Articles extends core\CContent {
 		protected $config = array(
-			'header' => 'Новости',
-			'table' => 'news',
-			'pref' => 'n_',
+			'header' => 'Articles',
+			'table' => 'articles',
+			'pref' => 'ar_',
 			'items_on_page' => 20,
 			'pages_in_line' => 10,
 			'reqId' => 'id'

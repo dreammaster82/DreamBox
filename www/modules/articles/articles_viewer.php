@@ -1,6 +1,7 @@
 <?php
-namespace news{
-	class NewsViewer extends News implements \CContentViewer{
+namespace articles{
+	use core;
+	class ArticlesViewer extends Articles implements core\CContentViewer{
 
 		function __construct($m) {
 			parent::__construct($m);
@@ -13,12 +14,13 @@ namespace news{
 			$out = array();
 			$this->ret['not_catalog_menu'] = true;
 			$item = $this->getItem(array('id', 'name', 'content', 'img_src', 'posted'), $this->id);
+			$this->ret['style'] .= '<link rel="stylesheet" href="/modules/articles/css/style.css" />';
 			if($item){
 				return $this->showItem($item);
 			} else {
-				$this->ret['title'] = $this->config['header'];
-				$this->ret['description'] = $this->config['header'];
-				$this->ret['keywords'] = $this->config['header'];
+				$this->ret['title'] = '';
+				$this->ret['description'] = '';
+				$this->ret['keywords'] = '';
 				$out['cnt'] = $this->getCountItems(array('active' => 1));
 				if($out['cnt']){
 					$out['items'] = $this->getItems(array('id', 'name', 'annotation', 'posted', 'img_src', 'alias'), array('active' => 1), false, false, false, false, $this->config['items_on_page']);
@@ -27,7 +29,6 @@ namespace news{
 				include $this->path.'/data/show.html';
 				return ob_get_clean();
 			}
-
 		}
 
 		function showItems($out){
@@ -38,7 +39,7 @@ namespace news{
 
 		function showItem($out) {
 			$this->ret['title'] = $out['name'];
-			$this->ret['description'] = $out['name'];
+			$this->ret['description'] = '';
 			$this->ret['keywords'] = $out['name'];
 			$out['posted'] = reset(explode(' ', $out['posted']));
 			$out['data_array'] = explode('-', $out['posted']);

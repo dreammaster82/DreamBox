@@ -1,5 +1,6 @@
 <?php
-
+include realpath($_SERVER['DOCUMENT_ROOT']).'/include/setup.php';
+$Core = new Core();
 		if($_REQUEST[path])
 		{
 			if($_REQUEST[path] == "/") $_REQUEST[path] = "";
@@ -105,8 +106,8 @@ if($list)
 		{
 			$wwwpath = "/" . $filesroot . "/";
 			//if($curdir) $wwwpath .= $curdir . "/";
-			$res = db::queryOne("select * from files_children where file_name='$wwwpath'");
-			$comments = $res[comments];
+			$res = $Core->getClass('Db')->queryOne("select * from files_children where fc_name='$wwwpath'");
+			$comments = $res[fc_comments];
 
 			$wwwpath .= $cur . "/";
 
@@ -145,11 +146,11 @@ if($list)
 			{	
 				$wwwpath = "/" . $filesroot . "/";
 				if($path) $wwwpath .= $path . "/";
-				$SQL = "select * from files_children where file_name='{$wwwpath}{$cur}'";
+				$SQL = "select * from files_children where fc_name='{$wwwpath}{$cur}'";
 				//$wwwpath .= "/";
 		
-				$res = db::queryOne($SQL);
-				$comments = ($res[name]) ? $res[name] : "";
+				$res = $Core->getClass('Db')->queryOne($SQL);
+				$comments = ($res[fc_name]) ? $res[fc_name] : "";
 
 				$wwwpath .= $cur;
 //echo $wwwpath;
