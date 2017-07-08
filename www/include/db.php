@@ -5,7 +5,7 @@ namespace core{
 		function connect(){
 			try{
 				$this->link = new \PDO(
-					'mysql:host='.$CONFIG['database']['host'].';dbname='.$this->Core->globalConfig['database']['database'],
+					'mysql:host='.$this->Core->globalConfig['database']['host'].';dbname='.$this->Core->globalConfig['database']['database'],
 					$this->Core->globalConfig['database']['user'],
 					$this->Core->globalConfig['database']['pass'],
 					array(
