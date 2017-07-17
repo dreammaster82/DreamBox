@@ -18,7 +18,7 @@ namespace core\admin{
 				unset($_SESSION['menu']);
 				$login = substr($_REQUEST['login'], 0, 32);
 				$pass = substr($_REQUEST['pass'], 0, 32);
-				$exp = "/[a-zA-Z0-9_\-]{0,32}/i";
+				$exp = "/[a-zA-Z0-9_\\-]{0,32}/i";
 				if(!preg_match($exp, $login) && !preg_match($exp, $pass)){
 					return;
 				}
@@ -61,7 +61,7 @@ namespace core\admin{
 		}
 
 		function converter(){
-			global $DATA;
+			global $DATA, $C;
 			if(!$this->Auth->user['id']){
 				return;
 			}
@@ -144,6 +144,7 @@ namespace core\admin{
 		}
 
 		function process(){
+			global $MODULE;
 			$this->ret['title'] = 'Администрирование сайта';
 			$this->Auth = $this->Core->getClass('Auth');
 			$this->path = ADMIN_PATH;
