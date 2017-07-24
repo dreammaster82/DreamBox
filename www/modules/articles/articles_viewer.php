@@ -23,7 +23,7 @@ namespace articles{
 				$this->ret['keywords'] = '';
 				$out['cnt'] = $this->getCountItems(array('active' => 1));
 				if($out['cnt']){
-					$out['items'] = $this->getItems(array('id', 'name', 'annotation', 'posted', 'img_src', 'alias'), array('active' => 1), false, false, false, false, $this->config['items_on_page']);
+					$out['items'] = $this->getItems(array('id', 'name', 'annotation', 'posted', 'img_src'), array('active' => 1), false, false, false, false, $this->config['items_on_page']);
 				}
 				ob_start();
 				include $this->path.'/data/show.html';

@@ -41,11 +41,18 @@ namespace content{
 		
 		function getTopMenu(){
 			if(!$ret = $this->Util->memcacheGet(__FUNCTION__)){
-				$r = $this->getItems(array('id', 'parent_id', 'alias', 'name'), array('active' => 1, 'on_top' => 1), array('priority'));
+				$r = $this->getItems(array('id', 'parent_id', 'name'), array('active' => 1, 'on_top' => 1), array('priority'));
+
 				$arr = array();
 				foreach ($r as $v){
+                    if(!$GLOBALS['realAlias']){
+
+                    }
 					$arr[$v['parent_id']][$v['id']] = $v;
-					$arr[$v['parent_id']][$v['id']]['real_alias'] = '/'.$v['alias'];
+                    $alias = $this->Util->getAlias($v['id'], 'content');
+
+                    if(!$alias) throw new \Error("Ошибка алиаса");
+					$arr[$v['parent_id']][$v['id']]['real_alias'] = '/'.$alias;
 				}
 				foreach($arr[0] as $k => $v){
 					if($arr[$k]){
@@ -67,15 +74,14 @@ namespace content{
 					$fields = array(
 						$this->config['pref'].'id',
 						$this->config['pref'].'parent_id',
-						$this->config['pref'].'header',
-						$this->config['pref'].'alias'
+						$this->config['pref'].'header'
 					);
 					if($hs->openIndex(1, $this->Core->globalConfig['database']['database'], $this->config['table'], \HandlerSocket::PRIMARY, implode(',', $fields))){
 						$pId = $item['parent_id'];
 						while($pId){
 							$it = $hs->executeSingle(1, '=', array($pId));
 							$pId = $it[0][1];
-							$arr[] = array('header' => $it[0][2], 'alias' => $it[0][3]);
+							$arr[] = array('header' => $it[0][2]);
 						}
 					}
 					unset($hs);
@@ -98,13 +104,17 @@ namespace content{
 			$r = $this->Db->query('SELECT
 				'.$this->config['pref'].'id ,
 				'.$this->config['pref'].'parent_id,
-				'.$this->config['pref'].'alias,
 				'.$this->config['pref'].'name,
 				'.$this->config['pref'].'on_top
 				FROM '.$this->config['table'].' WHERE '.$this->config['pref'].'active=1
 				ORDER BY '.$this->config['pref'].'priority', false, \PDO::FETCH_NUM);
 			$it = [];
 			foreach ($r as $v){
+                $alias = $this->Util->getAlias($v[0], 'content');
+
+                if(!$alias) throw new \Error("Ошибка алиаса");
+
+                array_push($v, $alias);
 				$it[$v[0]] = $v;
 			}
 			if(isset($this->Memcache)){

@@ -3,8 +3,9 @@ if(file_exists(realpath($_SERVER['DOCUMENT_ROOT']).'/cache'.$_SERVER['REQUEST_UR
     include realpath($_SERVER['DOCUMENT_ROOT']).'/cache'.$_SERVER['REQUEST_URI'];
 } else {
     include_once 'include/core.php';
+    $Core = new Core(Core::UTIL | Core::CONNECTED | Core::MEMCACHE);
     if($CONFIG['no_apache'] && $_REQUEST['req']){
-        $arr = explode('/', ltrim($_REQUEST['req'], '/'));
+        $arr = $Core->getClass('Util')->getModuleWithAliases($_REQUEST['req']);
         $m = array_shift($arr);
         if($m == 'admin'){
             $_REQUEST['module'] = array_shift($arr);
@@ -27,7 +28,6 @@ if(file_exists(realpath($_SERVER['DOCUMENT_ROOT']).'/cache'.$_SERVER['REQUEST_UR
 
     $out = array();
     if($CONFIG['no_apache'] && $_REQUEST['admin_section']){
-        $Core = new Core(Core::UTIL | Core::CONNECTED | Core::MEMCACHE);
         $Core->getClass('Auth')->process();
         if($_REQUEST['module']){
             if($_REQUEST['admin']){
@@ -54,7 +54,7 @@ if(file_exists(realpath($_SERVER['DOCUMENT_ROOT']).'/cache'.$_SERVER['REQUEST_UR
         }
         include ADMIN_PATH.'/data/'.$out['template'].'.html';
     } else {
-        $Core = new Core();
+        $Core->getClass('Scroll');
         if($_REQUEST['module']){
             $out['content'] = $Core->process();
             if($Core->ret){

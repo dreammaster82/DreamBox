@@ -51,7 +51,7 @@ namespace content{
 				return $this->Util->error($this->errors);
 			}
 			if($_REQUEST['alias']){
-				$tData = array('id', 'parent_id', 'name', 'content', 'img_src', 'title', 'description', 'keywords', 'toprint', 'parent', 'alias', 'is_text', 'posted', 'active', 'header');
+				$tData = array('id', 'parent_id', 'name', 'content', 'img_src', 'title', 'description', 'keywords', 'toprint', 'parent', 'is_text', 'posted', 'active', 'header');
 				$item = $this->getItem($tData, $_REQUEST['alias']);
 				if($item){
 					return $this->showItem($item);

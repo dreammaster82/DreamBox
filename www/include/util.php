@@ -222,6 +222,33 @@ namespace core{
 				$m->flush($class);
 			}
 		}
+
+		function getModuleWithAliases($req){
+		    $reserved = ['admin', 'news', 'articles', 'content', 'search', 'reviews', 'gallery', 'files'];
+            $arr = explode('/', trim($req, '/'));
+            if(in_array($arr[0], $reserved)) return $arr;
+
+            $alias = $arr[count($arr) - 1];
+            $type = $this->Core->getClass('Db')->queryOne('SELECT type, type_id FROM components_refs WHERE aliases=?', [$alias]);
+
+            if(count($type) && $type['type']){
+                $GLOBALS['realAlias'] = $alias;
+                return [$type['type'], $type['type_id']];
+            }
+
+        }
+
+        function getAlias($id, $type){
+		    static $aliases = [];
+		    if(!count($aliases)){
+                $q = $this->Core->getClass('Db')->query('SELECT aliases, type_id, type FROM components_refs');
+                foreach ($q as $v){
+                    $aliases[$v['type']][$v['type_id']] = $v['aliases'];
+                }
+            }
+
+            return $aliases[$type][$id];
+        }
 	}
 }
 ?>

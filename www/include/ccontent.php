@@ -37,6 +37,8 @@ namespace core{
 		}
 
 		public function process(){
+            $action = $_REQUEST['action'] ? $_REQUEST['action'] : 'show';
+
 			if($_REQUEST['m'] && is_file($this->path.'/'.$_REQUEST['m'].'.php') && is_file($this->path.'/'.$_REQUEST['m'].'_viewer.php')){
 				if(!class_exists($_REQUEST['m'])){
 					include $this->path.'/'.$_REQUEST['m'].'.php';
@@ -44,7 +46,7 @@ namespace core{
 				}
 				$class = ucfirst($_REQUEST['m'].'Viewer');
 				$C = new $class();
-				if(method_exists($C, $_REQUEST['action'])){
+				if(method_exists($C, $action)){
 					$ret = $C->$action();
 					$this->ret = array_merge($this->ret, $C->ret);
 					return $ret;
@@ -54,9 +56,9 @@ namespace core{
 			} elseif($_REQUEST['m']) {
 				$this->error();
 			}
-			$action = $_REQUEST['action'] ? $_REQUEST['action'] : 'show';
+
 			$ret = '';
-			if($action && method_exists($this,$action)){
+			if($action && method_exists($this, $action)){
 				$ret = $this->$action();
 			}
 			return $ret;
@@ -205,7 +207,7 @@ namespace core{
 			}
 			$r = $this->Db->query('SELECT '.implode(',', $data).' FROM '.$table.
 					($wCond ? ' WHERE '.implode(' AND ', $wCond) : '').($order ? ' ORDER BY '.implode(',', $order) : '').
-					($limit ? ' LIMIT 0, '.(((int)$_REQUEST['page'] + 1) * $limit) : ''),
+                        ($limit ? ' LIMIT '.(int)$_REQUEST['page'] * $limit.', '.$limit : ''),
 				$arr);
 			if($getBy){
 				$ret = array();
@@ -249,6 +251,7 @@ namespace core{
 				$data = array('*');
 			}
 			if(is_array($cond)){
+                $arr = array();
 				foreach ($cond as $k => $v){
 					if(is_array($v) && sizeof($v)){
 						$s = sizeof($v);

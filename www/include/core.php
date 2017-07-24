@@ -42,6 +42,54 @@ class Core{
 		}
 	}
 
+	function loadClass($class, $cn, $classes, $getCont = false){
+        $name = $mp = '';
+        if($getCont && $class[self::CLASS_NAME] != 'CContent' && !$classes['core\CContent']){
+            if($class[self::ADMIN]){
+                $this->loadClass(array(self::CLASS_NAME => 'CContent', self::ADMIN => true, self::ABSTRACT_CLASS => true), 'core\\admin'.'\\'.$class[self::CLASS_NAME], $classes);
+            } else {
+                $this->loadClass(array(self::CLASS_NAME => 'CContent', self::ABSTRACT_CLASS => true, self::MODULE => 'core'), $class[self::MODULE].'\\'.$class[self::CLASS_NAME], $classes);
+            }
+        }
+        if(strpos($class[self::CLASS_NAME], 'Viewer')){
+            if($class[self::CLASS_NAME] != 'CContentViewer' && !$classes['core\CContentViewer']){
+                $this->loadClass(array(self::CLASS_NAME => 'CContentViewer', self::ABSTRACT_CLASS => true, self::MODULE => 'core'),
+                    $class[self::MODULE].'\\'.$class[self::CLASS_NAME], $classes);
+            }
+            $mp = str_replace('Viewer', '', $class[self::CLASS_NAME]);
+            $this->loadClass(array(self::CLASS_NAME => $mp, self::MODULE => $class[self::MODULE]), $class[self::MODULE].'\\'.$class[self::CLASS_NAME], $classes);
+            $mp = strtolower($mp);
+            $name = $mp.'_viewer';
+        } else {
+            $mp = $name = strtolower($class[self::CLASS_NAME]);
+            if($class[self::ADMIN]){
+                $name .= '_admin';
+            }
+        }
+        $path = '';
+        if($class[self::MODULE] != 'core'){
+            if($class[self::MODULE] == 'admin'){
+                $path .= ADMIN_PATH.'/modules/'.strtolower($class[self::CLASS_NAME]);
+            } else {
+                $mp = $class[self::MODULE];
+                $path .= MODULES_PATH.'/'.$mp;
+            }
+        } else {
+            if($class[self::ADMIN]){
+                $path .= ADMIN_PATH.'/include';
+            } else {
+                $path .= CLIENT_PATH.'/include';
+            }
+        }
+        if(file_exists($path.'/'.$name.'.php')){
+            include $path.'/'.$name.'.php';
+        } else {
+            $classes[$cn] = false;
+            $this->setError('Class '.$cn.' not defined', __CLASS__);
+        }
+        return $mp;
+    }
+
 	function getClass($class = array(), $params = false){
 		static $classes = array();
 		$getCont = true;
@@ -55,49 +103,7 @@ class Core{
 		$cn = ($class[self::ADMIN] ? 'core\\admin' : $class[self::MODULE]).'\\'.$class[self::CLASS_NAME];
 		if(!$classes[$cn]){
 			if(!class_exists($cn)){
-				$name = $mp = '';
-				if($getCont && $class[self::CLASS_NAME] != 'CContent' && !$classes['core\CContent']){
-					if($class[self::ADMIN]){
-						$this->getClass(array(self::CLASS_NAME => 'CContent', self::ADMIN => true, self::ABSTRACT_CLASS => true));
-					} else {
-						$this->getClass(array(self::CLASS_NAME => 'CContent', self::ABSTRACT_CLASS => true, self::MODULE => 'core'));
-					}
-				}
-				if(strpos($class[self::CLASS_NAME], 'Viewer')){
-					if($class[self::CLASS_NAME] != 'CContentViewer' && !$classes['core\CContentViewer']){
-						$this->getClass(array(self::CLASS_NAME => 'CContentViewer', self::ABSTRACT_CLASS => true, self::MODULE => 'core'));
-					}
-					$mp = str_replace('Viewer', '', $class[self::CLASS_NAME]);
-					$this->getClass(array(self::CLASS_NAME => $mp, self::MODULE => $class[self::MODULE]));
-					$mp = strtolower($mp);
-					$name = $mp.'_viewer';
-				} else {
-					$mp = $name = strtolower($class[self::CLASS_NAME]);
-					if($class[self::ADMIN]){
-						$name .= '_admin';
-					}
-				}
-				$path = '';
-				if($class[self::MODULE] != 'core'){
-					if($class[self::MODULE] == 'admin'){
-						$path .= ADMIN_PATH.'/modules/'.strtolower($class[self::CLASS_NAME]);
-					} else {
-						$mp = $class[self::MODULE];
-						$path .= MODULES_PATH.'/'.$mp;
-					}
-				} else {
-					if($class[self::ADMIN]){
-						$path .= ADMIN_PATH.'/include';
-					} else {
-						$path .= CLIENT_PATH.'/include';
-					}
-				}
-				if(file_exists($path.'/'.$name.'.php')){
-					include $path.'/'.$name.'.php';
-				} else {
-					$classes[$cn] = false;
-					$this->setError('Class '.$cn.' not defined', __CLASS__);
-				}
+			    $mp = $this->loadClass($class, $cn, $getCont);
 			}
 			if(!isset($classes[$cn])){
 				if($class[self::ABSTRACT_CLASS]){

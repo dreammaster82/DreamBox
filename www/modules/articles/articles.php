@@ -17,17 +17,22 @@ namespace articles{
 
 		function parseRequest($request) {
 			$ret = array();
-			if(strpos($request, '/') !== false){
-				$this->setError('badRequest');
-			}
-			if(strpos($request, '.html') !== false){
-				list($ret['id'], $ret['alias']) = explode('_', str_replace('.html', '', $request), 2);
-				if(!(float)$ret['id']){
-					$this->setError('badRequest');
-				}
-			} else {
-				$this->setError('badRequest');
-			}
+			if(+$request){
+			    $ret['id'] = +$request;
+            } else {
+                if(strpos($request, '/') !== false){
+                    $this->setError('badRequest');
+                }
+                if(strpos($request, '.html') !== false){
+                    list($ret['id'], $ret['alias']) = explode('_', str_replace('.html', '', $request), 2);
+                    if(!(float)$ret['id']){
+                        $this->setError('badRequest');
+                    }
+                } else {
+                    $this->setError('badRequest');
+                }
+            }
+
 			return $ret;
 		}
 
