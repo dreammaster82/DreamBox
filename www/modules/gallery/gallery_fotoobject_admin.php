@@ -1,7 +1,7 @@
 <?php
 namespace core\admin{
 	use core\admin as core;
-	class FotoObject extends core\CContent{
+	class Gallery_FotoObject extends core\CContent{
 		protected $config = array(
 			'table' => 'gallery_foto',
 			'parent_table' => 'gallery',

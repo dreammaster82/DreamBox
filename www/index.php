@@ -39,6 +39,12 @@ if(file_exists(realpath($_SERVER['DOCUMENT_ROOT']).'/cache'.$_SERVER['REQUEST_UR
             include ADMIN_PATH.'/include/admin.php';
             $out['content'] = $Core->process(array(Core::CLASS_NAME => 'Admin', Core::MODULE => 'admin', Core::ADMIN => true));
         }
+
+        if($_REQUEST['type'] && $_REQUEST['type'] == 'json') {
+            echo $out['content'];
+            return;
+        }
+
         if($Core->ret){
             foreach ($Core->ret as $k => $v){
                 $out[$k] = $v;

@@ -5,6 +5,32 @@ define(CLIENT_PATH, realpath($_SERVER['DOCUMENT_ROOT']));
 define(MODULES_PATH, CLIENT_PATH.'/modules');
 define(ADMIN_PATH, CLIENT_PATH.'/admin');
 define(VERSION, '2.2');
+
+set_include_path(get_include_path() . PATH_SEPARATOR . MODULES_PATH. PATH_SEPARATOR . ADMIN_PATH.'/modules');
+
+spl_autoload_register(function ($class){
+    $parts = explode('\\', $class);
+    if(count($parts) < 2) return false;
+
+    $className = array_pop($parts);
+
+    $isViewer = false;
+    if(strpos($className, 'Viewer')){
+        $isViewer = true;
+        $className = str_replace('Viewer', '', $className);
+    }
+    $module = strtolower(explode('_', $className)[0]);
+
+    if($parts[0] == 'core' && $parts[1] != 'admin') include CLIENT_PATH.'/include/'.strtolower($className).($isViewer ? '_viewer' : '').'.php';
+    elseif($parts[1] == 'admin'){
+        if(in_array($className, ['Admin', 'AdminFunctions', 'CContent'])) include ADMIN_PATH.'/include/'.strtolower($className).'.php';
+        else {
+            include $module.'/'.strtolower($className).'_admin.php';
+        }
+    } else {
+        include $module.'/'.strtolower($className).($isViewer ? '_viewer' : '').'.php';
+    }
+});
 include_once CLIENT_PATH.'/include/config.php';
 include_once CLIENT_PATH.'/include/redirect.php';
 
@@ -42,54 +68,6 @@ class Core{
 		}
 	}
 
-	function loadClass($class, $cn, $classes, $getCont = false){
-        $name = $mp = '';
-        if($getCont && $class[self::CLASS_NAME] != 'CContent' && !$classes['core\CContent']){
-            if($class[self::ADMIN]){
-                $this->loadClass(array(self::CLASS_NAME => 'CContent', self::ADMIN => true, self::ABSTRACT_CLASS => true), 'core\\admin'.'\\'.$class[self::CLASS_NAME], $classes);
-            } else {
-                $this->loadClass(array(self::CLASS_NAME => 'CContent', self::ABSTRACT_CLASS => true, self::MODULE => 'core'), $class[self::MODULE].'\\'.$class[self::CLASS_NAME], $classes);
-            }
-        }
-        if(strpos($class[self::CLASS_NAME], 'Viewer')){
-            if($class[self::CLASS_NAME] != 'CContentViewer' && !$classes['core\CContentViewer']){
-                $this->loadClass(array(self::CLASS_NAME => 'CContentViewer', self::ABSTRACT_CLASS => true, self::MODULE => 'core'),
-                    $class[self::MODULE].'\\'.$class[self::CLASS_NAME], $classes);
-            }
-            $mp = str_replace('Viewer', '', $class[self::CLASS_NAME]);
-            $this->loadClass(array(self::CLASS_NAME => $mp, self::MODULE => $class[self::MODULE]), $class[self::MODULE].'\\'.$class[self::CLASS_NAME], $classes);
-            $mp = strtolower($mp);
-            $name = $mp.'_viewer';
-        } else {
-            $mp = $name = strtolower($class[self::CLASS_NAME]);
-            if($class[self::ADMIN]){
-                $name .= '_admin';
-            }
-        }
-        $path = '';
-        if($class[self::MODULE] != 'core'){
-            if($class[self::MODULE] == 'admin'){
-                $path .= ADMIN_PATH.'/modules/'.strtolower($class[self::CLASS_NAME]);
-            } else {
-                $mp = $class[self::MODULE];
-                $path .= MODULES_PATH.'/'.$mp;
-            }
-        } else {
-            if($class[self::ADMIN]){
-                $path .= ADMIN_PATH.'/include';
-            } else {
-                $path .= CLIENT_PATH.'/include';
-            }
-        }
-        if(file_exists($path.'/'.$name.'.php')){
-            include $path.'/'.$name.'.php';
-        } else {
-            $classes[$cn] = false;
-            $this->setError('Class '.$cn.' not defined', __CLASS__);
-        }
-        return $mp;
-    }
-
 	function getClass($class = array(), $params = false){
 		static $classes = array();
 		$getCont = true;
@@ -102,31 +80,27 @@ class Core{
 		}
 		$cn = ($class[self::ADMIN] ? 'core\\admin' : $class[self::MODULE]).'\\'.$class[self::CLASS_NAME];
 		if(!$classes[$cn]){
-			if(!class_exists($cn)){
-			    $mp = $this->loadClass($class, $cn, $getCont);
-			}
-			if(!isset($classes[$cn])){
-				if($class[self::ABSTRACT_CLASS]){
-					$classes[$cn] = true;
-				} else {
-					$classes[$cn] = new $cn($mp, $params);
-					$classes[$cn]->Core = $this;
-					if(!in_array($cn, array('core\Db', 'core\Util', 'core\Scroll', 'core\Memcache'))){
-						if($classes['core\Db']){
-							$classes[$cn]->Db = $classes['core\Db'];
-						}
-						if($classes['core\Util']){
-							$classes[$cn]->Util = $classes['core\Util'];
-						}
-						if($classes['core\Scroll']){
-							$classes[$cn]->Scroll = $classes['core\Scroll'];
-						}
-						if($classes['core\Memcache']){
-							$classes[$cn]->Memcache = $classes['core\Memcache'];
-						}
-					}
-				}
-			}
+            if($class[self::ABSTRACT_CLASS]){
+                $classes[$cn] = true;
+            } else {
+                $classes[$cn] = new $cn($class[self::MODULE] != 'core' && $class[self::MODULE] != 'admin' ?
+                    $class[self::MODULE] : strtolower(str_replace('Viewer', '', $class[self::CLASS_NAME])), $params);
+                $classes[$cn]->Core = $this;
+                if(!in_array($cn, array('core\Db', 'core\Util', 'core\Scroll', 'core\Memcache'))){
+                    if($classes['core\Db']){
+                        $classes[$cn]->Db = $classes['core\Db'];
+                    }
+                    if($classes['core\Util']){
+                        $classes[$cn]->Util = $classes['core\Util'];
+                    }
+                    if($classes['core\Scroll']){
+                        $classes[$cn]->Scroll = $classes['core\Scroll'];
+                    }
+                    if($classes['core\Memcache']){
+                        $classes[$cn]->Memcache = $classes['core\Memcache'];
+                    }
+                }
+            }
 		}
 		return $classes[$cn];
 	}
@@ -141,19 +115,21 @@ class Core{
 		}
 		$class[Core::MODULE] = $class[Core::MODULE] ? $class[Core::MODULE] : $_REQUEST['module'];
 		$class[Core::CLASS_NAME] = $class[Core::CLASS_NAME] ? $class[Core::CLASS_NAME] : ($class[Core::ADMIN] ? ucfirst($class[Core::MODULE]) : ucfirst($class[Core::MODULE]).'Viewer');
+		$ret = '';
 		if($class[Core::CLASS_NAME]){
 			$C = $this->getClass($class);
 			if(!$this->errors){
-				$this->ret['content'] = $C->process();
+                $ret = $C->process();
 				foreach ($C->ret as $k => $v){
 					$this->ret[$k] = $v;
 					unset($C->ret[$k]);
 				}
 			} else {
-				$this->ret['content'] = $this->getClass('Util')->error($this->errors);
+                $ret = $this->getClass('Util')->error($this->errors);
 				$this->ret['title'] = $this->ret['description'] = $this->ret['keywords'] = 'Ошибка 404: Запрашиваемая страница не найдена';
 			}
 		}
+		return $ret;
 	}
 
 	function setError($error, $class = 'all'){

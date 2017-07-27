@@ -112,3 +112,13 @@
 	<input type='hidden' name='page' value="<?=$_REQUEST['page']?>" />
 	<input type='hidden' name='v' value="<?=$this->type?>" />
 </form>
+<script>
+	$(function () {
+        var aliasTrottle = throttle(function (e) {
+            $('input[name="alias"]').val(translit(e.target.value).replace(' ', '_').toLowerCase());
+        }, 0.5);
+		$('input[name="name"]').on('keyup', function (e) {
+            aliasTrottle(e);
+        });
+    });
+</script>

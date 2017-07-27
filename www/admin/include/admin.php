@@ -5,6 +5,13 @@ namespace core\admin{
 
 		public $ret, $Auth, $path;
 
+		function checkAlias(){
+		    if($_REQUEST['alias']){
+		        if(count($this->Db->query('SELECT * FROM components_refs WHERE aliases=?', array($_REQUEST['alias'])))) return '{"error":"Не корректный алиас"}';
+		        else return '{}';
+            } else return '{"error":"Ошибка запроса"}';
+        }
+
 		function show(){
 			$ret = '';
 			if($_REQUEST['logout']){
@@ -152,7 +159,7 @@ namespace core\admin{
 			if(!is_dir(CLIENT_PATH.'/data/log/')){
 				mkdir(CLIENT_PATH.'/data/log/', 0775, true);
 			}
-			$action = method_exists($this, $_REQUEST['action']) ? $_REQUEST['action'] : 'show';
+			$action = method_exists($this, $action) ? $action : 'show';
 			error_log(date('d.m.Y H:i').'	'.$this->Auth->user['login'].'	action='.$action.' id='.$this->id.'	'.($_REQUEST['what'] ? 'what='.$_REQUEST['what'].' ' : '').$MODULE.' operations'."\n", 3, CLIENT_PATH.'/data/log/log.log');
 			$ret = $this->$action();
 			$this->ret['menu'] = $this->showAdminMenu();

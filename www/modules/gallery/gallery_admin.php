@@ -154,7 +154,7 @@ namespace core\admin{
 					$C = new VideoObject();
 				} else {
 					include_once 'foto_object_admin.php';
-					$C = new FotoObject();
+					$C = new Gallery_FotoObject();
 				}
 				foreach ($items as $v){
 					if($item['type']){
@@ -319,7 +319,7 @@ namespace core\admin{
 			if($this->type){
 				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'VideoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
 			} else {
-				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'FotoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
+				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'Gallery_FotoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
 			}
 			$this->ret['warning'] = $C->ret['warning'];
 			return $C->editItem();
@@ -329,7 +329,7 @@ namespace core\admin{
 			if($this->type){
 				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'VideoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
 			} else {
-				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'FotoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
+				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'Gallery_FotoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
 			}
 			$id = $C->saveItem();
 			$this->ret['warning'] = $C->ret['warning'];
@@ -345,7 +345,7 @@ namespace core\admin{
 			if($this->type){
 				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'VideoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
 			} else {
-				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'FotoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
+				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'Gallery_FotoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
 			}
 			$ret = $C->deleteItem();
 			return $ret ? $ret : $this->show();
@@ -355,7 +355,7 @@ namespace core\admin{
 			if($this->type){
 				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'VideoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
 			} else {
-				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'FotoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
+				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'Gallery_FotoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
 			}
 			$C->deleteItem2();
 			$this->ret['warning'] = $C->ret['warning'];
@@ -366,7 +366,7 @@ namespace core\admin{
 			if($this->type){
 				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'VideoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
 			} else {
-				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'FotoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
+				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'Gallery_FotoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
 			}
 			$C->showHideItem();
 			$this->ret['warning'] = $C->ret['warning'];
@@ -377,7 +377,7 @@ namespace core\admin{
 			if($this->type){
 				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'VideoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
 			} else {
-				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'FotoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
+				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'Gallery_FotoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
 			}
 			$ret = $C->moveItem();
 			$this->ret['warning'] = $C->ret['warning'];
@@ -388,14 +388,14 @@ namespace core\admin{
 			if($this->type){
 				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'VideoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
 			} else {
-				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'FotoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
+				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'Gallery_FotoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
 			}
 			$this->id = $C->moveItem2($this->id);
 			$this->ret['warning'] = $C->ret['warning'];
 			return $this->show();
 		}
 
-		function priorityItem(){
+		function priorityItem($isParent = true){
 			return parent::priorityItem(true);
 		}
 
@@ -403,7 +403,7 @@ namespace core\admin{
 			if($this->type){
 				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'VideoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
 			} else {
-				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'FotoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
+				$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'Gallery_FotoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
 			}
 			return $this->show();
 		}
@@ -421,7 +421,7 @@ namespace core\admin{
 				$out['top_name'] = 'Video';
 				$out['top_header'] = 'Фото галлерея';
 				$out['top_color'] = 'dd8513';
-				$out['class_by_type'] = $this->Core->getClass(array(\Core::CLASS_NAME => 'FotoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
+				$out['class_by_type'] = $this->Core->getClass(array(\Core::CLASS_NAME => 'Gallery_FotoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true));
 			}
 			if((int)$_REQUEST['page']){
 				$out['add'][] = 'page='.(int)$_REQUEST['page'];

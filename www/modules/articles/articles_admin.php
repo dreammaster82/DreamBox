@@ -51,6 +51,7 @@ namespace core\admin{
 						echo $e->getMessage();
 					}
 				}
+                $this->Db->queryExec('DELETE FROM '.$this->aliasesTable.' WHERE type=? AND type_id=?', array($this->module, $id));
 				$this->Db->queryExec('DELETE FROM '.$this->config['table'].' WHERE '.$this->config['pref'].'id=?', array($id));
 				$this->ret['warning'] = 'Элемент удален';
 				$this->deleteCache($this->class);
@@ -61,7 +62,7 @@ namespace core\admin{
 		function editItem(){
 			$out = array();
 			if((int)$_REQUEST['what']){
-				$out = $this->getItem(array('id', 'name', 'annotation', 'content', 'posted', 'img_src', 'active', 'alias'), (int)$_REQUEST['what']);
+				$out = $this->getItem(array('id', 'name', 'annotation', 'content', 'posted', 'img_src', 'active'), (int)$_REQUEST['what']);
 				if($out['id']){
 					$out['files'] = $this->Util->getImagesArray($this->config['files_path'].'/'.$out['id']);
 					$out['module'] = $this->module;
@@ -73,6 +74,8 @@ namespace core\admin{
 						$out['size'] = filesize(CLIENT_PATH.$out['path'].$out['img_src']);
 						$out['type'] = $this->fTypes[$fi];
 					}
+					$q = $this->Db->queryOne('SELECT aliases FROM '.$this->aliasesTable.' WHERE type=? AND type_id=?', array($this->module, $out['id']));
+					if($q['aliases']) $out['alias'] = $q['aliases'];
 				}
 			}
 			if(!$out['posted']){
@@ -108,14 +111,14 @@ namespace core\admin{
 				$item = $this->getItem(array('id'), (int)$_REQUEST['what']);
 			}
 			if($item['id']){
+			    $this->Db->queryExec('UPDATE '.$this->aliasesTable.' SET aliases=? WHERE type=? AND type_id=?', array($alias, $this->module, $item['id']));
 				$this->Db->queryExec('UPDATE '.$this->config['table'].' SET
 					'.$this->config['pref'].'posted=?,
 					'.$this->config['pref'].'name=?,
 					'.$this->config['pref'].'annotation=?,
-					'.$this->config['pref'].'content="",
-					'.$this->config['pref'].'alias=?
+					'.$this->config['pref'].'content=""
 					WHERE '.$this->config['pref'].'id=?',
-					array($date, $name, $annotation, $alias, $item['id']));
+					array($date, $name, $annotation, $item['id']));
 				if(!$_REQUEST['reload']){
 					$this->ret['warning'] .= 'Элемент изменен';
 				}
@@ -124,11 +127,12 @@ namespace core\admin{
 					('.$this->config['pref'].'name,
 					'.$this->config['pref'].'annotation,
 					'.$this->config['pref'].'content,
-					'.$this->config['pref'].'posted,
-					'.$this->config['pref'].'alias)
+					'.$this->config['pref'].'posted)
 					VALUES
-					(?, ?, "", ?, ?)',
-					array($name, $annotation, $date, $alias));
+					(?, ?, "", ?)',
+					array($name, $annotation, $date));
+
+                $this->Db->queryInsert('INSERT INTO '.$this->aliasesTable.' (aliases, type, type_id) VALUES (?, ?, ?)', array($alias, $this->module, $item['id']));
 				if(!$_REQUEST['reload']){
 					$this->ret['warning'] = 'Элемент добавлен ('.$item['id'].')';
 				}

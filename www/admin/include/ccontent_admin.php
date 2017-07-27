@@ -15,7 +15,7 @@ namespace core\admin{
 			'10'=>'октября',
 			'11'=>'ноября',
 			'12'=>'декабря'
-		), $gData = array();
+		), $gData = array(), $aliasesTable = 'components_refs';
 
 		protected $id;
 
