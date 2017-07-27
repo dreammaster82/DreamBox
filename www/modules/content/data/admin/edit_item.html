@@ -190,32 +190,7 @@
 	<input type='hidden' name='type' value="<?=(int)$_REQUEST['type']?>" />
 </form>
 <script type='text/javascript' language='javascript'>
-isAlias=<?=($out['alias'] && $out['alias'] != '/content/') ? 'true' : 'false'?>;
-	$(document).ready(function(){
-		$(document.forms.edit_form.alias).on('focus', function(){
-			isAlias = true;
-		})
-	});
-function put_alias(){
-		var form = document.forms.edit_form;
-		if(!isAlias){
-			form.alias.value = '/<?=$out['module']?>/' + ru_en_encode(form.name.value) + '.html';
-		}
-}
-function ru_en_encode(str){
-    var ru = Array('а','б','в','г','д','е','ё','ж','з','и','й','к','л','м','н','о','п','р','с','т','у','ф','х','ц','ч','ш','щ','ъ','ы','ь','э','ю','я',' ','-', '.');
-    var en = Array('a','b','v','g','d','e','e','zh','z','i','i','k','l','m','n','o','p','r','s','t','u','f','h','c','ch','sh','sh','_','i','_','e','u','a','_','_','');
-    return strtr(str.toLowerCase(), ru, en);
-}
-function strtr(str, from, to){
-    for(var i in from){
-	if(str.indexOf(from[i]) != -1){
-	    str = str.replace(new RegExp(from[i], 'g'), to[i]);
-	}
-    }
-    return str;
-}
-function addRow() 
+function addRow()
 {
 	var table = document.getElementById('edit_table');
 	index = 0; rowindex = 1;
@@ -286,3 +261,19 @@ function removeRow(row)
 
 </script>
 <script src='/admin/include/script/addtags.js'></script>
+<script>
+    $(function () {
+        var aliasTrottle = throttle(function (e) {
+            $('input[name="alias"]').val(translit(e.target.value).replace(' ', '_').toLowerCase());
+            fetch('/admin/?action=checkAlias&type=json&alias=' + encodeURI($('input[name="alias"]').val()) + '&id=' + $('input[name="what"]').val()).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                if(data['error']) $('#alias_error').html(data['error']);
+                else $('#alias_error').html('');
+            });
+        }, 0.2);
+        $('input[name="name"]').on('keyup', function (e) {
+            aliasTrottle(e);
+        });
+    });
+</script>

@@ -56,6 +56,7 @@ namespace core\admin{
 					echo $e->getMessage();
 				}
 			}
+            $this->Db->queryExec('DELETE FROM '.$this->aliasesTable.' WHERE type=? AND type_id=?', array($this->module, $id));
 			$this->Db->queryExec('DELETE FROM '.$this->config['table'].' WHERE '.$this->config['pref'].'id=?', array($id));
 		}
 
@@ -80,7 +81,6 @@ namespace core\admin{
 						$out['type'] = $this->fTypes[$fi];
 					}
 					$out['files'] = $this->Util->getImagesArray($this->config['files_path'].'/'.$out['id']);
-					$out['alias'] = '/'.$out['alias'];
 				}
 			}
 			$out['module'] = $this->module;
@@ -95,7 +95,7 @@ namespace core\admin{
 
 		function getItem($data, $cond){
 			if(!$data){
-				$data = array('id', 'parent_id', 'name', 'content', 'img_src', 'title', 'description', 'keywords', 'toprint', 'parent', 'alias', 'active', 'is_text', 'on_top', 'header');
+				$data = array('id', 'parent_id', 'name', 'content', 'img_src', 'title', 'description', 'keywords', 'toprint', 'parent', 'active', 'is_text', 'on_top', 'header');
 			}
 			$item = parent::getItem($data, $cond);
 			if($item){
@@ -109,6 +109,8 @@ namespace core\admin{
 						}
 					}
 				}
+                $q = $this->Db->queryOne('SELECT aliases FROM '.$this->aliasesTable.' WHERE type=? AND type_id=?', array($this->module, $item['id']));
+                if($q['aliases']) $item['alias'] = $q['aliases'];
 			} else {
 				$item = array(
 					'id' => 0,
@@ -180,7 +182,7 @@ namespace core\admin{
 				if(!$alias){
 					$alias = $this->ru_en_encode($name);
 				}
-				$alias = $this->checkAlias($alias, (int)$item['id']);
+				$alias = $this->Core->getClass([\Core::CLASS_NAME => 'Admin', \Core::ADMIN => true])->checkAlias($alias, (int)$item['id']);
 				$content = str_replace("\n", "\n ", trim(stripslashes($_REQUEST['content'])));
 				$desc = trim(stripslashes($_REQUEST['description']));
 				$keywords = trim(stripslashes($_REQUEST['keywords']));
@@ -205,16 +207,16 @@ namespace core\admin{
 						'.$this->config['pref'].'description=?,
 						'.$this->config['pref'].'keywords=?,
 						'.$this->config['pref'].'toprint=?,
-						'.$this->config['pref'].'alias=?,
 						'.$this->config['pref'].'is_text=?,
 						'.$this->config['pref'].'posted=?,
 						'.$this->config['pref'].'on_top=?,
 						'.$this->config['pref'].'header=?
 						WHERE '.$this->config['pref'].'id=?', 
-						array($name, $title, $desc, $keywords, (int)$_REQUEST['toprint'], $alias, (int)$_REQUEST['is_text'], $posted, (int)$_REQUEST['on_top'], $header, $item['id']));
+						array($name, $title, $desc, $keywords, (int)$_REQUEST['toprint'], (int)$_REQUEST['is_text'], $posted, (int)$_REQUEST['on_top'], $header, $item['id']));
 					if(!$_REQUEST['reload']){
 						$this->ret['warning'] .= 'Элемент изменен';
 					}
+                    $this->Db->queryExec('UPDATE '.$this->aliasesTable.' SET aliases=? WHERE type=? AND type_id=?', array($alias, $this->module, $item['id']));
 				} else {
 					$r = $this->Db->queryOne('SELECT MAX('.$this->config['pref'].'priority) AS m FROM '.$this->config['table'].' WHERE '.$this->config['pref'].'parent_id=?',
 							array($this->id));
@@ -226,17 +228,18 @@ namespace core\admin{
 						'.$this->config['pref'].'description,
 						'.$this->config['pref'].'keywords,
 						'.$this->config['pref'].'toprint,
-						'.$this->config['pref'].'alias,
 						'.$this->config['pref'].'active,
 						'.$this->config['pref'].'priority,
 						'.$this->config['pref'].'is_text,
 						'.$this->config['pref'].'header,
 						'.$this->config['pref'].'on_top) VALUES (?, ?, "", ?, ?, ?, ?, ?, 1, ?, ?, ?, ?)',
-						array($this->id, $name, $title, $desc, $keywords, (int)$_REQUEST['toprint'], $alias, ++$r['m'], (int)$_REQUEST['is_text'], $header, (int)$_REQUEST['on_top']));
+						array($this->id, $name, $title, $desc, $keywords, (int)$_REQUEST['toprint'], ++$r['m'], (int)$_REQUEST['is_text'], $header, (int)$_REQUEST['on_top']));
 					if(!$_REQUEST['reload']){
 						$this->ret['warning'] = 'Элемент добавлен ('.$item['id'].')';
 					}
+                    $this->Db->queryInsert('INSERT INTO '.$this->aliasesTable.' (aliases, type, type_id) VALUES (?, ?, ?)', array($alias, $this->module, $item['id']));
 				}
+
 				$this->saveImageArr($this->config['files_path'].'/'.$item['id']);
 				$files = $this->Util->getImagesArray($this->config['files_path'].'/'.$item['id']);
 				if($files){

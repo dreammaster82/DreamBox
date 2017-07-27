@@ -119,7 +119,7 @@
 	<tr>
 		<td style="width:100px;"></td>
 		<td style="width:100px;white-space: nowrap">
-			<input type='submit' class='buttons' value='ОК' style='width:100'>
+			<input type='submit' class='buttons' value='ОК' style='width:100px'>
 			<input type='hidden' name='what' value="<?=$out['id']?>" />
 			<input type='hidden' name='action' value='saveItem'>
 			<input type='hidden' name='page' value="<?=$_REQUEST['page']?>" />
@@ -140,7 +140,7 @@
     $(function () {
         var aliasTrottle = throttle(function (e) {
             $('input[name="alias"]').val(translit(e.target.value).replace(' ', '_').toLowerCase());
-            fetch('/admin/?action=checkAlias&type=json&alias=' + encodeURI($('input[name="alias"]').val())).then(function (response) {
+            fetch('/admin/?action=checkAlias&type=json&alias=' + encodeURI($('input[name="alias"]').val()) + '&id=' + $('input[name="what"]').val()).then(function (response) {
 				return response.json();
             }).then(function (data) {
 				if(data['error']) $('#alias_error').html(data['error']);

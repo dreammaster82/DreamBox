@@ -187,17 +187,6 @@ namespace core\admin{
 			return $this->show();								
 		}
 
-		function checkAlias($alias, $id){
-			$r = $this->Db->queryOne('SELECT COUNT(*) AS cnt FROM '.$this->config['table'].' WHERE '.$this->config['pref'].'alias=?', array($alias));
-			if($r['cnt']){
-				if(!($r['cnt'] == 1 && $id)){
-					list($al, $ext) = explode('.', $alias);
-					$alias = $this->checkAlias($al.'2.'.$ext, $id);
-				}
-			}
-			return $alias;
-		}
-
 		function replaceImageFromContent($files, $content, $id){
 			foreach($files as $k => $v){
 				if(strpos($content,'['.$k.']')){

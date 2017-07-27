@@ -5,9 +5,13 @@ namespace core\admin{
 
 		public $ret, $Auth, $path;
 
-		function checkAlias(){
-		    if($_REQUEST['alias']){
-		        if(count($this->Db->query('SELECT * FROM components_refs WHERE aliases=?', array($_REQUEST['alias'])))) return '{"error":"Не корректный алиас"}';
+		function checkAlias($alias = '', $id = 0){
+		    $alias = $alias ?: $_REQUEST['alias'];
+		    $id = $id ?: $_REQUEST['id'];
+		    if($alias){
+		        $q = $this->Db->query('SELECT * FROM components_refs WHERE aliases=?', array($alias));
+		        $notCur = $id ? $q[0] && $q[0]['type_id'] != $id : true;
+		        if(count($q) && $notCur) return '{"error":"Не корректный алиас"}';
 		        else return '{}';
             } else return '{"error":"Ошибка запроса"}';
         }

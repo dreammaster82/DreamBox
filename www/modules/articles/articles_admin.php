@@ -105,7 +105,7 @@ namespace core\admin{
 			if(!$alias){
 				$alias = $name;
 			}
-			$alias = strtolower(substr($this->ru_en_encode($alias), 0, 32));
+			$alias = strtolower($alias);
 			$name = html_entity_decode($name, ENT_COMPAT | ENT_HTML5, 'UTF-8');
 			if((int)$_REQUEST['what']){
 				$item = $this->getItem(array('id'), (int)$_REQUEST['what']);
