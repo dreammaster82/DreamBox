@@ -5,8 +5,13 @@ if(file_exists(realpath($_SERVER['DOCUMENT_ROOT']).'/cache'.$_SERVER['REQUEST_UR
     include_once 'include/core.php';
     $Core = new Core(Core::UTIL | Core::CONNECTED | Core::MEMCACHE);
     if($CONFIG['no_apache'] && $_REQUEST['req']){
-        $arr = $Core->getClass('Util')->getModuleWithAliases($_REQUEST['req']);
-        $m = array_shift($arr);
+        if($REDIRECT[$_REQUEST['req']]){
+            $m = $REDIRECT[$_REQUEST['req']];
+            $arr = [];
+        } else {
+            $arr = $Core->getClass('Util')->getModuleWithAliases($_REQUEST['req']);
+            $m = array_shift($arr);
+        }
         if($m == 'admin'){
             $_REQUEST['module'] = array_shift($arr);
             if(strpos($_REQUEST['module'], 'admin_') !== false){
