@@ -25,7 +25,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
 </url>';
 
 $it = [];
-foreach($Core->getClass('Content')->getContentItems() as $v){
+foreach($Core->getClass([Core::CLASS_NAME => 'Content', Core::MODULE => 'content'])->getContentItems() as $v){
     $it[$v[0]] = $v;
 }
 
@@ -37,7 +37,7 @@ function getAlias($item){
         $parent = $it[$item[1]];
         while($parent){
             $arr[] = $Core->getClass('Util')->getAlias($parent[0], 'content');
-            $parent = $parent[$parent[1]];
+            $parent = $it[$parent[1]];
         }
         return implode('/' ,array_reverse($arr));
     }
@@ -55,7 +55,7 @@ unset($it);
 
 foreach($Core->getClass([Core::CLASS_NAME => 'Articles', Core::MODULE => 'articles'])->getItems(['id'], ['active' => 1], ['posted desc']) as $v){
     echo '<url>
-  <loc>http://'.$Core->globalConfig['site'].'/'.$Core->getClass('Util')->getAlias($v[0], 'articles').'/</loc>
+  <loc>http://'.$Core->globalConfig['site'].'/'.$Core->getClass('Util')->getAlias($v['id'], 'articles').'/</loc>
   <changefreq>monthly</changefreq>
   <priority>0.64</priority>
 </url>';
@@ -66,5 +66,5 @@ echo '</urlset>';
 $content = ob_get_clean();
 
 file_put_contents(CLIENT_PATH.'/sitemap.xml', $content);
-
+header("Content-type: text/xml");
 echo $content;
