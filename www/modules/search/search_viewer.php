@@ -20,7 +20,7 @@ namespace search{
                 return $this->Util->error($this->errors);
             }
             if($_REQUEST['s']){
-                $req = stripcslashes($_REQUEST['s']);
+                $req = htmlspecialchars(strip_tags($_REQUEST['s']), ENT_COMPAT | ENT_HTML5 | ENT_QUOTES);
                 $out['items'] = $this->getItems($req);
                 $out['request'] = $req;
                 ob_start();

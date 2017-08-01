@@ -103,7 +103,7 @@ namespace core\admin{
 			}
 			$alias = stripslashes(trim($_REQUEST['alias']));
 			if(!$alias){
-				$alias = $name;
+				$alias = $this->ru_en_encode($name);
 			}
 			$alias = strtolower($alias);
 			$name = html_entity_decode($name, ENT_COMPAT | ENT_HTML5, 'UTF-8');

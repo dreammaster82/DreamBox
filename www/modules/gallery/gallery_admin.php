@@ -231,7 +231,6 @@ namespace core\admin{
 			if(!$alias){
 				$alias = $name;
 			}
-			$alias = $this->checkAlias(strtolower(substr($this->ru_en_encode($alias), 0, 32)), $item['id']);
 			$parId = (int)$_REQUEST['parent_id'];
 			$content = stripslashes(trim($_REQUEST['content']));
 			if(stripos($content, '[preview]') !== false){

@@ -2,24 +2,36 @@
     <h1 class="page-title">Результаты поиска: <span><?=$out['request']?></span></h1>
 </header>
 <?php if(count($out['items'])){
-    foreach($out['items'] as $ov){ ?>
-<article id="post-<?=$ov[0]?>" class="post-?=$ov[0]?> post type-post status-publish format-standard hentry category-news">
+    foreach($out['items'] as $ov){
+        $dt = new DateTime($ov['posted']); ?>
+<article id="post-<?=$ov['id']?>" class="post-?=$ov['id']?> post type-post status-publish format-standard hentry category-news">
     <header class="entry-header">
-        <h1 class="entry-title"><a href="/<?=$ov['alias']?>/" title="Постоянная ссылка: Продолжается возведение многоквартирного дома в Нижнем Новгороде" rel="bookmark">Продолжается возведение многоквартирного дома в Нижнем Новгороде</a></h1>
+        <h1 class="entry-title"><a href="/<?=$ov['alias']?>/" title="<?=$ov['name']?>" rel="bookmark"><?=$ov['name']?></a></h1>
         <!--div class="main_img"></div-->
         <div class="entry-meta">
-            <a href="/<?=$ov['alias']?>/" title="14:36" rel="bookmark"><time class="entry-date" datetime="2017-07-11T14:36:46+00:00">11.07.2017</time></a>			</div><!-- .entry-meta -->
+            <a href="/<?=$ov['alias']?>/" title="<?=$dt->format('h:i')?>" rel="bookmark"><time class="entry-date" datetime="<?=$dt->format(DateTime::ATOM)?>"><?=$dt->format('d.m.Y')?></time></a>
+        </div><!-- .entry-meta -->
 
     </header><!-- .entry-header -->
 
     <div class="entry-summary">
-        <p>Один из последних крупных проектов компании-застройщика «Потенциал» — возведение многоквартирного дома №7 в Нижнем Новгороде. Работы начались совсем недавно – в мае 2017 года, и уже выполнен один из сложнейших этапов – заливка фундамента. На данный момент строители укладываются в … <a href="http://pttl.ru/prodolzhaetsya-vozvedenie-mnogokvartirnogo-doma-v-nizhnem-novgorode/">Читать далее <span class="meta-nav">→</span></a></p>
+        <p><?=$ov['content']?> <a href="/<?=$ov['alias']?>/">Читать далее <span class="meta-nav">→</span></a></p>
     </div><!-- .entry-summary -->
-
-    <!--footer class="entry-meta">
-                                            <span class="cat-links">
-            <span class="entry-utility-prep entry-utility-prep-cat-links">Рубрика:</span> <a href="http://pttl.ru/category/news/" title="Просмотреть все записи в рубрике &laquo;НОВОСТИ&raquo;" rel="category tag">НОВОСТИ</a>			</span>
-
-
-                </footer--><!-- .entry-meta -->
 </article>
+<?php  }
+} else { ?>
+<article id="post-0" class="post no-results not-found">
+    <header class="entry-header">
+        <h1 class="entry-title">Ничего не найдено</h1>
+    </header><!-- .entry-header -->
+
+    <div class="entry-content">
+        <p>Извините, по вашему запросу ничего не найдено. Попробуйте другие ключевые слова.</p>
+        <form method="get" id="searchform" action="/search/">
+            <label for="s" class="assistive-text">Поиск</label>
+            <input type="text" class="field" name="s" id="s" placeholder="Поиск">
+            <input type="submit" class="submit" name="submit" id="searchsubmit" value="Поиск">
+        </form>
+    </div><!-- .entry-content -->
+</article>
+<?php } ?>

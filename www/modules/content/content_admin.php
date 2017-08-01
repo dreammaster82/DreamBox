@@ -178,11 +178,10 @@ namespace core\admin{
 			}
 			if(!$err){
 				$title = trim(stripslashes($_REQUEST['title']));
-				$alias = ltrim(str_replace('/content/', '', $_REQUEST['alias']), '/');
+                $alias = stripslashes(trim($_REQUEST['alias']));
 				if(!$alias){
 					$alias = $this->ru_en_encode($name);
 				}
-				$alias = $this->Core->getClass([\Core::CLASS_NAME => 'Admin', \Core::ADMIN => true])->checkAlias($alias, (int)$item['id']);
 				$content = str_replace("\n", "\n ", trim(stripslashes($_REQUEST['content'])));
 				$desc = trim(stripslashes($_REQUEST['description']));
 				$keywords = trim(stripslashes($_REQUEST['keywords']));
