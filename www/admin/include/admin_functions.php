@@ -11,7 +11,7 @@ namespace core\admin{
 		);
 
 		public function insertPreviews($content, $cfg = array()){
-			if(!$content || !$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'FotoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true))){
+			if(!$content || !$C = $this->Core->getClass(array(\Core::CLASS_NAME => 'Gallery_FotoObject', \Core::MODULE => 'gallery', \Core::ADMIN => true))){
 				return;
 			}
 			include ADMIN_PATH.'/include/replacePreview.php';
