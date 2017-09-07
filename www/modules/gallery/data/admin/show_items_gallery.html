@@ -5,8 +5,8 @@ if((int)$_REQUEST['window']){
 if((int)$_REQUEST['preview']){
 	$addArr[] = 'preview='.(int)$_REQUEST['preview'];
 }
-if((int)$_REQUEST['idArea']){
-	$addArr[] = 'idArea='.(int)$_REQUEST['idArea'];
+if($_REQUEST['idArea']){
+	$addArr[] = 'idArea='.strip_tags($_REQUEST['idArea']);
 }
 if((int)$_REQUEST['insItem']){
 	$addArr[] = 'insItem='.(int)$_REQUEST['insItem'];
