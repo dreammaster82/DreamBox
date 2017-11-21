@@ -64,6 +64,7 @@ if(file_exists(realpath($_SERVER['DOCUMENT_ROOT']).'/cache'.$_SERVER['REQUEST_UR
         }
         include ADMIN_PATH.'/data/'.$out['template'].'.html';
     } else {
+        ob_start();
         $Core->getClass('Scroll');
         if(array_key_exists('module', $_REQUEST) && !$_REQUEST['module']) $_REQUEST['error'] = 'fuck';
         if($_REQUEST['module']){
@@ -92,6 +93,7 @@ if(file_exists(realpath($_SERVER['DOCUMENT_ROOT']).'/cache'.$_SERVER['REQUEST_UR
 
         /*---Include Global Items---*/
         include 'include/global.php';
+        $out['errors'] = ob_get_clean();
 
         if((int)$_REQUEST['print']){
             include CLIENT_PATH.'/data/toprint.html';
@@ -110,6 +112,7 @@ if(file_exists(realpath($_SERVER['DOCUMENT_ROOT']).'/cache'.$_SERVER['REQUEST_UR
                 }
             }
         }
+        debug($out['errors']);
     }
 }
 ?>
