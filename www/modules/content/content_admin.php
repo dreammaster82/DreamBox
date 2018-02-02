@@ -231,7 +231,7 @@ namespace core\admin{
 						'.$this->config['pref'].'priority,
 						'.$this->config['pref'].'is_text,
 						'.$this->config['pref'].'header,
-						'.$this->config['pref'].'on_top) VALUES (?, ?, "", ?, ?, ?, ?, ?, 1, ?, ?, ?, ?)',
+						'.$this->config['pref'].'on_top) VALUES (?, ?, "", ?, ?, ?, ?, 1, ?, ?, ?, ?)',
 						array($this->id, $name, $title, $desc, $keywords, (int)$_REQUEST['toprint'], ++$r['m'], (int)$_REQUEST['is_text'], $header, (int)$_REQUEST['on_top']));
 					if(!$_REQUEST['reload']){
 						$this->ret['warning'] = 'Элемент добавлен ('.$item['id'].')';
