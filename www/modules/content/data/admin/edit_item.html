@@ -140,7 +140,7 @@
 		<td width='100%'><input type='file' name='header' size='65' class='textfield' />
 			<?php if($out['img_src']){ ?>
 			<input type="checkbox" name="delete_file" id="delete_file" value="1"><label for="delete_file"><span></span>удалить</label>
-			<? } ?>
+			<?php } ?>
 		</td>	
 	</tr>
 	<?php if($out['img_src']){ ?>
@@ -151,7 +151,7 @@
 			<a href="<?php echo $out['path'].$out['img_src']; ?>" target="image"> Скачать для редактирования...</a>
 		</td>	
 	</tr>
-	<? } ?>
+	<?php } ?>
 	<tr>
 		<td></td>
 		<td>
