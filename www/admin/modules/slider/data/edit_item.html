@@ -5,19 +5,19 @@
 	</tr>
 	<tr>
 		<td style="width:100px;">Название:</td>
-		<td><input type="text" name="name" size="50" value="<?=$out['item']['name']?>" /></td>	
+		<td><input type="text" name="name" size="50" value="<?=$out['item']['name']?>" /></td>
 	</tr>
 	<tr>
 		<td>Cсылка:</td>
-		<td><input type="text" name="link" size="50" value="<?=$out['item']['link']?>" /></td>	
+		<td><input type="text" name="link" size="50" value="<?=$out['item']['link']?>" /></td>
 	</tr>
 	<tr>
 		<td>Описание:</td>
-		<td><input type="text" name="alt" size="50" value="<?=$out['item']['alt']?>" /></td>	
+		<td><input type="text" name="alt" size="50" value="<?=$out['item']['alt']?>" /></td>
 	</tr>
 	<tr>
 		<td>Текст:</td>
-		<td><textarea name="content" rows="5" cols="50"><?=$out['item']['content']?></textarea></td>	
+		<td><textarea name="content" rows="5" cols="50"><?=$out['item']['content']?></textarea></td>
 	</tr>
 	<?php if($out['item']['img_src']){ ?>
 	<tr>
@@ -27,20 +27,20 @@
 			<a href="<?php echo $out['path'].$out['item']['img_src']; ?>" target="image">
 				<img src="<?=$this->config['files_path'].$out['item']['img_src']?>" width="<?=$out['width']?>" alt="<?=$out['item']['alt']?>" border="0" />
 			</a>
-		</td>	
+		</td>
 	</tr>
-	<? } ?>
+	<?php } ?>
 	<tr>
 		<td>Файл:</td>
 		<td>
 			<input type="file" name="img_src" />
 			<?php if($out['item']['img_src']){ ?>
 			<input type="checkbox" name="delete_file" id="delete_file" value="1" /><label for="delete_file"><span></span>удалить</label>
-			<? } ?>
+			<?php } ?>
 			<div style="display: inline-block; margin-left: 20px;">
 				<input type='submit' class='buttons' value='Обновить' name="reload" />
 			</div>
-		</td>	
+		</td>
 	</tr>
 	<tr>
 		<td>Расположение:</td>
@@ -48,11 +48,11 @@
 		<?php foreach ($this->type as $ok => $ov){?>
 			<div><input type="radio" name="slider_id" id="slider_id_<?=$ok?>" value="<?=$ok?>"<?=$ok == $out['item']['type'] ? ' checked' : ''?> /><label for="slider_id_<?=$ok?>"><span></span><?=$ov?></label></div>
 		<?php } ?>
-		</td>	
+		</td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="checkbox" name="active" id="active" value="1" <?=$out['item']['active'] ? ' checked' : ''?> /><label for="active"><span></span>активен</label></td>	
+		<td><input type="checkbox" name="active" id="active" value="1" <?=$out['item']['active'] ? ' checked' : ''?> /><label for="active"><span></span>активен</label></td>
 	</tr>
 	<tr>
 		<td></td>
@@ -68,6 +68,6 @@
 </table>
 </form>
 <form action='.' method='get' name="form_cancel">
-    <input type='hidden' name='page' value="<?=$_REQUEST['page'];?>" />
+    <input type='hidden' name='page' value="<?=$_REQUEST['page']?>" />
     <input type='hidden' name='action' value='show' />
 </form>
