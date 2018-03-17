@@ -2,6 +2,7 @@
 if(file_exists(realpath($_SERVER['DOCUMENT_ROOT']).'/cache'.$_SERVER['REQUEST_URI']) && stppos($_SERVER['REQUEST_URI'], '?') === false){
     include realpath($_SERVER['DOCUMENT_ROOT']).'/cache'.$_SERVER['REQUEST_URI'];
 } else {
+    ob_start();
     include_once 'include/core.php';
     $Core = new Core(Core::UTIL | Core::CONNECTED | Core::MEMCACHE);
     if($_REQUEST['req']){
@@ -56,15 +57,17 @@ if(file_exists(realpath($_SERVER['DOCUMENT_ROOT']).'/cache'.$_SERVER['REQUEST_UR
             }
         }
 
-
         $out['template'] = $out['template'] ? $out['template'] : 'admin';
 
         if($_REQUEST['window']){
             $out['template'] = 'gallery_window';
         }
+        $errors = ob_get_clean();
         include ADMIN_PATH.'/data/'.$out['template'].'.html';
     } else {
-        ob_start();
+        /*---Include Global Items---*/
+        include 'include/global.php';
+
         $Core->getClass('Scroll');
         if(array_key_exists('module', $_REQUEST) && !$_REQUEST['module']) $_REQUEST['error'] = 'fuck';
         if($_REQUEST['module']){
@@ -91,10 +94,7 @@ if(file_exists(realpath($_SERVER['DOCUMENT_ROOT']).'/cache'.$_SERVER['REQUEST_UR
         $out['keywords'] = htmlspecialchars($out['keywords'], ENT_COMPAT, 'UTF-8');
         $out['template'] = $out['template'] ? $out['template'] : 'content';
 
-        /*---Include Global Items---*/
-        include 'include/global.php';
-        $out['errors'] = ob_get_clean();
-
+        $errors = ob_get_clean();
         if((int)$_REQUEST['print']){
             include CLIENT_PATH.'/data/toprint.html';
         } else {
@@ -112,7 +112,8 @@ if(file_exists(realpath($_SERVER['DOCUMENT_ROOT']).'/cache'.$_SERVER['REQUEST_UR
                 }
             }
         }
-        debug($out['errors']);
+
     }
+    debug($errors);
 }
 ?>
