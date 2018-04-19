@@ -122,6 +122,15 @@ namespace content{
 			}
 			return $it;
 		}
+
+        function getFullAlias($item) {
+            $parent = null;
+            if ($item['parent_id']) {
+                $parent = $this->getItem(['id', 'parent_id'], $item['parent_id']);
+            }
+
+            return ($parent ? $this->getFullAlias($parent).'/' : '').$this->Util->getAlias($item['id'], 'content');
+        }
 	}
 }
 ?>
