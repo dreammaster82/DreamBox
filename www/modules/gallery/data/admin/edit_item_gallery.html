@@ -69,14 +69,14 @@
 			<a href="<?php echo $this->config['files_path'].'/prevfoto'.$out['img_src']; ?>" target="image"> Скачать для редактирования...</a>
 		</td>	
 	</tr>
-	<? } ?>
+	<?php } ?>
 	<tr>
 		<td style="width:100px;">Предпросмотр:</td>
 		<td>
 			<input type='file' name='header' size='65' class='textfield' />
 			<?php if($out['img_src']){ ?>
 			<input type="checkbox" id="delete_file" name="delete_file" value="1" /><label for="delete_file"><span></span>удалить</label>
-			<? } ?>
+			<?php } ?>
 			<div style="display:inline-block;margin-left:20px;vertical-align: top">
 				<input type='submit' class='buttons' value='Обновить' name="reload" />
 			</div>
