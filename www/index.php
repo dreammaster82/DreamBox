@@ -1,5 +1,5 @@
 <?php
-if(file_exists(realpath($_SERVER['DOCUMENT_ROOT']).'/cache'.$_SERVER['REQUEST_URI']) && stppos($_SERVER['REQUEST_URI'], '?') === false){
+if(strpos($_SERVER['REQUEST_URI'], '?') === false && is_file(realpath($_SERVER['DOCUMENT_ROOT']).'/cache'.$_SERVER['REQUEST_URI'])){
     include realpath($_SERVER['DOCUMENT_ROOT']).'/cache'.$_SERVER['REQUEST_URI'];
 } else {
     ob_start();
@@ -65,6 +65,8 @@ if(file_exists(realpath($_SERVER['DOCUMENT_ROOT']).'/cache'.$_SERVER['REQUEST_UR
         $errors = ob_get_clean();
         include ADMIN_PATH.'/data/'.$out['template'].'.html';
     } else {
+        $out['sid'] = rand(1000, 9999);
+        $_SESSION['form_sid'] = $out['sid'];
         /*---Include Global Items---*/
         include 'include/global.php';
 
