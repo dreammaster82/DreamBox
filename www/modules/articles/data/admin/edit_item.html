@@ -68,9 +68,10 @@
 				</tr>
 			</table>
 			<table id='edit_table'>
-	<?php if($out['files']){
-		foreach($out['files'] as $ok => $ov){
-	?>
+<?php
+if($out['files']){
+	foreach($out['files'] as $ok => $ov){
+?>
 				<tr class="row<?=$ok?>">
 					<td>
 						<input id="row<?=$ok?>" type="hidden" name="image[<?=$ok?>]" value="1" />img <b><?=$ok?></b>:
@@ -79,35 +80,43 @@
 						<input type="file" name="files[<?=$ok?>]" class="textfield" size="25" />&nbsp;&nbsp;или URL: <input type="text" name="url[<?=$ok?>]" class="textfield" size="25" /> 
 					</td>
 					<td>
-						<input type="checkbox" id="delete_img_<?=$ok?>" name="delete_img[<?=$ok?>]" value="1" /><label for="delete_img_<?=$ok?>"><span></span>X</label> (<b><a href="<?php echo $out['path'].'/'.$out['id'].'/'.$ov; ?>" target="_blank"><?=$ov?></a></b>)
-						<span onclick="image2('item_textarea', '<?php echo $out['path'].'/'.$out['id'].'/'.$ov; ?>')" style="cursor:pointer; cursor:hand;">[<u>вставить</u>]</span>
+						<input type="checkbox" id="delete_img_<?=$ok?>" name="delete_img[<?=$ok?>]" value="1" /><label for="delete_img_<?=$ok?>"><span></span>X</label> (<b><a href="<?=$out['path'].'/'.$out['id'].'/'.$ov?>" target="_blank"><?=$ov?></a></b>)
+						<span onclick="image2('item_textarea', '<?=$out['path'].'/'.$out['id'].'/'.$ov?>')" style="cursor:pointer; cursor:hand;">[<u>вставить</u>]</span>
 					</td>	
 				</tr>
-	<?php
-		}
+<?php
 	}
-	?>
+}
+?>
 			</table>
 		</td>	
 	</tr>
 </table>
 <table style="width: 100%;">
-	<?php if($out['img_src']){ ?>
+<?php
+if($out['img_src']){
+?>
 	<tr>
 		<td></td>
 		<td>
 			Имя файла: <?=$out['img_src']?>, Тип файла: <?=$out['type']?>, размер: <?=$out['size']?> bytes<br>
-			<a href="<?php echo $out['path'].$out['img_src']; ?>" target="image"> Скачать для редактирования...</a>
+			<a href="<?=$out['path'].$out['img_src']?>" target="image"> Скачать для редактирования...</a>
 		</td>	
 	</tr>
-	<? } ?>
+<?php
+}
+?>
 	<tr>
 		<td style="width:100px;">Предпросмотр:</td>
 		<td>
 			<input type='file' name='header' size='65' class='textfield' />
-			<?php if($out['img_src']){ ?>
+<?php
+if($out['img_src']){
+?>
 			<input type="checkbox" id="delete_file" name="delete_file" value="1" /><label for="delete_file"><span></span>удалить</label>
-			<? } ?>
+<?php
+}
+?>
 			<div style="display: inline-block; margin-left: 20px;">
 				<input type='submit' class='buttons' value='Обновить' name="reload" />
 			</div>
