@@ -1,13 +1,28 @@
-			<div class="path">
-				<a href="/">Главная</a>
-				<span class="separator"></span>
-				<?php 
-				foreach($data as $dv){
-					if($dv['link']){?>
-				<a href="<?=$dv['link']?>"><?=$dv['name']?></a>
-				<span class="separator"></span>
-					<?php } else { ?>
-				<?=$dv['name']?>
-				<?php }
-				} ?>
-			</div>
+<div class="breadcrumb">
+	<ul itemscope itemtype="http://schema.org/BreadcrumbList">
+		<?php
+foreach($data as $dk => $dv) {
+	if ($dv['link']){
+		?>
+		<li temprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+			<a itemscope itemtype="http://schema.org/Thing" itemprop="item" href="<?=$dv['link']?>">
+				<span itemprop="name"><?=$dv['name']?></span>
+			</a>
+			<meta itemprop="position" content="<?=$dk+1?>" />
+		</li>
+<?php
+	} else {
+?>
+		<li temprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                        <span itemscope itemtype="http://schema.org/Thing" itemprop="item">
+                            <span itemprop="name"><?=$dv['name']?></span>
+                        </span>
+			<meta itemprop="position" content="<?=sizeof($data)?>" />
+		</li>
+<?php
+	}
+}
+?>
+
+	</ul>
+</div>
